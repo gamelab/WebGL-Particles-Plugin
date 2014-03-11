@@ -3,7 +3,7 @@
 
 <head>
 	<script src="js/kiwi.min.js"></script>
-	<script src="../dist/particles-gl-0.9.0.min.js"></script>
+	<script src="../dist/particles-gl/particles-gl-0.9.0/particles-gl-0.9.0.min.js"></script>
     
 
 </head>
@@ -33,7 +33,7 @@
 			var particle = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,300,config,false);
 
 			//if you haven't started the particle objects yet then you can adjust the configuration
-			particle.config.numParts = 300;
+			particle.config.numParts = 1500;
 			//start the particle object
 			particle.start();
 			
