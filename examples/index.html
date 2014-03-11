@@ -2,13 +2,11 @@
 <html>
 
 <head>
-	<script src="js/gl-matrix-min.js"></script>
-	<script src="js/kiwi.js"></script>
+	<script src="js/kiwi.min.js"></script>
 	<script src="../src/shader.js"></script>
     <script src="../src/renderer.js"></script>
     <script src="../src/gameobject.js"></script>
     <script src="../src/particles-gl.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/styles.css"/>
 	
 
 </head>
@@ -20,101 +18,107 @@
 	<script type="text/javascript">
 
 		var MyState = new Kiwi.State("myState");
-
-		var particle,pirate,pirate2,pirate3,particle2;
-		var myGame = new Kiwi.Game("testGameContainer","testGame",MyState,{plugins:["ParticlesGL"]
-					,renderer:Kiwi.RENDERER_WEBGL,deviceTarget:Kiwi.TARGET_COCOON});
+		
+		var MyGame = new Kiwi.Game("testGameContainer","testGame",MyState,{plugins:["ParticlesGL"],renderer:Kiwi.RENDERER_WEBGL,deviceTarget:Kiwi.TARGET_COCOON});
 
 		MyState.preload = function() {
 			this.game.stage.color="000000"
-    	
     		this.addImage('particle', 'assets/particle_01.png');
   		};
 
 		MyState.create = function() {
-			
-			particle = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,300,config,false);
+			//create a particle object
+			//params are
+			//1) the state(this),
+			//2) the texture to use,
+			//3) an optional configuration object (see example configuration below). if not supplied or null, this will use a default configuration.
+			//4) whether to start generate and start emitting particles immediately (also optional - defaults to true)	
+			var particle = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,300,config,false);
+
+			//if you haven't started the particle objects yet then you can adjust the configuration
 			particle.config.numParts = 300;
-			
+			//start the particle object
 			particle.start();
-			particle2 = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,300,null)
+			
+			//another particle object that starts automatically and uses default config
+			var particle2 = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,300,null)
 			this.addChild(particle);
 			this.addChild(particle2);
 		
 		};
 
-	var config = {
- "numParts": 300,
- "posOffsetX": 0,
- "posOffsetY": 0,
- "posRadius": 50,
- "posRadialStart": 0,
- "posRadialEnd": 6.283185307179586,
- "posWidth": 100,
- "posHeight": 100,
- "posAngle": 0,
- "posLength": 100,
- "posConstrain": true,
- "posShape": "Radial",
- "maxVel": 100,
- "minVel": 70,
- "velConstrain": false,
- "velShape": "Center",
- "velOffsetX": 0,
- "velOffsetY": -50,
- "velAngMin": -6.283185307179586,
- "velAngMax": 6.283185307179586,
- "velRadius": 100,
- "velRadialStart": 0,
- "velRadialEnd": 6.283185307179586,
- "velWidth": 100,
- "velHeight": 100,
- "velAngle": 0,
- "velLength": 30,
- "minStartTime": 1,
- "maxStartTime": 6,
- "minLifespan": 3,
- "maxLifespan": 5,
- "gravity": "-0.05",
- "startSize": "4",
- "endSize": "30",
- "loop": true,
- "colEnvKeyframes": [
-  "0.5",
-  "0.6"
- ],
- "alpha": "1",
- "colEnv0": [
-  1,
-  0,
-  0
- ],
- "colEnv1": [
-  1,
-  1,
-  0
- ],
- "colEnv2": [
-  1,
-  1,
-  1
- ],
- "colEnv3": [
-  0,
-  0,
-  0
- ],
- "alphaGradient": [
-  1,
-  1,
-  1,
-  0
- ],
- "alphaStops": [
-  0.3,
-  0.7
- ]
-}
+		var config = {
+		"numParts": 300,
+		"posOffsetX": 0,
+		"posOffsetY": 0,
+		"posRadius": 50,
+		"posRadialStart": 0,
+		"posRadialEnd": 6.283185307179586,
+		"posWidth": 100,
+		"posHeight": 100,
+		"posAngle": 0,
+		"posLength": 100,
+		"posConstrain": true,
+		"posShape": "Radial",
+		"maxVel": 100,
+		"minVel": 70,
+		"velConstrain": false,
+		"velShape": "Center",
+		"velOffsetX": 0,
+		"velOffsetY": -50,
+		"velAngMin": -6.283185307179586,
+		"velAngMax": 6.283185307179586,
+		"velRadius": 100,
+		"velRadialStart": 0,
+		"velRadialEnd": 6.283185307179586,
+		"velWidth": 100,
+		"velHeight": 100,
+		"velAngle": 0,
+		"velLength": 30,
+		"minStartTime": 1,
+		"maxStartTime": 6,
+		"minLifespan": 3,
+		"maxLifespan": 5,
+		"gravity": "-0.05",
+		"startSize": "4",
+		"endSize": "30",
+		"loop": true,
+		"colEnvKeyframes": [
+		"0.5",
+		"0.6"
+		],
+		"alpha": "1",
+		"colEnv0": [
+		1,
+		0,
+		0
+		],
+		"colEnv1": [
+		1,
+		1,
+		0
+		],
+		"colEnv2": [
+		1,
+		1,
+		1
+		],
+		"colEnv3": [
+		0,
+		0,
+		0
+		],
+		"alphaGradient": [
+		1,
+		1,
+		1,
+		0
+		],
+		"alphaStops": [
+		0.3,
+		0.7
+		]
+	}
 
 	</script>
 
