@@ -15,7 +15,7 @@
         "url": "xx"
     },
 
-    "main": "src/particles-gl.js",
+    "main": "src/*.js",
 
     "dependencies": {},
     "devDependencies": {

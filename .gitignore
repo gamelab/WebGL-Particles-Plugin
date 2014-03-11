@@ -23,6 +23,7 @@ Thumbs.db
 *.map
 *.orig
 
+node_modules/*
 /obj/debug/*
 *.map
 *.config
