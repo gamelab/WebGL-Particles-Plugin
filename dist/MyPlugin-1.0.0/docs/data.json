@@ -1,0 +1,141 @@
+{
+    "project": {
+        "name": "MyPlugin",
+        "description": "This plugin does something.",
+        "version": "1.0.0",
+        "url": "http://kiwijs.org/"
+    },
+    "files": {
+        "src\\myplugin.js": {
+            "name": "src\\myplugin.js",
+            "modules": {
+                "Plugins": 1
+            },
+            "classes": {
+                "Kiwi.Plugins.MyPlugin": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "Kiwi.Plugins": 1
+            }
+        }
+    },
+    "modules": {
+        "Kiwi": {
+            "name": "Kiwi",
+            "submodules": {
+                "Plugins": 1
+            },
+            "classes": {
+                "Kiwi.Plugins.MyPlugin": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "Kiwi.Plugins": 1
+            },
+            "file": "src\\myplugin.js",
+            "line": 1
+        },
+        "Plugins": {
+            "name": "Plugins",
+            "submodules": {},
+            "classes": {
+                "Kiwi.Plugins.MyPlugin": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {
+                "Kiwi.Plugins": 1
+            },
+            "module": "Kiwi",
+            "namespace": "",
+            "file": "src\\myplugin.js",
+            "line": 1,
+            "description": "Description about the main namespace that the plugin is in."
+        }
+    },
+    "classes": {
+        "Kiwi.Plugins.MyPlugin": {
+            "name": "Kiwi.Plugins.MyPlugin",
+            "shortname": "Kiwi.Plugins.MyPlugin",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Kiwi",
+            "submodule": "Plugins",
+            "namespace": "Kiwi.Plugins",
+            "file": "src\\myplugin.js",
+            "line": 1,
+            "description": "Description about the main namespace that the plugin is in."
+        }
+    },
+    "classitems": [
+        {
+            "file": "src\\myplugin.js",
+            "line": 11,
+            "description": "The name of this plugin.",
+            "itemtype": "property",
+            "name": "name",
+            "type": "String",
+            "default": "'MyPlugin'",
+            "access": "public",
+            "tagname": "",
+            "class": "Kiwi.Plugins.MyPlugin",
+            "module": "Kiwi",
+            "submodule": "Plugins",
+            "namespace": "Kiwi.Plugins"
+        },
+        {
+            "file": "src\\myplugin.js",
+            "line": 20,
+            "description": "The version of this plugin.",
+            "itemtype": "property",
+            "name": "version",
+            "type": "String",
+            "default": "'1.0.0'",
+            "access": "public",
+            "tagname": "",
+            "class": "Kiwi.Plugins.MyPlugin",
+            "module": "Kiwi",
+            "submodule": "Plugins",
+            "namespace": "Kiwi.Plugins"
+        },
+        {
+            "file": "src\\myplugin.js",
+            "line": 31,
+            "description": "Regsisters this plugin with the Global Kiwi Plugins Manager if it is avaiable.",
+            "class": "Kiwi.Plugins.MyPlugin",
+            "module": "Kiwi",
+            "submodule": "Plugins",
+            "namespace": "Kiwi.Plugins"
+        },
+        {
+            "file": "src\\myplugin.js",
+            "line": 37,
+            "description": "This create method is executed when Kiwi Game that has been told to use this plugin reaches the boot stage of the game loop.",
+            "itemtype": "method",
+            "name": "create",
+            "params": [
+                {
+                    "name": "game",
+                    "description": "The game that is current in the boot stage.",
+                    "type": "Kiwi.Game"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Kiwi.Plugins.MyPlugin",
+            "module": "Kiwi",
+            "submodule": "Plugins",
+            "namespace": "Kiwi.Plugins"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "Missing item type\nRegsisters this plugin with the Global Kiwi Plugins Manager if it is avaiable.",
+            "line": " src\\myplugin.js:31"
+        }
+    ]
+}
