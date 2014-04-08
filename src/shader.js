@@ -79,7 +79,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
             type: "2fv"
         },
         uLoop: {
-            type: "1f"
+            type: "1i"
         }    
     }
 

@@ -13,7 +13,7 @@ Kiwi.Renderers.StatelessParticleRenderer = function (gl,shaderManager,params){
    
     this.vertexBuffer = new Kiwi.Renderers.GLArrayBuffer(gl, 11);
 
-    //this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
+    this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
     this.startTime = Date.now();
 
 };
@@ -21,22 +21,36 @@ Kiwi.extend(Kiwi.Renderers.StatelessParticleRenderer,Kiwi.Renderers.Renderer);
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.RENDERER_ID = "StatelessParticleRenderer";
 
+Kiwi.Renderers.StatelessParticleRenderer.prototype.setConfig = function (config) {
+    this._config = config;
+    this._setConfigUniforms(this.gl)
+}
+
 Kiwi.Renderers.StatelessParticleRenderer.prototype.enable = function (gl, params) {
        
     this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
     var cfg = this._config;
+    this._setStandardUniforms(gl,params.stageResolution,params.textureAtlas,params.camMatrix)
+    this._setConfigUniforms(gl);
+}
+
+Kiwi.Renderers.StatelessParticleRenderer.prototype._setStandardUniforms = function (gl,stageResolution,textureAtlas,camMatrix){
 
     //Texture
     gl.uniform1i(this.shaderPair.uniforms.uSampler.location, 0);
 
     //Standard uniforms
-    gl.uniform2fv(this.shaderPair.uniforms.uResolution.location, params.stageResolution);
-    gl.uniform2fv(this.shaderPair.uniforms.uTextureSize.location, new Float32Array([params.textureAtlas.width,params.textureAtlas.height]));
+    gl.uniform2fv(this.shaderPair.uniforms.uResolution.location, stageResolution);
+    gl.uniform2fv(this.shaderPair.uniforms.uTextureSize.location, new Float32Array([textureAtlas.image.width,textureAtlas.image.height]));
    
-    gl.uniformMatrix3fv(this.shaderPair.uniforms.uCamMatrix.location, false, params.camMatrix);
+    gl.uniformMatrix3fv(this.shaderPair.uniforms.uCamMatrix.location, false, camMatrix);
    
-    this.camMatrix = new Float32Array(params.camMatrix.buffer);
+    this.camMatrix = new Float32Array(camMatrix.buffer);
+}
 
+Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms = function (gl){
+    var cfg = this._config;
+    gl = gl || this.gl;
     //Particle uniforms
     gl.uniform1f(this.shaderPair.uniforms.uT.location, 0);
     gl.uniform1f(this.shaderPair.uniforms.uGravity.location, cfg.gravity);
@@ -50,7 +64,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.enable = function (gl, params
     gl.uniform4fv(this.shaderPair.uniforms.uAlphaGradient.location, new Float32Array(cfg.alphaGradient));
     gl.uniform2fv(this.shaderPair.uniforms.uAlphaStops.location, new Float32Array(cfg.alphaStops));
     
-    gl.uniform1f(this.shaderPair.uniforms.uLoop.location, (cfg.loop) ? 1 : 0);
+    gl.uniform1i(this.shaderPair.uniforms.uLoop.location, (cfg.loop) ? 1 : 0);
 };
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.disable = function (gl) {
