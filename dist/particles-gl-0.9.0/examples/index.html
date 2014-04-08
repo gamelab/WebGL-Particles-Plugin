@@ -1,0 +1,128 @@
+
+<html>
+
+<head>
+	<script src="js/kiwi.min.js"></script>
+	<script src="../dist/particles-gl/particles-gl-0.9.0/particles-gl-0.9.0.min.js"></script>
+</head>
+<body>
+	<div id="testGameContainer">
+
+	</div>
+
+	<script type="text/javascript">
+
+		var MyState = new Kiwi.State("myState");
+		
+		var MyGame = new Kiwi.Game("testGameContainer","testGame",MyState,{plugins:["ParticlesGL"],renderer:Kiwi.RENDERER_WEBGL});
+
+		MyState.preload = function() {
+			this.game.stage.color="000000"
+    		this.addImage('particle', 'assets/particle_01.png');
+  		};
+
+		MyState.create = function() {
+			//create a particle object
+			//params are
+			//1) the state(this),
+			//2) the texture to use,
+			//3) an optional configuration object (see example configuration below). if not supplied or null, this will use a default configuration.
+			//4) whether to start generate and start emitting particles immediately (also optional - defaults to true)	
+			var particle = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,300,config,false);
+
+			//if you haven't started the particle objects yet then you can adjust the configuration
+			particle.config.numParts = 50;
+			//start the particle object
+			particle.start();
+			
+			//another particle object that starts automatically and uses default config
+			var particle2 = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,400,null)
+			this.addChild(particle);
+			this.addChild(particle2);
+		
+		};
+
+var config = {
+  "numParts": 70,
+  "posOffsetX": 0,
+  "posOffsetY": 0,
+  "posRadius": 80.4,
+  "posRadialStart": 0,
+  "posRadialEnd": 6.14355896702004,
+  "posWidth": 200,
+  "posHeight": 200,
+  "posConstrainRect": true,
+  "posAngle": 0,
+  "posLength": 200,
+  "posRandomLine": true,
+  "posConstrainRadial": true,
+  "posRandomRadial": false,
+  "posShape": "radial",
+  "maxVel": 100,
+  "minVel": 100,
+  "velConstrainRect": true,
+  "velConstrainRadial": true,
+  "velRandomRadial": false,
+  "velShape": "radial",
+  "velOffsetX": -100,
+  "velOffsetY": 50,
+  "velAngMin": 2.8,
+  "velAngMax": -8.1,
+  "velRadius": 250.8,
+  "velRadialStart": 5.358160803622591,
+  "velRadialEnd": 3.647738136668149,
+  "velWidth": 200,
+  "velHeight": 200,
+  "velAngle": 0,
+  "velLength": 200,
+  "velRandomLine": false,
+  "minStartTime": 0.95,
+  "maxStartTime": 1,
+  "minLifespan": 2,
+  "maxLifespan": 2,
+  "gravity": 60,
+  "startSize": 39,
+  "endSize": 140,
+  "loop": true,
+  "colEnvKeyframes": [
+    0.5,
+    0.6
+  ],
+  "alpha": "1",
+  "colEnv0": [
+    0.3686274509803922,
+    0.050980392156862744,
+    0.9490196078431372
+  ],
+  "colEnv1": [
+    0.07058823529411765,
+    0.9490196078431372,
+    0.050980392156862744
+  ],
+  "colEnv2": [
+    1,
+    1,
+    1
+  ],
+  "colEnv3": [
+    0,
+    0,
+    0
+  ],
+  "alphaGradient": [
+    1,
+    1,
+    1,
+    0
+  ],
+  "alphaStops": [
+    0.3,
+    0.7
+  ]
+}
+
+	</script>
+
+</body>
+
+</html>

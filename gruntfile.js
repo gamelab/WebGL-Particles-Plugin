@@ -24,7 +24,7 @@ module.exports = function(grunt) {
     uglify: {
             build: {
                 files: {
-                'dist/particles-gl/particles-gl-0.9.0/particles-gl-<%= pkg.version %>.min.js': ['<%= pkg.main %>']
+                'particles-gl-<%= pkg.version %>.min.js': ['<%= pkg.main %>']
             }
         }
     },
@@ -32,7 +32,7 @@ module.exports = function(grunt) {
     copy: {
 
         whole: {
-          src: ['src/**', 'examples/**', 'docs/**', 'assets/**', 'libs/**', 'README.md'],
+          src: ['src/**', 'examples/**', 'docs/**', 'assets/**', 'libs/**', 'README.md','particles-gl-<%= pkg.version %>.min.js'],
           dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/'
         }
 

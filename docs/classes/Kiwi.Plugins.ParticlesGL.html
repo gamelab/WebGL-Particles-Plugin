@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Kiwi.Plugins.MyPlugin - MyPlugin</title>
+    <title>Kiwi.Plugins.ParticlesGL - particles-gl</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -15,11 +15,11 @@
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
             
-                <h1><img src="../assets/css/logo.png" title="MyPlugin"></h1>
+                <h1><img src="../assets/css/logo.png" title="particles-gl"></h1>
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.0</em>
+            <em>API Docs for: 0.9.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -41,7 +41,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/Kiwi.Plugins.MyPlugin.html">Kiwi.Plugins.MyPlugin</a></li>
+                <li><a href="../classes/Kiwi.Plugins.ParticlesGL.html">Kiwi.Plugins.ParticlesGL</a></li>
+            
+                <li><a href="../classes/StatelessParticles.html">StatelessParticles</a></li>
             
             </ul>
 
@@ -86,7 +88,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Kiwi.Plugins.MyPlugin Class</h1>
+                        <h1>Kiwi.Plugins.ParticlesGL Class</h1>
 <div class="box meta">
     
 
@@ -94,7 +96,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_myplugin.js.html#l1"><code>src\myplugin.js:1</code></a>
+            Defined in: <a href="../files/src_particles-gl.js.html#l1"><code>src\particles-gl.js:1</code></a>
         </div>
     
 
@@ -111,7 +113,7 @@
 
 
 <div class="box intro">
-    <p>Description about the main namespace that the plugin is in.</p>
+    <p>The particles plugin creates a new gameobject &quot;StatelessParticles&quot; to the Kiwi.GameObject object</p>
 
 </div>
 
@@ -121,8 +123,6 @@
     <ul class="api-class-tabs">
         <li class="api-class-tab index"><a href="#index">Index</a></li>
 
-        
-            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
         
         
             <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
@@ -135,21 +135,6 @@
         <div id="index" class="api-class-tabpanel index">
             <h2 class="off-left">Item Index</h2>
 
-            
-                <div class="index-section methods">
-                    <h3>Methods</h3>
-
-                    <ul class="index-list methods">
-                        
-                            <li class="index-item method private">
-                                <a href="#method_create">create</a>
-
-                                
-                                
-                            </li>
-                        
-                    </ul>
-                </div>
             
 
             
@@ -182,103 +167,6 @@
         </div>
 
         
-            <div id="methods" class="api-class-tabpanel">
-                <h2 class="off-left">Methods</h2>
-
-                
-                    <div id="method_create" class="method item private">
-    <h3 class="name"><code>create</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>game</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_myplugin.js.html#l37"><code>src\myplugin.js:37</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>This create method is executed when Kiwi Game that has been told to use this plugin reaches the boot stage of the game loop.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">game</code>
-                        <span class="type">Kiwi.Game</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The game that is current in the boot stage.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-            </div>
-        
 
         
             <div id="properties" class="api-class-tabpanel">
@@ -310,7 +198,7 @@
             
         
         
-        <a href="../files/src_myplugin.js.html#l11"><code>src\myplugin.js:11</code></a>
+        <a href="../files/src_particles-gl.js.html#l11"><code>src\particles-gl.js:11</code></a>
         
         </p>
 
@@ -359,7 +247,7 @@
             
         
         
-        <a href="../files/src_myplugin.js.html#l20"><code>src\myplugin.js:20</code></a>
+        <a href="../files/src_particles-gl.js.html#l20"><code>src\particles-gl.js:20</code></a>
         
         </p>
 

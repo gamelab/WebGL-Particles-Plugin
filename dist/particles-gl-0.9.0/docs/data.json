@@ -1,0 +1,524 @@
+{
+    "project": {
+        "name": "particles-gl",
+        "description": "A WebGL particle plugin.",
+        "version": "0.9.0",
+        "url": "http://kiwijs.org/"
+    },
+    "files": {
+        "src\\gameobject.js": {
+            "name": "src\\gameobject.js",
+            "modules": {},
+            "classes": {
+                "StatelessParticles": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\particles-gl.js": {
+            "name": "src\\particles-gl.js",
+            "modules": {
+                "Plugins": 1
+            },
+            "classes": {
+                "Kiwi.Plugins.ParticlesGL": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "Kiwi.Plugins": 1
+            }
+        },
+        "src\\shader.js": {
+            "name": "src\\shader.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "Kiwi": {
+            "name": "Kiwi",
+            "submodules": {
+                "Plugins": 1
+            },
+            "classes": {
+                "StatelessParticles": 1,
+                "Kiwi.Plugins.ParticlesGL": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "Kiwi.Plugins": 1
+            },
+            "file": "src\\particles-gl.js",
+            "line": 1
+        },
+        "Plugins": {
+            "name": "Plugins",
+            "submodules": {},
+            "classes": {
+                "Kiwi.Plugins.ParticlesGL": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {
+                "Kiwi.Plugins": 1
+            },
+            "module": "Kiwi",
+            "namespace": "",
+            "file": "src\\particles-gl.js",
+            "line": 1,
+            "description": "The particles plugin creates a new gameobject \"StatelessParticles\" to the Kiwi.GameObject object"
+        }
+    },
+    "classes": {
+        "StatelessParticles": {
+            "name": "StatelessParticles",
+            "shortname": "StatelessParticles",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Kiwi",
+            "file": "src\\gameobject.js",
+            "line": 10,
+            "description": "Creates a particle game object",
+            "extends": "Kiwi.Entity",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "state",
+                    "description": ": the state to which the game object belongs",
+                    "type": "Kiwi.State"
+                },
+                {
+                    "name": "atlas",
+                    "description": ": the texture for the particle object",
+                    "type": "Kiwi.Textures.TextureAtlas"
+                },
+                {
+                    "name": "x",
+                    "description": ": the x position of the game object",
+                    "type": "Number"
+                },
+                {
+                    "name": "y",
+                    "description": ": the y position of the game object",
+                    "type": "Number"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "",
+                "type": "Kiwi.GameObjects.StatelessParticles"
+            }
+        },
+        "Kiwi.Plugins.ParticlesGL": {
+            "name": "Kiwi.Plugins.ParticlesGL",
+            "shortname": "Kiwi.Plugins.ParticlesGL",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Kiwi",
+            "submodule": "Plugins",
+            "namespace": "Kiwi.Plugins",
+            "file": "src\\particles-gl.js",
+            "line": 1,
+            "description": "The particles plugin creates a new gameobject \"StatelessParticles\" to the Kiwi.GameObject object"
+        }
+    },
+    "classitems": [
+        {
+            "file": "src\\gameobject.js",
+            "line": 2,
+            "description": "* @module Kiwi\n * @submodule GameObjects\n * @main StatelessParticles",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 74,
+            "description": "The default configuration object.",
+            "itemtype": "property",
+            "name": "defaultConfig",
+            "type": "object",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 154,
+            "description": "Returns whether the emitter has started",
+            "itemtype": "property",
+            "name": "started",
+            "type": "boolean",
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 162,
+            "description": "The type of object that this is.",
+            "itemtype": "method",
+            "name": "objType",
+            "return": {
+                "description": "string"
+            },
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 172,
+            "description": "An array of vectors that conatains generated velocities if useDrawingVectors is true. Used by the particle editor.",
+            "itemtype": "property",
+            "name": "drawingVectors",
+            "type": "array",
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 180,
+            "description": "If true, velocity vectors will be stored on particle generation. Used by the particle editor.",
+            "itemtype": "property",
+            "name": "useDrawingVectors",
+            "type": "boolean",
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 188,
+            "description": "A function delegated to return a random number. Used by the particle editor.",
+            "itemtype": "property",
+            "name": "rnd",
+            "type": "function",
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 196,
+            "description": "If useRandoms is true, This array will contain pregenerate random numbers which will be used every new generation refresh. Used by the particle editor.",
+            "itemtype": "property",
+            "name": "randoms",
+            "type": "array",
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 204,
+            "description": "If true, pregenerate random numbers. Used by the particle editor.",
+            "itemtype": "property",
+            "name": "useRandoms",
+            "type": "boolean",
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 212,
+            "description": "The index of the next random number in useRandoms. Used by the particle editor.",
+            "itemtype": "property",
+            "name": "nextRandomIndex",
+            "type": "number",
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 220,
+            "description": "Get the next random number from the randoms list. Used by the particle editor.",
+            "itemtype": "method",
+            "name": "nextRandom",
+            "return": {
+                "description": "number"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 232,
+            "description": "Starts the emitter.",
+            "itemtype": "method",
+            "name": "start",
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 242,
+            "description": "Sets the configuration object and optionally regenerates particles and sets runtime properties.",
+            "itemtype": "method",
+            "name": "setConfig",
+            "params": [
+                {
+                    "name": "config",
+                    "description": ": the new configuration object",
+                    "type": "Object"
+                },
+                {
+                    "name": "doGenerate",
+                    "description": ": immediately regenerate particles",
+                    "type": "Boolean"
+                },
+                {
+                    "name": "doUniforms",
+                    "description": ": apply runtime properties",
+                    "type": "Boolean"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 258,
+            "description": "Generates particles based on configuration object.",
+            "itemtype": "method",
+            "name": "_generateParticles",
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 393,
+            "description": "Instructs the renderer to draw the particles.",
+            "itemtype": "method",
+            "name": "renderGL",
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 402,
+            "description": "Returns a point on a unit arc based on a total number of points and an index",
+            "itemtype": "method",
+            "name": "regularPointCirclePerimeter",
+            "params": [
+                {
+                    "name": "a",
+                    "description": ": the start angle of the arc",
+                    "type": "Number"
+                },
+                {
+                    "name": "b",
+                    "description": ": the end angle of the ard",
+                    "type": "Number"
+                },
+                {
+                    "name": "index",
+                    "description": ": the point index",
+                    "type": "Number"
+                },
+                {
+                    "name": "total",
+                    "description": ": the total number of points",
+                    "type": "Number"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 416,
+            "description": "Returns a point on a unit arc",
+            "itemtype": "method",
+            "name": "randomPointCirclePerimeter",
+            "params": [
+                {
+                    "name": "a",
+                    "description": ": the start angle of the arc",
+                    "type": "Number"
+                },
+                {
+                    "name": "b",
+                    "description": ": the end angle of the ard",
+                    "type": "Number"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 428,
+            "description": "Returns a point within the sector of a circle",
+            "itemtype": "method",
+            "name": "randomPointCirclePerimeter",
+            "params": [
+                {
+                    "name": "a",
+                    "description": ": the start angle of the sector",
+                    "type": "Number"
+                },
+                {
+                    "name": "b",
+                    "description": ": the end angle of the sector",
+                    "type": "Number"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 442,
+            "description": "Returns a point within the unit square",
+            "itemtype": "method",
+            "name": "randomPointRect",
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 451,
+            "description": "Returns a point on the perimeter of the unit square",
+            "itemtype": "method",
+            "name": "randomPointRectPerimeter",
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 466,
+            "description": "Returns a point on a unit line based on a total number of points and an index.",
+            "itemtype": "method",
+            "name": "regularPointLine",
+            "params": [
+                {
+                    "name": "radians",
+                    "description": ": the angle of the line",
+                    "type": "Number"
+                },
+                {
+                    "name": "index",
+                    "description": ": the point index",
+                    "type": "Number"
+                },
+                {
+                    "name": "total",
+                    "description": ": the total number of points",
+                    "type": "Number"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 481,
+            "description": "Returns a point on a unit line.",
+            "itemtype": "method",
+            "name": "regularPointLine",
+            "params": [
+                {
+                    "name": "radians",
+                    "description": ": the angle of the line",
+                    "type": "Number"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\particles-gl.js",
+            "line": 11,
+            "description": "The name of this plugin.",
+            "itemtype": "property",
+            "name": "name",
+            "type": "String",
+            "default": "'MyPlugin'",
+            "access": "public",
+            "tagname": "",
+            "class": "Kiwi.Plugins.ParticlesGL",
+            "module": "Kiwi",
+            "submodule": "Plugins",
+            "namespace": "Kiwi.Plugins"
+        },
+        {
+            "file": "src\\particles-gl.js",
+            "line": 20,
+            "description": "The version of this plugin.",
+            "itemtype": "property",
+            "name": "version",
+            "type": "String",
+            "default": "'1.0.0'",
+            "access": "public",
+            "tagname": "",
+            "class": "Kiwi.Plugins.ParticlesGL",
+            "module": "Kiwi",
+            "submodule": "Plugins",
+            "namespace": "Kiwi.Plugins"
+        },
+        {
+            "file": "src\\particles-gl.js",
+            "line": 31,
+            "description": "Registers this plugin with the Global Kiwi Plugins Manager if it is avaiable.",
+            "class": "Kiwi.Plugins.ParticlesGL",
+            "module": "Kiwi",
+            "submodule": "Plugins",
+            "namespace": "Kiwi.Plugins"
+        },
+        {
+            "file": "src\\shader.js",
+            "line": 86,
+            "itemtype": "property",
+            "name": "texture2DFrag",
+            "type": "Array",
+            "access": "public",
+            "tagname": "",
+            "class": "",
+            "module": "Kiwi",
+            "namespace": "Kiwi.Plugins"
+        },
+        {
+            "file": "src\\shader.js",
+            "line": 108,
+            "itemtype": "property",
+            "name": "texture2DVert",
+            "type": "Array",
+            "access": "public",
+            "tagname": "",
+            "class": "",
+            "module": "Kiwi",
+            "namespace": "Kiwi.Plugins"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "Missing item type\n* @module Kiwi\n * @submodule GameObjects\n * @main StatelessParticles",
+            "line": " src\\gameobject.js:2"
+        },
+        {
+            "message": "Missing item type\nRegisters this plugin with the Global Kiwi Plugins Manager if it is avaiable.",
+            "line": " src\\particles-gl.js:31"
+        }
+    ]
+}

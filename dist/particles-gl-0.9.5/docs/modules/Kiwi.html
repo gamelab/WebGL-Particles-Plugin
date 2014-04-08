@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\myplugin.js - MyPlugin</title>
+    <title>Kiwi - particles-gl</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -15,11 +15,11 @@
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
             
-                <h1><img src="../assets/css/logo.png" title="MyPlugin"></h1>
+                <h1><img src="../assets/css/logo.png" title="particles-gl"></h1>
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.0</em>
+            <em>API Docs for: 0.9.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -41,7 +41,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/Kiwi.Plugins.MyPlugin.html">Kiwi.Plugins.MyPlugin</a></li>
+                <li><a href="../classes/Kiwi.Plugins.ParticlesGL.html">Kiwi.Plugins.ParticlesGL</a></li>
+            
+                <li><a href="../classes/StatelessParticles.html">StatelessParticles</a></li>
             
             </ul>
 
@@ -86,62 +88,71 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src\myplugin.js</h1>
+                        <h1>Kiwi Module</h1>
+<div class="box clearfix meta">
+    
 
-<div class="file">
-    <pre class="code prettyprint linenums">
-/**
-* Description about the main namespace that the plugin is in.
-*
-* @module Kiwi
-* @submodule Plugins
-* @namespace Kiwi.Plugins
-* @class MyPlugin
-*/
-Kiwi.Plugins.MyPlugin = {
-  
-  /**
-  * The name of this plugin.
-  * @property name
-  * @type String
-  * @default &#x27;MyPlugin&#x27;
-  * @public
-  */
-  name:&#x27;MyPlugin&#x27;,
+    
 
-  /**
-  * The version of this plugin.
-  * @property version
-  * @type String
-  * @default &#x27;1.0.0&#x27;
-  * @public
-  */
-  version:&#x27;1.0.0&#x27;
+    
+        <div class="foundat">
+            Defined in: <a href="../files/src_particles-gl.js.html#l1"><code>src\particles-gl.js:1</code></a>
+        </div>
+    
 
-};
+    
+</div>
 
-/**
-* Regsisters this plugin with the Global Kiwi Plugins Manager if it is avaiable.
-* 
-*/
-Kiwi.PluginManager.register(Kiwi.Plugins.MyPlugin);
 
-/**
-* This create method is executed when Kiwi Game that has been told to use this plugin reaches the boot stage of the game loop.
-* @method create
-* @param game{Kiwi.Game} The game that is current in the boot stage.
-* @private 
-*/
-Kiwi.Plugins.MyPlugin.create = function(game) {
-  	
-	console.log( &#x27;Hello &#x27; + game.name );
 
-}
- 
+<div class="box intro">
+    
+</div>
 
- 
 
-    </pre>
+
+<div class="yui3-g">
+    <div class="yui3-u-1-2">
+        
+            <p>This module provides the following classes:</p>
+
+            <ul class="module-classes">
+            
+                <li class="module-class">
+                    <a href="../classes/Kiwi.Plugins.ParticlesGL.html">
+                        Kiwi.Plugins.ParticlesGL
+                    </a>
+                </li>
+            
+                <li class="module-class">
+                    <a href="../classes/StatelessParticles.html">
+                        StatelessParticles
+                    </a>
+                </li>
+            
+            </ul>
+        
+    </div>
+
+    <div class="yui3-u-1-2">
+        
+            <p>This module is a rollup of the following modules:</p>
+
+            <ul class="module-submodules">
+            
+                <li class="module-submodule">
+                    <a href="../modules/Plugins.html">
+                        Plugins
+                    </a>
+
+                    <div class="module-submodule-description">
+                        The particles plugin creates a new gameobject "StatelessParticles" to the Kiwi.GameObject object
+                    </div>
+                </li>
+            
+            </ul>
+        
+    </div>
 </div>
 
                     </div>
