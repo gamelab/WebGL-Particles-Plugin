@@ -41,86 +41,90 @@
 			particle.start();
 			
 			//another particle object that starts automatically and uses default config
-			var particle2 = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,400,null)
+			//var particle2 = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,400,null)
 			this.addChild(particle);
-			this.addChild(particle2);
+			//this.addChild(particle2);
 		
 		};
 
 		var config = {
-            "numParts": 20,
-            "posOffsetX": 0,
-            "posOffsetY": 0,
-            "posRadius": 50,
-            "posRadialStart": 4.363323129985823,
-            "posRadialEnd": 5.061454830783556,
-            "posWidth": 100,
-            "posHeight": 100,
-            "posAngle": 0,
-            "posLength": 100,
-            "posConstrainRect": true,
-            "posConstrainRadial": true,
-            "posShape": "radial",
-            "maxVel": 100,
-            "minVel": 70,
-            "velConstrainRect": false,
-            "velConstrainRadial": false,
-            "velShape": "line",
-            "velOffsetX": 0,
-            "velOffsetY": 0,
-            "velAngMin": -2,
-            "velAngMax": +2,
-            "velRadius": 100,
-            "velRadialStart": 0,
-            "velRadialEnd": 6.283185307179586,
-            "velWidth": 100,
-            "velHeight": 100,
-            "velAngle": 0,
-            "velLength": 30,
-            "minStartTime": 1,
-            "maxStartTime": 6,
-            "minLifespan": 3,
-            "maxLifespan": 5,
-            "gravity": "0",
-            "startSize": "4",
-            "endSize": "150",
-            "loop": true,
-            "colEnvKeyframes": [
-                0.5,
-                0.6
-            ],
-            "alpha": "1",
-            "colEnv0": [
-                1,
-                0,
-                0
-            ],
-            "colEnv1": [
-                1,
-                1,
-                0
-            ],
-            "colEnv2": [
-                1,
-                1,
-                1
-            ],
-            "colEnv3": [
-                0,
-                0,
-                0
-            ],
-            "alphaGradient": [
-                1,
-                1,
-                1,
-                0
-            ],
-            "alphaStops": [
-                0.3,
-                0.7
-            ]
-        }
+  "numParts": 70,
+  "posOffsetX": 0,
+  "posOffsetY": 0,
+  "posRadius": 80.4,
+  "posRadialStart": 0,
+  "posRadialEnd": 6.14355896702004,
+  "posWidth": 200,
+  "posHeight": 200,
+  "posConstrainRect": true,
+  "posAngle": 0,
+  "posLength": 200,
+  "posRandomLine": true,
+  "posConstrainRadial": true,
+  "posRandomRadial": false,
+  "posShape": "radial",
+  "maxVel": 100,
+  "minVel": 100,
+  "velConstrainRect": true,
+  "velConstrainRadial": true,
+  "velRandomRadial": false,
+  "velShape": "radial",
+  "velOffsetX": -100,
+  "velOffsetY": 50,
+  "velAngMin": 2.8,
+  "velAngMax": -8.1,
+  "velRadius": 250.8,
+  "velRadialStart": 5.358160803622591,
+  "velRadialEnd": 3.647738136668149,
+  "velWidth": 200,
+  "velHeight": 200,
+  "velAngle": 0,
+  "velLength": 200,
+  "velRandomLine": false,
+  "minStartTime": 0.95,
+  "maxStartTime": 1,
+  "minLifespan": 2,
+  "maxLifespan": 2,
+  "gravity": 60,
+  "startSize": 39,
+  "endSize": 140,
+  "loop": true,
+  "colEnvKeyframes": [
+    0.5,
+    0.6
+  ],
+  "alpha": "1",
+  "colEnv0": [
+    0.3686274509803922,
+    0.050980392156862744,
+    0.9490196078431372
+  ],
+  "colEnv1": [
+    0.07058823529411765,
+    0.9490196078431372,
+    0.050980392156862744
+  ],
+  "colEnv2": [
+    1,
+    1,
+    1
+  ],
+  "colEnv3": [
+    0,
+    0,
+    0
+  ],
+  "alphaGradient": [
+    1,
+    1,
+    1,
+    0
+  ],
+  "alphaStops": [
+    0.3,
+    0.7
+  ]
+}
 
 	</script>
 
