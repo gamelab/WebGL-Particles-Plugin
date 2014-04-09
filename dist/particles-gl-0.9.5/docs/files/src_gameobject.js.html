@@ -334,6 +334,23 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         },
         
         /**
+         * Stops the emitter immediately.
+         * @method start
+         * @public
+         */
+        stop : function() {
+            this.config.numParts = 0;
+            this.setConfig(this.config,true,true);
+            this._generateParticles();
+            this.started = false;
+        },
+
+        toggleLoop : function() {
+            this.config.loop = !this.config.loop
+            this.setConfig(this.config,false,true);
+        },
+
+        /**
         * Sets the configuration object and optionally regenerates particles and sets runtime properties.
         * @method setConfig
         * @param {object} config : the new configuration object

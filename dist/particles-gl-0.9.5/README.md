@@ -1,5 +1,5 @@
 Name: Particles-gl.
-Version: 0.9.0
+Version: 0.9.5
 Type: N/A
 Author: Kiwi.js Team
 Website: www.kiwijs.org
@@ -11,6 +11,8 @@ Versions:
 
 0.9.0
 - Initial plugin release.
+0.9.5
+- Integration with particle editor
 
 
 ----------------------------------------------------------------------------------------
@@ -42,7 +44,7 @@ How to Include:
 ----------------------------------------------------------------------------------------
 
 	<script src="kiwi.min.js"></script>
-	<script src="particles-gl-0.9.0.min.js"></script>
+	<script src="particles-gl-0.9.5.min.js"></script>
 
 
 

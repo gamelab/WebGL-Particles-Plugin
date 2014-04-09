@@ -3,7 +3,9 @@
 
 <head>
 	<script src="js/kiwi.min.js"></script>
-	<script src="../dist/particles-gl/particles-gl-0.9.0/particles-gl-0.9.0.min.js"></script>
+
+  <script src="../particles-gl-0.9.5.min.js"></script>
+  
 </head>
 <body>
 	<div id="testGameContainer">
@@ -39,7 +41,11 @@
 			var particle2 = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,400,null)
 			this.addChild(particle);
 			this.addChild(particle2);
-		
+			
+			setTimeout( function() {
+				particle2.toggleLoop();
+
+			},3000)
 		};
 
 var config = {
