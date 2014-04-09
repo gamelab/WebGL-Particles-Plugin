@@ -208,6 +208,14 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         * @private
         */
         useRandoms : false,
+
+        /**
+        * The number of random numbers to generate if useRandoms is true.
+        * @property numRandoms
+        * @type number
+        * @private
+        */
+        numRandoms: 5000,
         
         /**
         * The index of the next random number in useRandoms. Used by the particle editor.
@@ -225,7 +233,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
          */
         nextRandom : function () {
             this.nextRandomIndex++;
-            if (this.nextRandomIndex >= 5000) this.nextRandomIndex =-1;
+            if (this.nextRandomIndex >= this.numRandoms) this.nextRandomIndex =-1;
             return this.randoms[this.nextRandomIndex];
         },
 
@@ -241,7 +249,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         
         /**
          * Stops the emitter immediately.
-         * @method start
+         * @method stop
          * @public
          */
         stop : function() {
@@ -251,9 +259,21 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             this.started = false;
         },
 
-        toggleLoop : function() {
-            this.config.loop = !this.config.loop
+        /**
+         * Flips whether the effect is looping. Useful for smoothly turning off an effect after a period of time.
+         * @method toggleLoop
+         * @public
+         */
+        pause : function() {
+            this.config.loop = false;
             this.setConfig(this.config,false,true);
+            //this.glRenderer.resetTime();
+        },
+
+        unpause : function() {
+            this.config.loop = true;
+            this.setConfig(this.config,false,true);
+            this.glRenderer.resetTime();
         },
 
         /**

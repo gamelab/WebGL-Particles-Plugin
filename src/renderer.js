@@ -14,10 +14,11 @@ Kiwi.Renderers.StatelessParticleRenderer = function (gl,shaderManager,params){
     this.vertexBuffer = new Kiwi.Renderers.GLArrayBuffer(gl, 11);
 
     this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
-    this.startTime = Date.now();
+    this.resetTime();
 
 };
 Kiwi.extend(Kiwi.Renderers.StatelessParticleRenderer,Kiwi.Renderers.Renderer);
+
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.RENDERER_ID = "StatelessParticleRenderer";
 
@@ -25,6 +26,12 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.setConfig = function (config)
     this._config = config;
     this._setConfigUniforms(this.gl)
 }
+
+Kiwi.Renderers.StatelessParticleRenderer.prototype.resetTime = function () {
+    this.startTime = Date.now();
+}
+
+
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.enable = function (gl, params) {
        

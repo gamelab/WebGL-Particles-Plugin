@@ -229,6 +229,17 @@
         {
             "file": "src\\gameobject.js",
             "line": 212,
+            "description": "The number of random numbers to generate if useRandoms is true.",
+            "itemtype": "property",
+            "name": "numRandoms",
+            "type": "number",
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 220,
             "description": "The index of the next random number in useRandoms. Used by the particle editor.",
             "itemtype": "property",
             "name": "nextRandomIndex",
@@ -239,7 +250,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 220,
+            "line": 228,
             "description": "Get the next random number from the randoms list. Used by the particle editor.",
             "itemtype": "method",
             "name": "nextRandom",
@@ -252,7 +263,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 232,
+            "line": 240,
             "description": "Starts the emitter.",
             "itemtype": "method",
             "name": "start",
@@ -262,17 +273,27 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 242,
+            "line": 250,
             "description": "Stops the emitter immediately.",
             "itemtype": "method",
-            "name": "start",
+            "name": "stop",
             "access": "public",
             "tagname": "",
             "class": "StatelessParticles"
         },
         {
             "file": "src\\gameobject.js",
-            "line": 259,
+            "line": 262,
+            "description": "Flips whether the effect is looping. Useful for smoothly turning off an effect after a period of time.",
+            "itemtype": "method",
+            "name": "toggleLoop",
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 279,
             "description": "Sets the configuration object and optionally regenerates particles and sets runtime properties.",
             "itemtype": "method",
             "name": "setConfig",
@@ -299,7 +320,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 275,
+            "line": 295,
             "description": "Generates particles based on configuration object.",
             "itemtype": "method",
             "name": "_generateParticles",
@@ -309,7 +330,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 410,
+            "line": 430,
             "description": "Instructs the renderer to draw the particles.",
             "itemtype": "method",
             "name": "renderGL",
@@ -319,7 +340,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 419,
+            "line": 439,
             "description": "Returns a point on a unit arc based on a total number of points and an index",
             "itemtype": "method",
             "name": "regularPointCirclePerimeter",
@@ -351,7 +372,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 433,
+            "line": 453,
             "description": "Returns a point on a unit arc",
             "itemtype": "method",
             "name": "randomPointCirclePerimeter",
@@ -373,7 +394,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 445,
+            "line": 465,
             "description": "Returns a point within the sector of a circle",
             "itemtype": "method",
             "name": "randomPointCirclePerimeter",
@@ -395,7 +416,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 459,
+            "line": 479,
             "description": "Returns a point within the unit square",
             "itemtype": "method",
             "name": "randomPointRect",
@@ -405,7 +426,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 468,
+            "line": 488,
             "description": "Returns a point on the perimeter of the unit square",
             "itemtype": "method",
             "name": "randomPointRectPerimeter",
@@ -415,7 +436,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 483,
+            "line": 503,
             "description": "Returns a point on a unit line based on a total number of points and an index.",
             "itemtype": "method",
             "name": "regularPointLine",
@@ -442,7 +463,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 498,
+            "line": 518,
             "description": "Returns a point on a unit line.",
             "itemtype": "method",
             "name": "regularPointLine",

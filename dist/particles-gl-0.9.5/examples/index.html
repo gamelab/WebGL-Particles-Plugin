@@ -43,10 +43,14 @@
 			this.addChild(particle2);
 			
 			setTimeout( function() {
-				
-				particle.toggleLoop();
+				particle.pause();
 
-			},3000)
+			},1000)
+
+      setTimeout( function() {
+        particle.unpause();
+
+      },6000)
 		};
 
 var config = {
@@ -83,7 +87,7 @@ var config = {
   "velAngle": 0,
   "velLength": 200,
   "velRandomLine": false,
-  "minStartTime": 0.95,
+  "minStartTime": 0,
   "maxStartTime": 1,
   "minLifespan": 2,
   "maxLifespan": 2,
