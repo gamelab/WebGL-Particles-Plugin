@@ -1,6 +1,6 @@
 Name: Particles-gl.
 Version: 0.9.5
-Type: N/A
+Type: GameObject
 Author: Kiwi.js Team
 Website: www.kiwijs.org
 Kiwi.js Version Last Tested: 0.7
@@ -12,7 +12,7 @@ Versions:
 0.9.0
 - Initial plugin release.
 0.9.5
-- Integration with particle editor
+- Integration with particle editor - https://github.com/gamelab/WebGL-Particles-Plugin/releases/tag/v0.9.5
 
 
 ----------------------------------------------------------------------------------------
