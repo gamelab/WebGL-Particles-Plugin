@@ -48,6 +48,9 @@ Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
         uT: {
             type: "1f"
         },
+        uPauseTime: {
+            type: "1f"
+        },
         uGravity: {
             type: "2fv"
         },
@@ -122,6 +125,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
     "uniform vec2 uTextureSize;",
     "uniform vec2 uResolution;",
     "uniform float uT;",
+    "uniform float uPauseTime;",
     "uniform vec2 uGravity;",
     
     "uniform vec2 uPointSizeRange;",
@@ -147,13 +151,16 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
         "float birthTime = aBirthLifespanAngle.x;",
         "float lifespan = aBirthLifespanAngle.y;",
         "float angularVelocity = aBirthLifespanAngle.z;",
-        "float deathTime = birthTime+lifespan;",
+        "float deathTime = birthTime + lifespan;",
         "float age = mod(uT-birthTime,lifespan);",
-        
+        "float pauseTimeAge = mod(uPauseTime-birthTime,lifespan);",
+
+      
         "lerp =  age / lifespan;",
         "gl_PointSize = mix(uPointSizeRange.x,uPointSizeRange.y,lerp);",
         
-        "if (uT < birthTime || (uT >= deathTime && !uLoop )) {",
+        "float loopBirthTime = (uT - birthTime) / lifespan;",
+        "if (uT < birthTime || (uT >= deathTime && !uLoop ) || (uT >= uPauseTime - pauseTimeAge + lifespan)) {",
             "gl_Position = vec4(9999.0,0,0,0);",
         "} else {", 
             "vec2 pos = aXYVxVy.xy; ",

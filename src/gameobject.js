@@ -16,15 +16,15 @@
  * @param {Kiwi.Textures.TextureAtlas} atlas : the texture for the particle object
  * @param {number} x : the x position of the game object
  * @param {number} y : the y position of the game object
- * @param {number} y : the y position of the game object
+ * @param {object} config : the particle configuration object
  * @public
  * @return {Kiwi.GameObjects.StatelessParticles}
  */
 
-Kiwi.GameObjects.StatelessParticles = function(state, atlas, x, y, config, start, numLoops, destroyOnComplete){
-    Kiwi.Entity.call(this,state, x, y, start);
+Kiwi.GameObjects.StatelessParticles = function(state, atlas, x, y, config){
+    Kiwi.Entity.call(this,state, x, y);
 
-    return this.constructor(state, atlas, x, y, config, start, numLoops,destroyOnComplete);
+    return this.constructor(state, atlas, x, y, config);
 
 };
 Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
@@ -34,19 +34,12 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
 (function (){
     var protoProps = {
 
-        constructor : function (state, atlas, x, y, config, start, numLoops, destroyOnComplete){
-             console.log(numLoops);
+        constructor : function (state, atlas, x, y, config){
             if (typeof x === "undefined") { x = 0; }
             if (typeof y === "undefined") { y = 0; }
-            if (typeof start === "undefined") { start = true; }
             if (typeof config === "undefined") { config = this.defaultConfig; }
-            if (typeof numLoops === "undefined") {numLoops = -1; }
-            if (typeof destroyOnComplete === "undefined") { destroyOnComplete = false; }
-
+         
             this.config = config;
-            this.numLoops = numLoops;
-            console.log(this.numLoops)
-            this.destroyOnComplete = destroyOnComplete;
             
             this.randoms = function() {
                 var arr = []
@@ -76,8 +69,6 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             this.transform.rotPointY = this.height / 2;
             this.box = this.components.add(new Kiwi.Components.Box(this, x, y, this.width, this.height));
 
-            if (start) this.start();
-            console.log(this)
         },
 
         /**
@@ -162,7 +153,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         },
 
         /**
-        * Returns whether the emitter has started
+        * Returns whether the particle system has started emitting
         * @property started
         * @type boolean
         * @public
@@ -234,26 +225,14 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         * @private
         */
         nextRandomIndex : -1,
-        
+    
         /**
-        * The length of time to complete one loop in milliseconds. Calculated upon generation.
+        * The maximum loop length of the system.
         * @property loopLength
         * @type number
         * @private
         */
-        loopLength : 0,
-
-        /**
-        * The number of complete generation and emission cycles that will be completed before the object is destroyed. If -1 then it will not be destroyed and will loop infinitely.
-        * @property numLoops
-        * @type number
-        * @public
-        */
-        numLoops : null,
-
-        completedLoops:0,
-
-        destroyOnComplete:false,
+        loopLength:0,
 
         /**
          * Get the next random number from the randoms list. Used by the particle editor.
@@ -268,75 +247,85 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         },
 
         /**
-         * Starts the emitter.
-         * @method start
+         * Starts the system emitting particles. Particles will be regenerated each time.
+         * @method startEmitting
+         * @param {boolean} loop : Set to true for continuous looping. Overrides and updates the config loop setting. 
+         * @param {boolean} removeOnComplete : if not looping, then the gameobject will destroy itself after one full emission cycle.
          * @param {number} numParts : the number of particles to generate, set on the config object - if not provided the current config value will be used 
          * @public
          */
-        start : function (loops,numParts) {
-            //this.loops = loops || -1;
-            //this.config.numParts = numParts || this.config.numParts;
-            this._generateParticles();
+        startEmitting : function (loop,removeOnComplete,numParts) {
+            if (typeof loop === "undefined") { loop = true; }
+            if (typeof removeOnComplete === "undefined") { removeOnComplete = false }
+            if (typeof numParts === "undefined") { numParts = this.config.numParts; }
+
+            this.config.numParts = numParts;
+            this.config.loop = loop;
+            
+            this.glRenderer.resetTime();
+            this.glRenderer.resetPauseTime();
+            
+            this.setConfig(this.config,true,true);
+                      
+            if (!loop && removeOnComplete) {
+                this.scheduleRemoval(this.loopLength * 1000);
+            }
+
             this.started = true;
+        
         },
         
         /**
-         * Stops the emitter immediately.
-         * @method stop
+         * Stops the system from emitting particles.
+         * @method stopEmitting
+         * @param {boolean} immediate : stops the emitter and removes any existing particles.
+         * @param {boolean} remove : if true the gameobject will mark itself for removal either immediately, or after a completed cycle.  
          * @public
          */
-        stop : function() {
-            this.config.numParts = 0;
-            this.setConfig(this.config,true,true);
-            this._generateParticles();
-            this.started = false;
+        stopEmitting : function(immediate,remove) {
+            
+            if (typeof immediate === "undefined") { immediate = false; }
+            if (typeof remove === "undefined") { remove = false; }
+
+            if (immediate && remove) {
+              this.remove();
+            } else if (immediate && !remove) {
+              this.started = false;
+            } else if (!immediate && !remove) {
+              this.glRenderer.pause();
+              this.started = false;
+            } else if (!immediate && remove) {
+              this.config.loop = false;
+              this.scheduleRemoval(this.loopLength * 1000);
+            }          
+        
+
         },
 
         /**
-         * Stops a looping emitter from looping. Particles will continue to be emitted until all the originally generated particles are exhausted.
-         * @method pause
+         * Marks the gameobject for removal after a provided number of milliseconds.
+         * @method scheduleRemoval
+         * @param {boolean} milliseconds : the delahy time in milliseconds before being marked for removal.
          * @public
          */
-        pause : function() {
-            this.config.loop = false;
-            this.setConfig(this.config,false,true);
+        scheduleRemoval: function (milliseconds) {
+            var that = this;
+            setTimeout(function(milliseconds) {
+                that.remove.call(that);
+            },milliseconds)
+
         },
 
         /**
-         * Start an emitter looping. Time is reset to 0.
-         * @method pause
+         * Immediately marks the gameobject for removal.
+         * @method remove
          * @public
          */
-        unpause : function() {
-            this.config.loop = true;
-            this.setConfig(this.config,false,true);
-            this.glRenderer.resetTime();
+        remove : function() {
+            this.glRenderer.destroy();  
+            this.exists = false;
         },
 
-        /**
-        * Updates and checks to see if loop has finished and whether the game object needs to be destroyed.
-        * @method renderGL
-        * @private
-        */
-        update:function() {
-            if (this.started) {
-                if (this.glRenderer.time >= this.loopLength) {
-                    this.completedLoops ++;
-                    console.log("completed Loops:"+this.completedLoops+" of " + this.numLoops  )
-                    this.glRenderer.resetTime();
-                    if (this.completedLoops >= this.numLoops) {
-                        console.log('loops completed')
-                        if (this.destroyOnComplete) { 
-                            this.glRenderer.destroy();  
-                            this.exists = false;
-                        } else {
-                            this.pause();
-                        }
-
-                    }
-                } 
-            }
-        },
 
         /**
         * Sets the configuration object and optionally regenerates particles and sets runtime properties.
@@ -468,8 +457,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
                 startTime = cfg.minStartTime + this.rnd() * (cfg.maxStartTime - cfg.minStartTime);
                 lifespan = cfg.minLifespan + this.rnd() * (cfg.maxLifespan - cfg.minLifespan);
 
-                this.loopLength = Math.max(this.loopLength,(startTime + lifespan) * 1000);
-
+                this.loopLength = Math.max(this.loopLength,startTime+lifespan);
                 var cellIndex = 0;
 
                 if (cfg.cells) {
@@ -497,7 +485,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         * @private
         */
         renderGL : function (gl, camera, params) {
-            if (this.started) this.glRenderer.draw(gl,this.transform);
+            this.glRenderer.draw(gl,this.transform);
             
         },
 

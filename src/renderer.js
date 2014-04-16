@@ -31,6 +31,10 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.resetTime = function () {
     this.startTime = Date.now();
 }
 
+Kiwi.Renderers.StatelessParticleRenderer.prototype.resetPauseTime = function () {
+    this.pauseTime = 999999999;
+}
+
 
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.enable = function (gl, params) {
@@ -60,6 +64,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms = function
     gl = gl || this.gl;
     //Particle uniforms
     gl.uniform1f(this.shaderPair.uniforms.uT.location, 0);
+    gl.uniform1f(this.shaderPair.uniforms.uPauseTime.location, this.pauseTime);
     gl.uniform2fv(this.shaderPair.uniforms.uGravity.location, new Float32Array([cfg.gravityX,cfg.gravityY]));
     gl.uniform2fv(this.shaderPair.uniforms.uPointSizeRange.location, new Float32Array([cfg.startSize, cfg.endSize]));
     gl.uniform3fv(this.shaderPair.uniforms.uColEnv0.location, new Float32Array(cfg.colEnv0));
@@ -86,6 +91,15 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.clear = function (gl, params)
 };
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.time = 0;
+Kiwi.Renderers.StatelessParticleRenderer.prototype.pauseTime = 999999999;
+
+Kiwi.Renderers.StatelessParticleRenderer.prototype.pause = function (gl) {
+    gl = gl || this.gl;
+    console.log("pause");
+    this.pauseTime = this.time / 1000;
+    gl.uniform1f(this.shaderPair.uniforms.uPauseTime.location, this.pauseTime);
+     console.log('0 set pause time to' + this.pauseTime)
+}
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl,transform) {
 

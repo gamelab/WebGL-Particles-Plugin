@@ -34,31 +34,25 @@
 			//2) the texture to use,
 			//3) an optional configuration object (see example configuration below). if not supplied or null, this will use a default configuration.
 			//4) whether to start generate and start emitting particles immediately (also optional - defaults to true)	
-			var particle = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,300,config,false);
+			var particle = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,300,config);
 
 			//if you haven't started the particle objects yet then you can adjust the configuration
 			particle.config.numParts = 50;
 			//start the particle object
-			particle.start();
-			
-			//another particle object that starts automatically and uses default config
-			//var particle2 = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,400,null)
+
+      particle.startEmitting(true,false);
+   
+      setTimeout(function(){
+        particle.stopEmitting(false,false);
+        
+      },5000);
+
 			this.addChild(particle);
-			//this.addChild(particle2);
 			
-			setTimeout( function() {
-				//particle.pause();
-
-			},1000)
-
-      setTimeout( function() {
-        //particle.unpause();
-
-      },6000)
 		};
 
 var config = {
-  "numParts": 70,
+  "numParts": 10,
   "posOffsetX": 0,
   "posOffsetY": 0,
   "posRadius": 80.4,
