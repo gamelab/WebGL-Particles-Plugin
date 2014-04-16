@@ -16,14 +16,15 @@
  * @param {Kiwi.Textures.TextureAtlas} atlas : the texture for the particle object
  * @param {number} x : the x position of the game object
  * @param {number} y : the y position of the game object
+ * @param {number} y : the y position of the game object
  * @public
  * @return {Kiwi.GameObjects.StatelessParticles}
  */
 
-Kiwi.GameObjects.StatelessParticles = function(state, atlas, x, y, config, start){
-    Kiwi.Entity.call(this,state, x, y);
-    console.log(this)
-    return this.constructor(state, atlas, x, y, config, start);
+Kiwi.GameObjects.StatelessParticles = function(state, atlas, x, y, config, start, numLoops, destroyOnComplete){
+    Kiwi.Entity.call(this,state, x, y, start);
+
+    return this.constructor(state, atlas, x, y, config, start, numLoops,destroyOnComplete);
 
 };
 Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
@@ -33,13 +34,20 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
 (function (){
     var protoProps = {
 
-        constructor : function (state, atlas, x, y, config, start){
+        constructor : function (state, atlas, x, y, config, start, numLoops, destroyOnComplete){
+             console.log(numLoops);
             if (typeof x === "undefined") { x = 0; }
             if (typeof y === "undefined") { y = 0; }
             if (typeof start === "undefined") { start = true; }
+            if (typeof config === "undefined") { config = this.defaultConfig; }
+            if (typeof numLoops === "undefined") {numLoops = -1; }
+            if (typeof destroyOnComplete === "undefined") { destroyOnComplete = false; }
 
-            this.config = config || this.defaultConfig;
-
+            this.config = config;
+            this.numLoops = numLoops;
+            console.log(this.numLoops)
+            this.destroyOnComplete = destroyOnComplete;
+            
             this.randoms = function() {
                 var arr = []
                 for (var i =0;i < 5000;i++) {
@@ -69,6 +77,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             this.box = this.components.add(new Kiwi.Components.Box(this, x, y, this.width, this.height));
 
             if (start) this.start();
+            console.log(this)
         },
 
         /**
@@ -110,9 +119,10 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             "maxStartTime": 6,
             "minLifespan": 3,
             "maxLifespan": 5,
-            "gravity": "0",
-            "startSize": "4",
-            "endSize": "150",
+            "gravityX": -20,
+            "gravityY": 30,
+            "startSize": 4,
+            "endSize": 150,
             "loop": true,
             "colEnvKeyframes": [
                 0.5,
@@ -226,6 +236,26 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         nextRandomIndex : -1,
         
         /**
+        * The length of time to complete one loop in milliseconds. Calculated upon generation.
+        * @property loopLength
+        * @type number
+        * @private
+        */
+        loopLength : 0,
+
+        /**
+        * The number of complete generation and emission cycles that will be completed before the object is destroyed. If -1 then it will not be destroyed and will loop infinitely.
+        * @property numLoops
+        * @type number
+        * @public
+        */
+        numLoops : null,
+
+        completedLoops:0,
+
+        destroyOnComplete:false,
+
+        /**
          * Get the next random number from the randoms list. Used by the particle editor.
          * @method nextRandom
          * @return number
@@ -240,9 +270,12 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         /**
          * Starts the emitter.
          * @method start
+         * @param {number} numParts : the number of particles to generate, set on the config object - if not provided the current config value will be used 
          * @public
          */
-        start : function () {
+        start : function (loops,numParts) {
+            //this.loops = loops || -1;
+            //this.config.numParts = numParts || this.config.numParts;
             this._generateParticles();
             this.started = true;
         },
@@ -260,20 +293,49 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         },
 
         /**
-         * Flips whether the effect is looping. Useful for smoothly turning off an effect after a period of time.
-         * @method toggleLoop
+         * Stops a looping emitter from looping. Particles will continue to be emitted until all the originally generated particles are exhausted.
+         * @method pause
          * @public
          */
         pause : function() {
             this.config.loop = false;
             this.setConfig(this.config,false,true);
-            //this.glRenderer.resetTime();
         },
 
+        /**
+         * Start an emitter looping. Time is reset to 0.
+         * @method pause
+         * @public
+         */
         unpause : function() {
             this.config.loop = true;
             this.setConfig(this.config,false,true);
             this.glRenderer.resetTime();
+        },
+
+        /**
+        * Updates and checks to see if loop has finished and whether the game object needs to be destroyed.
+        * @method renderGL
+        * @private
+        */
+        update:function() {
+            if (this.started) {
+                if (this.glRenderer.time >= this.loopLength) {
+                    this.completedLoops ++;
+                    console.log("completed Loops:"+this.completedLoops+" of " + this.numLoops  )
+                    this.glRenderer.resetTime();
+                    if (this.completedLoops >= this.numLoops) {
+                        console.log('loops completed')
+                        if (this.destroyOnComplete) { 
+                            this.glRenderer.destroy();  
+                            this.exists = false;
+                        } else {
+                            this.pause();
+                        }
+
+                    }
+                } 
+            }
         },
 
         /**
@@ -298,134 +360,136 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         * @private
         */
         _generateParticles : function () {
-        if (this.useRandoms)
-            this.rnd = this.nextRandom;
-        else
-            this.rnd = Math.random;
+            if (this.useRandoms)
+                this.rnd = this.nextRandom;
+            else
+                this.rnd = Math.random;
 
-        this.nextRandomIndex = -1;
-        var vertexItems = [];
-        console.log('generate');
-        var cfg = this.config;
+            this.nextRandomIndex = -1;
+            var vertexItems = [];
+            
+            var cfg = this.config;
 
-        this.drawingVectors = [];
-
-        for (var i =0; i < cfg.numParts;i++) {
-            //calculate pos
-            var posSeed = {x:0,y:0};
-            var pos = {x:0,y:0};
-            var vel = {x:cfg.velOffsetX,y:cfg.velOffsetY};
-            var velSeed = {x:0,y:0};
+            this.drawingVectors = [];
 
 
-            switch (cfg.posShape) {
-                case "radial":
-                    if (cfg.posRandomRadial)
-                        posSeed = (cfg.posConstrainRadial) ? this.randomPointCirclePerimeter( cfg.posRadialStart,cfg.posRadialEnd): this.randomPointCircle( cfg.posRadialStart,cfg.posRadialEnd);
-                    else
-                        posSeed = (cfg.posConstrainRadial) ? this.regularPointCirclePerimeter( cfg.posRadialStart,cfg.posRadialEnd,i,cfg.numParts-1): this.randomPointCircle( cfg.posRadialStart,cfg.posRadialEnd);
-                    pos.x  = posSeed.x * cfg.posRadius;
-                    pos.y  = posSeed.y * cfg.posRadius;
+            for (var i =0; i < cfg.numParts;i++) {
+                //calculate pos
+                var posSeed = {x:0,y:0};
+                var pos = {x:0,y:0};
+                var vel = {x:cfg.velOffsetX,y:cfg.velOffsetY};
+                var velSeed = {x:0,y:0};
 
-                    break;
 
-                case "rectangle":
-                    posSeed = (cfg.posConstrainRect) ? this.randomPointRectPerimeter() : this.randomPointRect();
-                    pos.x += posSeed.x * cfg.posWidth;
-                    pos.y += posSeed.y * cfg.posHeight;
-                    break;
+                switch (cfg.posShape) {
+                    case "radial":
+                        if (cfg.posRandomRadial)
+                            posSeed = (cfg.posConstrainRadial) ? this.randomPointCirclePerimeter( cfg.posRadialStart,cfg.posRadialEnd): this.randomPointCircle( cfg.posRadialStart,cfg.posRadialEnd);
+                        else
+                            posSeed = (cfg.posConstrainRadial) ? this.regularPointCirclePerimeter( cfg.posRadialStart,cfg.posRadialEnd,i,cfg.numParts-1): this.randomPointCircle( cfg.posRadialStart,cfg.posRadialEnd);
+                        pos.x  = posSeed.x * cfg.posRadius;
+                        pos.y  = posSeed.y * cfg.posRadius;
 
-                case "line":
-                    if (cfg.posRandomLine)
-                        posSeed = this.randomPointLine(cfg.posAngle);
-                    else
-                        posSeed = this.regularPointLine(cfg.posAngle,i,cfg.numParts-1);
-                    pos.x += posSeed.x * cfg.posLength;
-                    pos.y += posSeed.y * cfg.posLength;
-                    break;
+                        break;
 
-                case "point" :
+                    case "rectangle":
+                        posSeed = (cfg.posConstrainRect) ? this.randomPointRectPerimeter() : this.randomPointRect();
+                        pos.x += posSeed.x * cfg.posWidth;
+                        pos.y += posSeed.y * cfg.posHeight;
+                        break;
 
-                    break;
-            }
+                    case "line":
+                        if (cfg.posRandomLine)
+                            posSeed = this.randomPointLine(cfg.posAngle);
+                        else
+                            posSeed = this.regularPointLine(cfg.posAngle,i,cfg.numParts-1);
+                        pos.x += posSeed.x * cfg.posLength;
+                        pos.y += posSeed.y * cfg.posLength;
+                        break;
 
-            switch (cfg.velShape) {
-                case "center":
-                    var direction = posSeed;
-                    var magnitude = cfg.minVel + this.rnd() * (cfg.maxVel - cfg.minVel)
-                    vel.x = direction.x * magnitude ;
-                    vel.y = direction.y * magnitude ;
-                    break;
+                    case "point" :
 
-                case "radial":
-                    if (cfg.velRandomRadial)
-                        velSeed = (cfg.velConstrainRadial) ? this.randomPointCirclePerimeter( cfg.velRadialStart,cfg.velRadialEnd): this.randomPointCircle( cfg.velRadialStart,cfg.velRadialEnd);
-                    else
-                        velSeed = (cfg.velConstrainRadial) ? this.regularPointCirclePerimeter( cfg.velRadialStart,cfg.velRadialEnd,i,cfg.numParts-1): this.randomPointCircle( cfg.velRadialStart,cfg.velRadialEnd);
-
-                    vel.x += velSeed.x * cfg.velRadius;
-                    vel.y += velSeed.y * cfg.velRadius;
-
-                    break;
-
-                case "rectangle":
-                    velSeed = (cfg.velConstrainRect) ? this.randomPointRectPerimeter() : this.randomPointRect();
-
-                    vel.x += velSeed.x * cfg.velWidth;
-                    vel.y += velSeed.y * cfg.velHeight;
-                    break;
-
-                case "line":
-                    if (cfg.velRandomLine)
-                        velSeed = this.randomPointLine(cfg.velAngle);
-                    else
-                        velSeed = this.regularPointLine(cfg.velAngle,i,cfg.numParts -1);
-                    vel.x += velSeed.x * cfg.velLength;
-                    vel.y += velSeed.y * cfg.velLength;
-                    break;
-
-                case "point" :
-
-                    break;
-            }
-
-            //angular velocity
-            var velAng;
-            var diff = Math.max(cfg.velAngMax,cfg.velAngMin) - Math.min (cfg.velAngMax,cfg.velAngMin);
-            velAng = cfg.velAngMin +this.rnd() * diff;
-
-            pos.x += cfg.posOffsetX;
-            pos.y += cfg.posOffsetY;
-
-            vertexItems.push(pos.x,pos.y,vel.x,vel.y);
-            this.drawingVectors.push( {x:pos.x,y:pos.y,vx:vel.x,vy:vel.y})
-
-            var startTime,lifespan;
-
-            startTime = cfg.minStartTime + this.rnd() * (cfg.maxStartTime - cfg.minStartTime);
-            lifespan = cfg.minLifespan + this.rnd() * (cfg.maxLifespan - cfg.minLifespan);
-
-            var cellIndex = 0;
-
-            if (cfg.cells) {
-                var numCells = cfg.cells.length;
-                if (numCells > 1) {
-                    cellIndex = cfg.cells[Math.floor(this.rnd() * numCells)];
-                } else {
-                    cellIndex = cfg.cells[0]
+                        break;
                 }
+
+                switch (cfg.velShape) {
+                    case "center":
+                        var direction = posSeed;
+                        var magnitude = cfg.minVel + this.rnd() * (cfg.maxVel - cfg.minVel)
+                        vel.x = direction.x * magnitude ;
+                        vel.y = direction.y * magnitude ;
+                        break;
+
+                    case "radial":
+                        if (cfg.velRandomRadial)
+                            velSeed = (cfg.velConstrainRadial) ? this.randomPointCirclePerimeter( cfg.velRadialStart,cfg.velRadialEnd): this.randomPointCircle( cfg.velRadialStart,cfg.velRadialEnd);
+                        else
+                            velSeed = (cfg.velConstrainRadial) ? this.regularPointCirclePerimeter( cfg.velRadialStart,cfg.velRadialEnd,i,cfg.numParts-1): this.randomPointCircle( cfg.velRadialStart,cfg.velRadialEnd);
+
+                        vel.x += velSeed.x * cfg.velRadius;
+                        vel.y += velSeed.y * cfg.velRadius;
+
+                        break;
+
+                    case "rectangle":
+                        velSeed = (cfg.velConstrainRect) ? this.randomPointRectPerimeter() : this.randomPointRect();
+
+                        vel.x += velSeed.x * cfg.velWidth;
+                        vel.y += velSeed.y * cfg.velHeight;
+                        break;
+
+                    case "line":
+                        if (cfg.velRandomLine)
+                            velSeed = this.randomPointLine(cfg.velAngle);
+                        else
+                            velSeed = this.regularPointLine(cfg.velAngle,i,cfg.numParts -1);
+                        vel.x += velSeed.x * cfg.velLength;
+                        vel.y += velSeed.y * cfg.velLength;
+                        break;
+
+                    case "point" :
+
+                        break;
+                }
+
+                //angular velocity
+                var velAng;
+                var diff = Math.max(cfg.velAngMax,cfg.velAngMin) - Math.min (cfg.velAngMax,cfg.velAngMin);
+                velAng = cfg.velAngMin +this.rnd() * diff;
+
+                pos.x += cfg.posOffsetX;
+                pos.y += cfg.posOffsetY;
+
+                vertexItems.push(pos.x,pos.y,vel.x,vel.y);
+                this.drawingVectors.push( {x:pos.x,y:pos.y,vx:vel.x,vy:vel.y})
+
+                var startTime,lifespan;
+
+                startTime = cfg.minStartTime + this.rnd() * (cfg.maxStartTime - cfg.minStartTime);
+                lifespan = cfg.minLifespan + this.rnd() * (cfg.maxLifespan - cfg.minLifespan);
+
+                this.loopLength = Math.max(this.loopLength,(startTime + lifespan) * 1000);
+
+                var cellIndex = 0;
+
+                if (cfg.cells) {
+                    var numCells = cfg.cells.length;
+                    if (numCells > 1) {
+                        cellIndex = cfg.cells[Math.floor(this.rnd() * numCells)];
+                    } else {
+                        cellIndex = cfg.cells[0]
+                    }
+                }
+
+                vertexItems.push(startTime,lifespan,velAng);
+                var cell = this.atlas.cells[cellIndex];
+                vertexItems.push(cell.x,cell.y,cell.w,cell.h);
             }
 
-            vertexItems.push(startTime,lifespan,velAng);
-            var cell = this.atlas.cells[cellIndex];
-            vertexItems.push(cell.x,cell.y,cell.w,cell.h);
-        }
-
-
-        this.glRenderer.initBatch(vertexItems);
+            this.glRenderer.initBatch(vertexItems);
 
         },
-
+       
         
         /**
         * Instructs the renderer to draw the particles.
@@ -434,7 +498,10 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         */
         renderGL : function (gl, camera, params) {
             if (this.started) this.glRenderer.draw(gl,this.transform);
+            
         },
+
+        
 
         /**
         * Returns a point on a unit arc based on a total number of points and an index

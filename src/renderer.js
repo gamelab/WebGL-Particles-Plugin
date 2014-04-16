@@ -34,7 +34,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.resetTime = function () {
 
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.enable = function (gl, params) {
-       
+    
     this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
     var cfg = this._config;
     this._setStandardUniforms(gl,params.stageResolution,params.textureAtlas,params.camMatrix)
@@ -60,7 +60,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms = function
     gl = gl || this.gl;
     //Particle uniforms
     gl.uniform1f(this.shaderPair.uniforms.uT.location, 0);
-    gl.uniform1f(this.shaderPair.uniforms.uGravity.location, cfg.gravity);
+    gl.uniform2fv(this.shaderPair.uniforms.uGravity.location, new Float32Array([cfg.gravityX,cfg.gravityY]));
     gl.uniform2fv(this.shaderPair.uniforms.uPointSizeRange.location, new Float32Array([cfg.startSize, cfg.endSize]));
     gl.uniform3fv(this.shaderPair.uniforms.uColEnv0.location, new Float32Array(cfg.colEnv0));
     gl.uniform3fv(this.shaderPair.uniforms.uColEnv1.location, new Float32Array(cfg.colEnv1));
@@ -85,6 +85,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.clear = function (gl, params)
     
 };
 
+Kiwi.Renderers.StatelessParticleRenderer.prototype.time = 0;
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl,transform) {
 
@@ -101,9 +102,9 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl,transform
     gl.uniformMatrix3fv(this.shaderPair.uniforms.uCamMatrix.location, false, modelViewMatrix);
 
     // calculate time
-    var t = Date.now() - this.startTime;
+    this.time = Date.now() - this.startTime;
 
-    gl.uniform1f(this.shaderPair.uniforms.uT.location, t / 1000);
+    gl.uniform1f(this.shaderPair.uniforms.uT.location, this.time / 1000);
 
 
     gl.blendEquationSeparate(gl.FUNC_ADD,gl.FUNC_ADD)
@@ -136,6 +137,12 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.updateTextureSize = function 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.initBatch = function (vertexItems) {
     this.vertexBuffer.items = vertexItems;
     this.vertexBuffer.uploadBuffer(this.gl,this.vertexBuffer.items);
+};
+
+Kiwi.Renderers.StatelessParticleRenderer.prototype.destroy = function (gl) {
+    gl = gl || this.gl;
+    gl. deleteBuffer(this.vertexBuffer.buffer);
+
 };
 
 
