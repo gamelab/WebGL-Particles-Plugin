@@ -48,8 +48,11 @@ Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
         uT: {
             type: "1f"
         },
-        uGravity: {
+        uPauseTime: {
             type: "1f"
+        },
+        uGravity: {
+            type: "2fv"
         },
         uPointSizeRange: {
             type: "2fv"
@@ -122,7 +125,8 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
     "uniform vec2 uTextureSize;",
     "uniform vec2 uResolution;",
     "uniform float uT;",
-    "uniform float uGravity;",
+    "uniform float uPauseTime;",
+    "uniform vec2 uGravity;",
     
     "uniform vec2 uPointSizeRange;",
     "uniform vec3 uColEnv0;",
@@ -147,20 +151,22 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
         "float birthTime = aBirthLifespanAngle.x;",
         "float lifespan = aBirthLifespanAngle.y;",
         "float angularVelocity = aBirthLifespanAngle.z;",
-        "float deathTime = birthTime+lifespan;",
-        "float age = uT - birthTime;",
-        "age = mod(uT-birthTime,lifespan);",
-        
+        "float deathTime = birthTime + lifespan;",
+        "float age = mod(uT-birthTime,lifespan);",
+        "float pauseTimeAge = mod(uPauseTime-birthTime,lifespan);",
+
+      
         "lerp =  age / lifespan;",
         "gl_PointSize = mix(uPointSizeRange.x,uPointSizeRange.y,lerp);",
         
-        "if (uT < birthTime || (uT >= deathTime && !uLoop )) {",
+        "float loopBirthTime = (uT - birthTime) / lifespan;",
+        "if (uT < birthTime || (uT >= deathTime && !uLoop ) || (uT >= uPauseTime - pauseTimeAge + lifespan)) {",
             "gl_Position = vec4(9999.0,0,0,0);",
         "} else {", 
             "vec2 pos = aXYVxVy.xy; ",
             "vec2 vel = aXYVxVy.zw;",
             "pos += age * vel;",
-            "pos.y += 0.5 * uGravity * age * age;",
+            "pos += 0.5 * uGravity * age * age;",
             "pos = (uCamMatrix * vec3(pos,1.0)).xy;",
             "pos = (pos / uResolution) * 2.0 - 1.0;",
             "gl_Position = vec4(pos * vec2(1, -1), 0, 1);",

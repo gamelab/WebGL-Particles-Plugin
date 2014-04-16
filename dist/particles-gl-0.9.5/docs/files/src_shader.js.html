@@ -142,8 +142,11 @@ Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
         uT: {
             type: &quot;1f&quot;
         },
-        uGravity: {
+        uPauseTime: {
             type: &quot;1f&quot;
+        },
+        uGravity: {
+            type: &quot;2fv&quot;
         },
         uPointSizeRange: {
             type: &quot;2fv&quot;
@@ -216,7 +219,8 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
     &quot;uniform vec2 uTextureSize;&quot;,
     &quot;uniform vec2 uResolution;&quot;,
     &quot;uniform float uT;&quot;,
-    &quot;uniform float uGravity;&quot;,
+    &quot;uniform float uPauseTime;&quot;,
+    &quot;uniform vec2 uGravity;&quot;,
     
     &quot;uniform vec2 uPointSizeRange;&quot;,
     &quot;uniform vec3 uColEnv0;&quot;,
@@ -241,20 +245,22 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
         &quot;float birthTime = aBirthLifespanAngle.x;&quot;,
         &quot;float lifespan = aBirthLifespanAngle.y;&quot;,
         &quot;float angularVelocity = aBirthLifespanAngle.z;&quot;,
-        &quot;float deathTime = birthTime+lifespan;&quot;,
-        &quot;float age = uT - birthTime;&quot;,
-        &quot;age = mod(uT-birthTime,lifespan);&quot;,
-        
+        &quot;float deathTime = birthTime + lifespan;&quot;,
+        &quot;float age = mod(uT-birthTime,lifespan);&quot;,
+        &quot;float pauseTimeAge = mod(uPauseTime-birthTime,lifespan);&quot;,
+
+      
         &quot;lerp =  age / lifespan;&quot;,
         &quot;gl_PointSize = mix(uPointSizeRange.x,uPointSizeRange.y,lerp);&quot;,
         
-        &quot;if (uT &lt; birthTime || (uT &gt;= deathTime &amp;&amp; !uLoop )) {&quot;,
+        &quot;float loopBirthTime = (uT - birthTime) / lifespan;&quot;,
+        &quot;if (uT &lt; birthTime || (uT &gt;= deathTime &amp;&amp; !uLoop ) || (uT &gt;= uPauseTime - pauseTimeAge + lifespan)) {&quot;,
             &quot;gl_Position = vec4(9999.0,0,0,0);&quot;,
         &quot;} else {&quot;, 
             &quot;vec2 pos = aXYVxVy.xy; &quot;,
             &quot;vec2 vel = aXYVxVy.zw;&quot;,
             &quot;pos += age * vel;&quot;,
-            &quot;pos.y += 0.5 * uGravity * age * age;&quot;,
+            &quot;pos += 0.5 * uGravity * age * age;&quot;,
             &quot;pos = (uCamMatrix * vec3(pos,1.0)).xy;&quot;,
             &quot;pos = (pos / uResolution) * 2.0 - 1.0;&quot;,
             &quot;gl_Position = vec4(pos * vec2(1, -1), 0, 1);&quot;,

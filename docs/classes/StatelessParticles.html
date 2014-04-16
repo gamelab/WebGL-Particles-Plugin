@@ -154,6 +154,12 @@
                     
                 </li>
             
+                <li class="arg">
+                    
+                        <code>config</code>
+                    
+                </li>
+            
             </ul><span class="paren">)</span>
         </div>
     
@@ -267,6 +273,22 @@
 
                     <div class="param-description">
                         <p>: the y position of the game object</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">config</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>: the particle configuration object</p>
 
                     </div>
 
@@ -391,8 +413,22 @@
                                 
                             </li>
                         
+                            <li class="index-item method public">
+                                <a href="#method_remove">remove</a>
+
+                                
+                                
+                            </li>
+                        
                             <li class="index-item method private">
                                 <a href="#method_renderGL">renderGL</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_scheduleRemoval">scheduleRemoval</a>
 
                                 
                                 
@@ -406,21 +442,14 @@
                             </li>
                         
                             <li class="index-item method public">
-                                <a href="#method_start">start</a>
+                                <a href="#method_startEmitting">startEmitting</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method public">
-                                <a href="#method_stop">stop</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method public">
-                                <a href="#method_toggleLoop">toggleLoop</a>
+                                <a href="#method_stopEmitting">stopEmitting</a>
 
                                 
                                 
@@ -445,6 +474,13 @@
                         
                             <li class="index-item property private">
                                 <a href="#property_drawingVectors">drawingVectors</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private">
+                                <a href="#property_loopLength">loopLength</a>
 
                                 
                                 
@@ -547,7 +583,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l295"><code>src\gameobject.js:295</code></a>
+        <a href="../files/src_gameobject.js.html#l346"><code>src\gameobject.js:346</code></a>
         
         </p>
 
@@ -608,7 +644,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l228"><code>src\gameobject.js:228</code></a>
+        <a href="../files/src_gameobject.js.html#l237"><code>src\gameobject.js:237</code></a>
         
         </p>
 
@@ -681,7 +717,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l162"><code>src\gameobject.js:162</code></a>
+        <a href="../files/src_gameobject.js.html#l163"><code>src\gameobject.js:163</code></a>
         
         </p>
 
@@ -766,7 +802,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l465"><code>src\gameobject.js:465</code></a>
+        <a href="../files/src_gameobject.js.html#l520"><code>src\gameobject.js:520</code></a>
         
         </p>
 
@@ -879,7 +915,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l453"><code>src\gameobject.js:453</code></a>
+        <a href="../files/src_gameobject.js.html#l508"><code>src\gameobject.js:508</code></a>
         
         </p>
 
@@ -976,7 +1012,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l479"><code>src\gameobject.js:479</code></a>
+        <a href="../files/src_gameobject.js.html#l534"><code>src\gameobject.js:534</code></a>
         
         </p>
 
@@ -1033,7 +1069,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l488"><code>src\gameobject.js:488</code></a>
+        <a href="../files/src_gameobject.js.html#l543"><code>src\gameobject.js:543</code></a>
         
         </p>
 
@@ -1118,7 +1154,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l439"><code>src\gameobject.js:439</code></a>
+        <a href="../files/src_gameobject.js.html#l494"><code>src\gameobject.js:494</code></a>
         
         </p>
 
@@ -1269,7 +1305,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l503"><code>src\gameobject.js:503</code></a>
+        <a href="../files/src_gameobject.js.html#l558"><code>src\gameobject.js:558</code></a>
         
         </p>
 
@@ -1392,7 +1428,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l518"><code>src\gameobject.js:518</code></a>
+        <a href="../files/src_gameobject.js.html#l573"><code>src\gameobject.js:573</code></a>
         
         </p>
 
@@ -1439,6 +1475,63 @@
 </div>
 
                 
+                    <div id="method_remove" class="method item public">
+    <h3 class="name"><code>remove</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_gameobject.js.html#l319"><code>src\gameobject.js:319</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Immediately marks the gameobject for removal.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_renderGL" class="method item private">
     <h3 class="name"><code>renderGL</code></h3>
 
@@ -1473,7 +1566,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l430"><code>src\gameobject.js:430</code></a>
+        <a href="../files/src_gameobject.js.html#l482"><code>src\gameobject.js:482</code></a>
         
         </p>
 
@@ -1488,6 +1581,97 @@
 
     </div>
 
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_scheduleRemoval" class="method item public">
+    <h3 class="name"><code>scheduleRemoval</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>milliseconds</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_gameobject.js.html#l305"><code>src\gameobject.js:305</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Marks the gameobject for removal after a provided number of milliseconds.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">milliseconds</code>
+                        <span class="type">Boolean</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>: the delahy time in milliseconds before being marked for removal.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
     
 
     
@@ -1552,7 +1736,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l279"><code>src\gameobject.js:279</code></a>
+        <a href="../files/src_gameobject.js.html#l330"><code>src\gameobject.js:330</code></a>
         
         </p>
 
@@ -1631,11 +1815,33 @@
 </div>
 
                 
-                    <div id="method_start" class="method item public">
-    <h3 class="name"><code>start</code></h3>
+                    <div id="method_startEmitting" class="method item public">
+    <h3 class="name"><code>startEmitting</code></h3>
 
     
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>loop</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>removeOnComplete</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>numParts</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
     
 
     
@@ -1665,7 +1871,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l240"><code>src\gameobject.js:240</code></a>
+        <a href="../files/src_gameobject.js.html#l249"><code>src\gameobject.js:249</code></a>
         
         </p>
 
@@ -1676,10 +1882,66 @@
     </div>
 
     <div class="description">
-        <p>Starts the emitter.</p>
+        <p>Starts the system emitting particles. Particles will be regenerated each time.</p>
 
     </div>
 
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">loop</code>
+                        <span class="type">Boolean</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>: Set to true for continuous looping. Overrides and updates the config loop setting.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">removeOnComplete</code>
+                        <span class="type">Boolean</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>: if not looping, then the gameobject will destroy itself after one full emission cycle.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">numParts</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>: the number of particles to generate, set on the config object - if not provided the current config value will be used</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
     
 
     
@@ -1688,11 +1950,27 @@
 </div>
 
                 
-                    <div id="method_stop" class="method item public">
-    <h3 class="name"><code>stop</code></h3>
+                    <div id="method_stopEmitting" class="method item public">
+    <h3 class="name"><code>stopEmitting</code></h3>
 
     
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>immediate</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>remove</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
     
 
     
@@ -1722,7 +2000,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l250"><code>src\gameobject.js:250</code></a>
+        <a href="../files/src_gameobject.js.html#l278"><code>src\gameobject.js:278</code></a>
         
         </p>
 
@@ -1733,67 +2011,50 @@
     </div>
 
     <div class="description">
-        <p>Stops the emitter immediately.</p>
+        <p>Stops the system from emitting particles.</p>
 
     </div>
 
     
+        <div class="params">
+            <h4>Parameters:</h4>
 
-    
-
-    
-</div>
-
-                
-                    <div id="method_toggleLoop" class="method item public">
-    <h3 class="name"><code>toggleLoop</code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-        <span class="flag public">public</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
+            <ul class="params-list">
             
-                
-                <p>
-                
-                Defined in
-                
+                <li class="param">
+                    
+                        <code class="param-name">immediate</code>
+                        <span class="type">Boolean</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>: stops the emitter and removes any existing particles.</p>
+
+                    </div>
+
+                    
+                </li>
             
-        
-        
-        <a href="../files/src_gameobject.js.html#l262"><code>src\gameobject.js:262</code></a>
-        
-        </p>
+                <li class="param">
+                    
+                        <code class="param-name">remove</code>
+                        <span class="type">Boolean</span>
+                    
 
+                    
 
-        
+                    <div class="param-description">
+                        <p>: if true the gameobject will mark itself for removal either immediately, or after a completed cycle.</p>
 
-        
-    </div>
+                    </div>
 
-    <div class="description">
-        <p>Flips whether the effect is looping. Useful for smoothly turning off an effect after a period of time.</p>
-
-    </div>
-
+                    
+                </li>
+            
+            </ul>
+        </div>
     
 
     
@@ -1880,7 +2141,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l172"><code>src\gameobject.js:172</code></a>
+        <a href="../files/src_gameobject.js.html#l173"><code>src\gameobject.js:173</code></a>
         
         </p>
 
@@ -1891,6 +2152,53 @@
 
     <div class="description">
         <p>An array of vectors that conatains generated velocities if useDrawingVectors is true. Used by the particle editor.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_loopLength" class="property item private">
+    <h3 class="name"><code>loopLength</code></h3>
+    <span class="type">Number</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_gameobject.js.html#l229"><code>src\gameobject.js:229</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The maximum loop length of the system.</p>
 
     </div>
 
@@ -1927,7 +2235,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l220"><code>src\gameobject.js:220</code></a>
+        <a href="../files/src_gameobject.js.html#l221"><code>src\gameobject.js:221</code></a>
         
         </p>
 
@@ -1974,7 +2282,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l212"><code>src\gameobject.js:212</code></a>
+        <a href="../files/src_gameobject.js.html#l213"><code>src\gameobject.js:213</code></a>
         
         </p>
 
@@ -2021,7 +2329,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l196"><code>src\gameobject.js:196</code></a>
+        <a href="../files/src_gameobject.js.html#l197"><code>src\gameobject.js:197</code></a>
         
         </p>
 
@@ -2068,7 +2376,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l188"><code>src\gameobject.js:188</code></a>
+        <a href="../files/src_gameobject.js.html#l189"><code>src\gameobject.js:189</code></a>
         
         </p>
 
@@ -2115,7 +2423,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l154"><code>src\gameobject.js:154</code></a>
+        <a href="../files/src_gameobject.js.html#l155"><code>src\gameobject.js:155</code></a>
         
         </p>
 
@@ -2125,7 +2433,7 @@
     </div>
 
     <div class="description">
-        <p>Returns whether the emitter has started</p>
+        <p>Returns whether the particle system has started emitting</p>
 
     </div>
 
@@ -2162,7 +2470,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l180"><code>src\gameobject.js:180</code></a>
+        <a href="../files/src_gameobject.js.html#l181"><code>src\gameobject.js:181</code></a>
         
         </p>
 
@@ -2209,7 +2517,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l204"><code>src\gameobject.js:204</code></a>
+        <a href="../files/src_gameobject.js.html#l205"><code>src\gameobject.js:205</code></a>
         
         </p>
 

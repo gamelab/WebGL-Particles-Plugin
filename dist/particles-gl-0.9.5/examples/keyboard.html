@@ -34,28 +34,40 @@
 			//2) the texture to use,
 			//3) an optional configuration object (see example configuration below). if not supplied or null, this will use a default configuration.
 			//4) whether to start generate and start emitting particles immediately (also optional - defaults to true)	
-			var particle = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,300,config);
-
+			var particle1 = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,300,config);
+     
 			//if you haven't started the particle objects yet then you can adjust the configuration
-			particle.config.numParts = 50;
-			//start the particle object
+			particle1.config.numParts = 100;
+     
+      //start the particle object
+			this.addChild(particle1);
+    
+      //press the sapce bar to emit particles
 
-      particle.startEmitting(true,false);
-   
-      setTimeout(function(){
-        particle.stopEmitting(false,false);
-        
-      },5000);
+      this.game.input.keyboard.onKeyDownOnce.add (function(keyCode) {
+        if (keyCode === 32) particle1.startEmitting();
+      });
 
-			this.addChild(particle);
-			
+       this.game.input.keyboard.onKeyUp.add (function(keyCode) {
+        if (keyCode === 32) particle1.stopEmitting();
+      });
+
+    
+
 		};
 
+    MyState.update = function () {
+     Kiwi.State.prototype.update.call(this);
+    
+    }
+
+
+   
 var config = {
-  "numParts": 10,
+  "numParts": 20,
   "posOffsetX": 0,
   "posOffsetY": 0,
-  "posRadius": 80.4,
+  "posRadius": 10,
   "posRadialStart": 0,
   "posRadialEnd": 6.14355896702004,
   "posWidth": 200,
@@ -87,32 +99,32 @@ var config = {
   "velRandomLine": false,
   "minStartTime": 0,
   "maxStartTime": 1,
-  "minLifespan": 2,
+  "minLifespan": 1,
   "maxLifespan": 2,
   "gravityX": 60,
   "gravityY": 30,
   "startSize": 39,
   "endSize": 140,
-  "loop": false,
+  "loop": true,
   "colEnvKeyframes": [
     0.5,
     0.6
   ],
   "alpha": "1",
   "colEnv0": [
-    0.3686274509803922,
-    0.050980392156862744,
-    0.9490196078431372
+    1.0,
+    0,
+    0
   ],
   "colEnv1": [
-    0.07058823529411765,
-    0.9490196078431372,
-    0.050980392156862744
+    1,
+    0,
+    0
   ],
   "colEnv2": [
     1,
-    1,
-    1
+    0,
+    0
   ],
   "colEnv3": [
     0,

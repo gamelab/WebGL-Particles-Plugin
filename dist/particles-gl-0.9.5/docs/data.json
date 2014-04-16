@@ -106,6 +106,11 @@
                     "name": "y",
                     "description": ": the y position of the game object",
                     "type": "Number"
+                },
+                {
+                    "name": "config",
+                    "description": ": the particle configuration object",
+                    "type": "Object"
                 }
             ],
             "access": "public",
@@ -149,8 +154,8 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 154,
-            "description": "Returns whether the emitter has started",
+            "line": 155,
+            "description": "Returns whether the particle system has started emitting",
             "itemtype": "property",
             "name": "started",
             "type": "boolean",
@@ -160,7 +165,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 162,
+            "line": 163,
             "description": "The type of object that this is.",
             "itemtype": "method",
             "name": "objType",
@@ -173,7 +178,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 172,
+            "line": 173,
             "description": "An array of vectors that conatains generated velocities if useDrawingVectors is true. Used by the particle editor.",
             "itemtype": "property",
             "name": "drawingVectors",
@@ -184,7 +189,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 180,
+            "line": 181,
             "description": "If true, velocity vectors will be stored on particle generation. Used by the particle editor.",
             "itemtype": "property",
             "name": "useDrawingVectors",
@@ -195,7 +200,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 188,
+            "line": 189,
             "description": "A function delegated to return a random number. Used by the particle editor.",
             "itemtype": "property",
             "name": "rnd",
@@ -206,7 +211,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 196,
+            "line": 197,
             "description": "If useRandoms is true, This array will contain pregenerate random numbers which will be used every new generation refresh. Used by the particle editor.",
             "itemtype": "property",
             "name": "randoms",
@@ -217,7 +222,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 204,
+            "line": 205,
             "description": "If true, pregenerate random numbers. Used by the particle editor.",
             "itemtype": "property",
             "name": "useRandoms",
@@ -228,7 +233,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 212,
+            "line": 213,
             "description": "The number of random numbers to generate if useRandoms is true.",
             "itemtype": "property",
             "name": "numRandoms",
@@ -239,7 +244,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 220,
+            "line": 221,
             "description": "The index of the next random number in useRandoms. Used by the particle editor.",
             "itemtype": "property",
             "name": "nextRandomIndex",
@@ -250,7 +255,18 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 228,
+            "line": 229,
+            "description": "The maximum loop length of the system.",
+            "itemtype": "property",
+            "name": "loopLength",
+            "type": "number",
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 237,
             "description": "Get the next random number from the randoms list. Used by the particle editor.",
             "itemtype": "method",
             "name": "nextRandom",
@@ -263,37 +279,83 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 240,
-            "description": "Starts the emitter.",
+            "line": 249,
+            "description": "Starts the system emitting particles. Particles will be regenerated each time.",
             "itemtype": "method",
-            "name": "start",
+            "name": "startEmitting",
+            "params": [
+                {
+                    "name": "loop",
+                    "description": ": Set to true for continuous looping. Overrides and updates the config loop setting.",
+                    "type": "Boolean"
+                },
+                {
+                    "name": "removeOnComplete",
+                    "description": ": if not looping, then the gameobject will destroy itself after one full emission cycle.",
+                    "type": "Boolean"
+                },
+                {
+                    "name": "numParts",
+                    "description": ": the number of particles to generate, set on the config object - if not provided the current config value will be used",
+                    "type": "Number"
+                }
+            ],
             "access": "public",
             "tagname": "",
             "class": "StatelessParticles"
         },
         {
             "file": "src\\gameobject.js",
-            "line": 250,
-            "description": "Stops the emitter immediately.",
+            "line": 278,
+            "description": "Stops the system from emitting particles.",
             "itemtype": "method",
-            "name": "stop",
+            "name": "stopEmitting",
+            "params": [
+                {
+                    "name": "immediate",
+                    "description": ": stops the emitter and removes any existing particles.",
+                    "type": "Boolean"
+                },
+                {
+                    "name": "remove",
+                    "description": ": if true the gameobject will mark itself for removal either immediately, or after a completed cycle.",
+                    "type": "Boolean"
+                }
+            ],
             "access": "public",
             "tagname": "",
             "class": "StatelessParticles"
         },
         {
             "file": "src\\gameobject.js",
-            "line": 262,
-            "description": "Flips whether the effect is looping. Useful for smoothly turning off an effect after a period of time.",
+            "line": 305,
+            "description": "Marks the gameobject for removal after a provided number of milliseconds.",
             "itemtype": "method",
-            "name": "toggleLoop",
+            "name": "scheduleRemoval",
+            "params": [
+                {
+                    "name": "milliseconds",
+                    "description": ": the delahy time in milliseconds before being marked for removal.",
+                    "type": "Boolean"
+                }
+            ],
             "access": "public",
             "tagname": "",
             "class": "StatelessParticles"
         },
         {
             "file": "src\\gameobject.js",
-            "line": 279,
+            "line": 319,
+            "description": "Immediately marks the gameobject for removal.",
+            "itemtype": "method",
+            "name": "remove",
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 330,
             "description": "Sets the configuration object and optionally regenerates particles and sets runtime properties.",
             "itemtype": "method",
             "name": "setConfig",
@@ -320,7 +382,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 295,
+            "line": 346,
             "description": "Generates particles based on configuration object.",
             "itemtype": "method",
             "name": "_generateParticles",
@@ -330,7 +392,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 430,
+            "line": 482,
             "description": "Instructs the renderer to draw the particles.",
             "itemtype": "method",
             "name": "renderGL",
@@ -340,7 +402,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 439,
+            "line": 494,
             "description": "Returns a point on a unit arc based on a total number of points and an index",
             "itemtype": "method",
             "name": "regularPointCirclePerimeter",
@@ -372,7 +434,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 453,
+            "line": 508,
             "description": "Returns a point on a unit arc",
             "itemtype": "method",
             "name": "randomPointCirclePerimeter",
@@ -394,7 +456,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 465,
+            "line": 520,
             "description": "Returns a point within the sector of a circle",
             "itemtype": "method",
             "name": "randomPointCirclePerimeter",
@@ -416,7 +478,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 479,
+            "line": 534,
             "description": "Returns a point within the unit square",
             "itemtype": "method",
             "name": "randomPointRect",
@@ -426,7 +488,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 488,
+            "line": 543,
             "description": "Returns a point on the perimeter of the unit square",
             "itemtype": "method",
             "name": "randomPointRectPerimeter",
@@ -436,7 +498,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 503,
+            "line": 558,
             "description": "Returns a point on a unit line based on a total number of points and an index.",
             "itemtype": "method",
             "name": "regularPointLine",
@@ -463,7 +525,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 518,
+            "line": 573,
             "description": "Returns a point on a unit line.",
             "itemtype": "method",
             "name": "regularPointLine",
@@ -519,7 +581,7 @@
         },
         {
             "file": "src\\shader.js",
-            "line": 86,
+            "line": 89,
             "itemtype": "property",
             "name": "texture2DFrag",
             "type": "Array",
@@ -531,7 +593,7 @@
         },
         {
             "file": "src\\shader.js",
-            "line": 108,
+            "line": 111,
             "itemtype": "property",
             "name": "texture2DVert",
             "type": "Array",
