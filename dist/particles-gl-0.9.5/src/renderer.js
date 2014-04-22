@@ -95,10 +95,8 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.pauseTime = 999999999;
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.pause = function (gl) {
     gl = gl || this.gl;
-    console.log("pause");
     this.pauseTime = this.time / 1000;
     gl.uniform1f(this.shaderPair.uniforms.uPauseTime.location, this.pauseTime);
-     console.log('0 set pause time to' + this.pauseTime)
 }
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl,transform) {
