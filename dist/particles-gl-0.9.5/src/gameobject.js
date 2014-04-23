@@ -31,6 +31,10 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
 
 
 
+
+            
+        
+
 (function (){
     var protoProps = {
 
@@ -153,13 +157,15 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         },
 
         /**
-        * Returns whether the particle system has started emitting
-        * @property started
+        * Returns the state of the particle effect. Either "stopped","started" or "stopping" 
+        * @property state
         * @type boolean
+        * @readonly
         * @public
         */
-        started : false,
-
+        effectState : "stopped",
+        
+        
         /**
          * The type of object that this is.
          * @method objType
@@ -227,12 +233,12 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         nextRandomIndex : -1,
     
         /**
-        * The maximum loop length of the system.
-        * @property loopLength
+        * The maximum loop length of the system. Used for calculating the timeout when stopping emission. This is calculated when the particles are generated. It can be overridden once the emission has started.
+        * @property timeoutLength
         * @type number
-        * @private
+        * @public
         */
-        loopLength:0,
+        timeoutLength:0,
 
         /**
          * Get the next random number from the randoms list. Used by the particle editor.
@@ -255,6 +261,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
          * @public
          */
         startEmitting : function (loop,removeOnComplete,numParts) {
+            console.log('startEmitting')
             if (typeof loop === "undefined") { loop = true; }
             if (typeof removeOnComplete === "undefined") { removeOnComplete = false }
             if (typeof numParts === "undefined") { numParts = this.config.numParts; }
@@ -268,10 +275,12 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             this.setConfig(this.config,true,true);
                       
             if (!loop && removeOnComplete) {
-                this.scheduleRemoval(this.loopLength * 1000);
+                this.scheduleRemoval(this.timeoutLength * 1000);
             }
 
-            this.started = true;
+            this.effectState = "started";
+            clearTimeout(this._timer);
+            console.log ("started")
         
         },
         
@@ -283,38 +292,49 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
          * @public
          */
         stopEmitting : function(immediate,remove) {
-            
+            console.log('stopEmitting')
             if (typeof immediate === "undefined") { immediate = false; }
             if (typeof remove === "undefined") { remove = false; }
 
-            if (immediate && remove) {
-              this.remove();
-            } else if (immediate && !remove) {
-              this.started = false;
-            } else if (!immediate && !remove) {
-              this.glRenderer.pause();
-              this.started = false;
-            } else if (!immediate && remove) {
-              this.config.loop = false;
-              this.scheduleRemoval(this.loopLength * 1000);
-            }          
+            if (this.effectState === "started" ) {
+                if (immediate && remove) {
+                  this.remove();
+                } else if (immediate && !remove) {
+                  this.effectState = "stopped";
+                  console.log ("stopped")
+                } else if (!immediate && !remove) {
+                  this.glRenderer.pause();
+                  this.effectState = "stopping";
+                  console.log ("stopping")
+                  this.scheduleStop (this.timeoutLength * 1000,false);
+                } else if (!immediate && remove) {
+                  this.config.loop = false;
+                  this.scheduleStop(this.timeoutLength * 1000,true);
+                }          
+            }
         
 
         },
 
         /**
-         * Marks the gameobject for removal after a provided number of milliseconds.
-         * @method scheduleRemoval
-         * @param {boolean} milliseconds : the delahy time in milliseconds before being marked for removal.
+         * Schedules the particle effect to stop (discontinue rendering), and optionally marks the gameobject for removal.
+         * @method scheduleStop
+         * @param {number} milliseconds : the delay time in milliseconds before being marked for removal.
+         * @param {boolean} remove : mark the gameobject for removal.
          * @public
          */
-        scheduleRemoval: function (milliseconds) {
+        scheduleStop: function (milliseconds,remove) {
             var that = this;
-            setTimeout(function(milliseconds) {
-                that.remove.call(that);
+            clearTimeout(this._timer);
+            this._timer = setTimeout(function(milliseconds) {
+                that.effectState = "stopped";
+                console.log ("stopped")
+                if (remove) that.remove.call(that);
             },milliseconds)
-
         },
+
+
+        _timer: null,
 
         /**
          * Immediately marks the gameobject for removal.
@@ -457,7 +477,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
                 startTime = cfg.minStartTime + this.rnd() * (cfg.maxStartTime - cfg.minStartTime);
                 lifespan = cfg.minLifespan + this.rnd() * (cfg.maxLifespan - cfg.minLifespan);
 
-                this.loopLength = Math.max(this.loopLength,startTime+lifespan);
+                this.timeoutLength = Math.max(this.timeoutLength,startTime+lifespan);
                 var cellIndex = 0;
 
                 if (cfg.cells) {
@@ -485,8 +505,8 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         * @private
         */
         renderGL : function (gl, camera, params) {
-            this.glRenderer.draw(gl,this.transform);
-            
+            if (this.effectState !== "stopped")
+                this.glRenderer.draw(gl,this.transform);
         },
 
         

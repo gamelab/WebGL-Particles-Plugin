@@ -428,7 +428,7 @@
                             </li>
                         
                             <li class="index-item method public">
-                                <a href="#method_scheduleRemoval">scheduleRemoval</a>
+                                <a href="#method_scheduleStop">scheduleStop</a>
 
                                 
                                 
@@ -480,13 +480,6 @@
                             </li>
                         
                             <li class="index-item property private">
-                                <a href="#property_loopLength">loopLength</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property private">
                                 <a href="#property_nextRandomIndex">nextRandomIndex</a>
 
                                 
@@ -515,7 +508,14 @@
                             </li>
                         
                             <li class="index-item property public">
-                                <a href="#property_started">started</a>
+                                <a href="#property_state">state</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property public">
+                                <a href="#property_timeoutLength">timeoutLength</a>
 
                                 
                                 
@@ -583,7 +583,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l346"><code>src\gameobject.js:346</code></a>
+        <a href="../files/src_gameobject.js.html#l366"><code>src\gameobject.js:366</code></a>
         
         </p>
 
@@ -644,7 +644,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l237"><code>src\gameobject.js:237</code></a>
+        <a href="../files/src_gameobject.js.html#l243"><code>src\gameobject.js:243</code></a>
         
         </p>
 
@@ -717,7 +717,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l163"><code>src\gameobject.js:163</code></a>
+        <a href="../files/src_gameobject.js.html#l169"><code>src\gameobject.js:169</code></a>
         
         </p>
 
@@ -802,7 +802,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l520"><code>src\gameobject.js:520</code></a>
+        <a href="../files/src_gameobject.js.html#l540"><code>src\gameobject.js:540</code></a>
         
         </p>
 
@@ -915,7 +915,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l508"><code>src\gameobject.js:508</code></a>
+        <a href="../files/src_gameobject.js.html#l528"><code>src\gameobject.js:528</code></a>
         
         </p>
 
@@ -1012,7 +1012,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l534"><code>src\gameobject.js:534</code></a>
+        <a href="../files/src_gameobject.js.html#l554"><code>src\gameobject.js:554</code></a>
         
         </p>
 
@@ -1069,7 +1069,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l543"><code>src\gameobject.js:543</code></a>
+        <a href="../files/src_gameobject.js.html#l563"><code>src\gameobject.js:563</code></a>
         
         </p>
 
@@ -1154,7 +1154,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l494"><code>src\gameobject.js:494</code></a>
+        <a href="../files/src_gameobject.js.html#l514"><code>src\gameobject.js:514</code></a>
         
         </p>
 
@@ -1305,7 +1305,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l558"><code>src\gameobject.js:558</code></a>
+        <a href="../files/src_gameobject.js.html#l578"><code>src\gameobject.js:578</code></a>
         
         </p>
 
@@ -1428,7 +1428,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l573"><code>src\gameobject.js:573</code></a>
+        <a href="../files/src_gameobject.js.html#l593"><code>src\gameobject.js:593</code></a>
         
         </p>
 
@@ -1509,7 +1509,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l319"><code>src\gameobject.js:319</code></a>
+        <a href="../files/src_gameobject.js.html#l339"><code>src\gameobject.js:339</code></a>
         
         </p>
 
@@ -1566,7 +1566,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l482"><code>src\gameobject.js:482</code></a>
+        <a href="../files/src_gameobject.js.html#l502"><code>src\gameobject.js:502</code></a>
         
         </p>
 
@@ -1589,8 +1589,8 @@
 </div>
 
                 
-                    <div id="method_scheduleRemoval" class="method item public">
-    <h3 class="name"><code>scheduleRemoval</code></h3>
+                    <div id="method_scheduleStop" class="method item public">
+    <h3 class="name"><code>scheduleStop</code></h3>
 
     
         <div class="args">
@@ -1599,6 +1599,12 @@
                 <li class="arg">
                     
                         <code>milliseconds</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>remove</code>
                     
                 </li>
             
@@ -1633,7 +1639,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l305"><code>src\gameobject.js:305</code></a>
+        <a href="../files/src_gameobject.js.html#l319"><code>src\gameobject.js:319</code></a>
         
         </p>
 
@@ -1644,7 +1650,7 @@
     </div>
 
     <div class="description">
-        <p>Marks the gameobject for removal after a provided number of milliseconds.</p>
+        <p>Schedules the particle effect to stop (discontinue rendering), and optionally marks the gameobject for removal.</p>
 
     </div>
 
@@ -1657,13 +1663,29 @@
                 <li class="param">
                     
                         <code class="param-name">milliseconds</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>: the delay time in milliseconds before being marked for removal.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">remove</code>
                         <span class="type">Boolean</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>: the delahy time in milliseconds before being marked for removal.</p>
+                        <p>: mark the gameobject for removal.</p>
 
                     </div>
 
@@ -1736,7 +1758,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l330"><code>src\gameobject.js:330</code></a>
+        <a href="../files/src_gameobject.js.html#l350"><code>src\gameobject.js:350</code></a>
         
         </p>
 
@@ -1871,7 +1893,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l249"><code>src\gameobject.js:249</code></a>
+        <a href="../files/src_gameobject.js.html#l255"><code>src\gameobject.js:255</code></a>
         
         </p>
 
@@ -2000,7 +2022,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l278"><code>src\gameobject.js:278</code></a>
+        <a href="../files/src_gameobject.js.html#l287"><code>src\gameobject.js:287</code></a>
         
         </p>
 
@@ -2094,7 +2116,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l74"><code>src\gameobject.js:74</code></a>
+        <a href="../files/src_gameobject.js.html#l78"><code>src\gameobject.js:78</code></a>
         
         </p>
 
@@ -2141,7 +2163,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l173"><code>src\gameobject.js:173</code></a>
+        <a href="../files/src_gameobject.js.html#l179"><code>src\gameobject.js:179</code></a>
         
         </p>
 
@@ -2152,53 +2174,6 @@
 
     <div class="description">
         <p>An array of vectors that conatains generated velocities if useDrawingVectors is true. Used by the particle editor.</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_loopLength" class="property item private">
-    <h3 class="name"><code>loopLength</code></h3>
-    <span class="type">Number</span>
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_gameobject.js.html#l229"><code>src\gameobject.js:229</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>The maximum loop length of the system.</p>
 
     </div>
 
@@ -2235,7 +2210,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l221"><code>src\gameobject.js:221</code></a>
+        <a href="../files/src_gameobject.js.html#l227"><code>src\gameobject.js:227</code></a>
         
         </p>
 
@@ -2282,7 +2257,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l213"><code>src\gameobject.js:213</code></a>
+        <a href="../files/src_gameobject.js.html#l219"><code>src\gameobject.js:219</code></a>
         
         </p>
 
@@ -2329,7 +2304,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l197"><code>src\gameobject.js:197</code></a>
+        <a href="../files/src_gameobject.js.html#l203"><code>src\gameobject.js:203</code></a>
         
         </p>
 
@@ -2376,7 +2351,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l189"><code>src\gameobject.js:189</code></a>
+        <a href="../files/src_gameobject.js.html#l195"><code>src\gameobject.js:195</code></a>
         
         </p>
 
@@ -2398,8 +2373,8 @@
 </div>
 
                 
-                    <div id="property_started" class="property item public">
-    <h3 class="name"><code>started</code></h3>
+                    <div id="property_state" class="property item public">
+    <h3 class="name"><code>state</code></h3>
     <span class="type">Boolean</span>
 
     
@@ -2423,7 +2398,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l155"><code>src\gameobject.js:155</code></a>
+        <a href="../files/src_gameobject.js.html#l159"><code>src\gameobject.js:159</code></a>
         
         </p>
 
@@ -2433,7 +2408,54 @@
     </div>
 
     <div class="description">
-        <p>Returns whether the particle system has started emitting</p>
+        <p>Returns the state of the particle effect. Either &quot;stopped&quot;,&quot;started&quot; or &quot;stopping&quot;</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_timeoutLength" class="property item public">
+    <h3 class="name"><code>timeoutLength</code></h3>
+    <span class="type">Number</span>
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_gameobject.js.html#l235"><code>src\gameobject.js:235</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The maximum loop length of the system. Used for calculating the timeout when stopping emission. This is calculated when the particles are generated. It can be overridden once the emission has started.</p>
 
     </div>
 
@@ -2470,7 +2492,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l181"><code>src\gameobject.js:181</code></a>
+        <a href="../files/src_gameobject.js.html#l187"><code>src\gameobject.js:187</code></a>
         
         </p>
 
@@ -2517,7 +2539,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l205"><code>src\gameobject.js:205</code></a>
+        <a href="../files/src_gameobject.js.html#l211"><code>src\gameobject.js:211</code></a>
         
         </p>
 

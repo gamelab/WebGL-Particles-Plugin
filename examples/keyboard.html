@@ -45,7 +45,13 @@
       //press the sapce bar to emit particles
 
       this.game.input.keyboard.onKeyDownOnce.add (function(keyCode) {
-        if (keyCode === 32) particle1.startEmitting();
+        /*if (keyCode === 32) {
+            particle1.startEmitting();
+        }*/
+        if (keyCode === 32 && particle1.effectState === "stopped") {
+            particle1.startEmitting();
+            particle1.timeoutLength -=1.2;   //this trims the length of particle emission timeout  
+        }
       });
 
        this.game.input.keyboard.onKeyUp.add (function(keyCode) {
