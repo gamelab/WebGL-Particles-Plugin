@@ -120,7 +120,11 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl,transform
 
 
     gl.blendEquationSeparate(gl.FUNC_ADD,gl.FUNC_ADD)
-    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE,gl.ONE);
+
+    if (this._config.additive )
+        gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE, gl.ONE,gl.ONE);
+    else
+        gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE,gl.ONE);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer.buffer);
 
