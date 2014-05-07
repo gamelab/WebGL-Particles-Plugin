@@ -146,7 +146,7 @@ var Kiwi;
             * @private
             */
             this._delta = 0;
-            console.log(name + ' is being created.');
+            console.log(name + ' is booting, using Kiwi.js version ' + Kiwi.VERSION);
 
             //Have they specified debugging
             if (options.debug !== 'undefined' && typeof options.debug === 'number') {
@@ -225,7 +225,41 @@ var Kiwi;
             this.fileStore = new Kiwi.Files.FileStore(this);
             this.input = new Kiwi.Input.InputManager(this);
 
-            this.stage = new Kiwi.Stage(this, name);
+            // Width / Height
+            var width = Kiwi.Stage.DEFAULT_WIDTH;
+            var height = Kiwi.Stage.DEFAULT_HEIGHT;
+
+            if (options.width !== 'undefined' && typeof options.width === 'number') {
+                width = options.width;
+            }
+
+            if (options.height !== 'undefined' && typeof options.height === 'number') {
+                height = options.height;
+            }
+
+            console.log('Stage Dimensions: ' + width + 'x' + height);
+
+            if (options.scaleType !== 'undefined') {
+                switch (options.scaleType) {
+                    case Kiwi.Stage.SCALE_FIT:
+                        console.log('Stage scaling set to FIT.');
+                        break;
+                    case Kiwi.Stage.SCALE_STRETCH:
+                        console.log('Stage scaling set to STRETCH.');
+                        break;
+                    case Kiwi.Stage.SCALE_NONE:
+                        console.log('Stage scaling set to NONE.');
+                        break;
+                    default:
+                        console.log('Stage specified, but is not a valid option. Set to NONE.');
+                        options.scaleType = 0;
+                        break;
+                }
+            } else {
+                options.scaleType = 0;
+            }
+
+            this.stage = new Kiwi.Stage(this, name, width, height, options.scaleType);
 
             if (this._renderOption === Kiwi.RENDERER_CANVAS) {
                 this.renderer = new Kiwi.Renderers.CanvasRenderer(this);
@@ -455,18 +489,15 @@ var Kiwi;
     *
     */
     var Stage = (function () {
-        function Stage(game, name) {
+        function Stage(game, name, width, height, scaleType) {
             /**
-            * Calculates and returns the amount that the container has been scale buy.
-            * Mainly used for re-calculating input coordinates.
-            * Note: For COCOONJS this returns 1 since COCOONJS translates the points itself.
-            * This property is READ ONLY.
-            * @property scale
-            * @type Number
-            * @default 1
-            * @public
+            * Private property that holds the scaling method that should be applied to the container element.
+            * @property _scaleType
+            * @type number
+            * @default SCALE_NONE
+            * @private
             */
-            this._scale = 1;
+            this._scaleType = Kiwi.Stage.SCALE_NONE;
             /**
             * A point which determines the offset of this Stage
             * @property offset
@@ -493,11 +524,15 @@ var Kiwi;
             this._x = 0;
             this._y = 0;
 
-            this._width = Stage.DEFAULT_WIDTH;
-            this._height = Stage.DEFAULT_HEIGHT;
+            this._width = width;
+            this._height = height;
             this.color = 'ffffff';
 
+            this._scale = new Kiwi.Geom.Point(1, 1);
+            this._scaleType = scaleType;
+
             this.onResize = new Kiwi.Signal();
+            this.onWindowResize = new Kiwi.Signal();
         }
         /**
         * Returns the type of this object.
@@ -509,9 +544,31 @@ var Kiwi;
             return "Stage";
         };
 
+
+        Object.defineProperty(Stage.prototype, "scaleType", {
+            get: function () {
+                return this._scaleType;
+            },
+            /**
+            * Holds type of scaling that should be applied the container element.
+            * @property scaleType
+            * @type number
+            * @default SCALE_NONE
+            * @private
+            */
+            set: function (val) {
+                this._scaleType = val;
+                this._scaleContainer();
+            },
+            enumerable: true,
+            configurable: true
+        });
+
         Object.defineProperty(Stage.prototype, "alpha", {
             /**
-            * Get the current alpha of the stage. 0 = invisible, 1 = fully visible.
+            * Sets the alpha of the container element. 0 = invisible, 1 = fully visible.
+            * Note: Because the alpha value is applied to the container, it will not work in CocoonJS.
+            *
             * @property alpha
             * @type number
             * @public
@@ -613,9 +670,41 @@ var Kiwi;
             configurable: true
         });
 
+        Object.defineProperty(Stage.prototype, "scaleX", {
+            /**
+            * Calculates and returns the amount that the container has been scale by on the X axis.
+            * @property scaleX
+            * @type Number
+            * @default 1
+            * @public
+            */
+            get: function () {
+                return this._scale.x;
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(Stage.prototype, "scaleY", {
+            /**
+            * Calculates and returns the amount that the container has been scale by on the Y axis.
+            * @property scaleY
+            * @type Number
+            * @default 1
+            * @public
+            */
+            get: function () {
+                return this._scale.y;
+            },
+            enumerable: true,
+            configurable: true
+        });
+
         Object.defineProperty(Stage.prototype, "color", {
             /**
-            * Get the background color of the stage. This returns a hex style color string such as "#ffffff"
+            * Sets the background color of the stage via a hex value.
+            * The hex colour code should not contain a hashtag '#'.
+            *
             * @property color
             * @type string
             * @public
@@ -624,21 +713,46 @@ var Kiwi;
                 return this._color;
             },
             set: function (val) {
-                this._color = "#" + val;
+                this._color = val;
                 var bigint = parseInt(val, 16);
+
                 var r = (bigint >> 16) & 255;
                 var g = (bigint >> 8) & 255;
                 var b = bigint & 255;
+
+                //Converts the colour to normalized values.
                 this._normalizedColor = { r: r / 255, g: g / 255, b: b / 255, a: 1 };
             },
             enumerable: true,
             configurable: true
         });
 
+
+        Object.defineProperty(Stage.prototype, "rgbColor", {
+            /**
+            * Allows the setting of the background color of the stage through component RGB colour values.
+            * This property is an Object Literal with 'r', 'g', 'b' colour streams of values between 0 and 255.
+            *
+            * @property rgbColor
+            * @type Object
+            * @public
+            */
+            get: function () {
+                return { r: this._normalizedColor.r * 255, g: this._normalizedColor.g * 255, b: this._normalizedColor.b * 255 };
+            },
+            set: function (val) {
+                this.color = this.componentToHex(val.r) + this.componentToHex(val.g) + this.componentToHex(val.b);
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+
         Object.defineProperty(Stage.prototype, "normalizedColor", {
             /**
-            * Get the normalized background color of the stage. returns a object with rgba values between 0 and 1.
-            * @property color
+            * Get the normalized background color of the stage. Returns a object with rgba values, each being between 0 and 1.
+            * This is READ ONLY.
+            * @property normalizedColor
             * @type string
             * @public
             */
@@ -662,10 +776,9 @@ var Kiwi;
 
             if (this._game.deviceTargetOption === Kiwi.TARGET_BROWSER) {
                 this.offset = this._game.browser.getOffsetPoint(this.container);
+
                 this._x = this.offset.x;
                 this._y = this.offset.y;
-                this._width = this.container.clientWidth;
-                this._height = this.container.clientHeight;
 
                 window.addEventListener("resize", function (event) {
                     return _this._windowResized(event);
@@ -673,25 +786,44 @@ var Kiwi;
             }
 
             this._createCompositeCanvas();
-            if (this._game.debugOption === Kiwi.DEBUG_ON) {
-                //this._createDebugCanvas();
+
+            if (this._game.deviceTargetOption === Kiwi.TARGET_COCOON) {
+                this._scaleContainer();
+            } else {
+                this._calculateContainerScale();
             }
         };
 
         /**
         * Method that is fired when the window is resized.
-        * Used to calculate the new offset and see what the scale of the stage currently is.
         * @method _windowResized
         * @param event {UIEvent}
         * @private
         */
         Stage.prototype._windowResized = function (event) {
-            this.offset = this._game.browser.getOffsetPoint(this.container);
-            this._scale = this._width / this.container.clientWidth;
+            this._calculateContainerScale();
+
+            //Dispatch window resize event
+            this.onWindowResize.dispatch();
         };
 
         /**
-        * [DESCRIPTION REQUIRED]
+        * Used to calculate the new offset and see what the scale of the stage currently is.
+        * @method _calculateContainerScale
+        * @param event {UIEvent}
+        * @private
+        */
+        Stage.prototype._calculateContainerScale = function () {
+            this.offset = this._game.browser.getOffsetPoint(this.container);
+            this._scaleContainer();
+
+            this._scale.x = this._width / this.container.clientWidth;
+            this._scale.y = this._height / this.container.clientHeight;
+        };
+
+        /**
+        * Handles the creation of the canvas that the game will use and retrieves the context for the renderer.
+        *
         * @method _createComponsiteCanvas
         * @private
         */
@@ -699,9 +831,11 @@ var Kiwi;
             //If we are using cocoon then create a accelerated screen canvas
             if (this._game.deviceTargetOption == Kiwi.TARGET_COCOON) {
                 this.canvas = document.createElement(navigator['isCocoonJS'] ? 'screencanvas' : 'canvas');
-                //otherwise default to normal canvas
+                //Otherwise default to normal canvas
             } else {
                 this.canvas = document.createElement("canvas");
+                this.canvas.style.width = '100%';
+                this.canvas.style.height = '100%';
             }
 
             this.canvas.id = this._game.id + "compositeCanvas";
@@ -709,7 +843,7 @@ var Kiwi;
             this.canvas.width = this.width;
             this.canvas.height = this.height;
 
-            //get 2d or gl context - should add in error checking here
+            //Get 2D or GL Context - Should add in error checking here
             if (this._game.renderOption === Kiwi.RENDERER_CANVAS) {
                 this.ctx = this.canvas.getContext("2d");
                 this.ctx.fillStyle = '#fff';
@@ -729,7 +863,8 @@ var Kiwi;
         };
 
         /**
-        * Set the stage width and height
+        * Set the stage width and height.
+        *
         * @method resize
         * @param width {number} new stage width
         * @param height {number} new stage height
@@ -742,27 +877,58 @@ var Kiwi;
             this._width = width;
 
             if (this._game.deviceTargetOption === Kiwi.TARGET_BROWSER) {
-                this.container.style.height = String(height + 'px');
-                this.container.style.width = String(width + 'px');
-                this._scale = this._width / this.container.clientWidth;
+                this._calculateContainerScale();
             }
 
             this.onResize.dispatch(this._width, this._height);
         };
 
         /**
-        * [DESCRIPTION REQUIRED]
-        * @method _createDebugCanvas
+        * Sets the background color of the stage through component RGB colour values.
+        * Each parameter pass is a number between 0 and 255. This method also returns a Object Literal with 'r', 'g', 'b' properties.
+        *
+        * @method setRGBColor
+        * @param r {Number} The red component. A value between 0 and 255.
+        * @param g {Number} The green component. A value between 0 and 255.
+        * @param B {Number} The blue component. A value between 0 and 255.
+        * @return {Object} A Object literal containing the r,g,b properties.
+        * @public
+        */
+        Stage.prototype.setRGBColor = function (r, g, b) {
+            this.rgbColor = { r: r, g: g, b: b };
+            return this.rgbColor;
+        };
+
+        /**
+        * Converts a component colour value into its hex equivalent. Used when setting rgb colour values.
+        *
+        * @method componentToHex
+        * @param c {Number} The components colour value. A number between 0 and 255.
+        * @return {string} The hex equivelent of that colour string.
         * @private
         */
-        Stage.prototype._createDebugCanvas = function () {
+        Stage.prototype.componentToHex = function (c) {
+            var hex = c.toString(16);
+            return hex.length == 1 ? "0" + hex : hex;
+        };
+
+        /**
+        * Creates a debug canvas and adds it above the regular game canvas.
+        * The debug canvas is not created by default (even with debugging on) and rendering/clearing of the canvas is upto the developer.
+        * The context for rendering can be access via the 'dctx' property and you can use the 'clearDebugCanvas' method to clear the canvas.
+        *
+        * @method createDebugCanvas
+        * @public
+        */
+        Stage.prototype.createDebugCanvas = function () {
             if (this._game.deviceTargetOption === Kiwi.TARGET_COCOON) {
-                //debug canvas not supported in cocoon, creating canvas and context anyway.
+                //Not supported in CocoonJS only because we cannot add it to the container (as a container does not exist) and position will be hard.
+                console.log('Debug canvas not supported in cocoon, creating canvas and context anyway');
             }
+
             this.debugCanvas = document.createElement("canvas");
             this.debugCanvas.id = this._game.id + "debugCanvas";
             this.debugCanvas.style.position = "absolute";
-            this.debugCanvas.style.display = "none";
             this.debugCanvas.width = this.width;
             this.debugCanvas.height = this.height;
             this.dctx = this.debugCanvas.getContext("2d");
@@ -774,7 +940,9 @@ var Kiwi;
         };
 
         /**
-        * [DESCRIPTION REQUIRED]
+        * Clears the debug canvas and fills with either the color passed.
+        * If not colour is passed then Red at 20% opacity is used.
+        *
         * @method clearDebugCanvas
         * @param [color='rgba(255,0,0,0.2)'] {string} debug color
         * @public
@@ -786,16 +954,75 @@ var Kiwi;
         };
 
         /**
-        * [DESCRIPTION REQUIRED]
+        * Toggles the visibility of the debug canvas.
         * @method toggleDebugCanvas
         * @public
         */
         Stage.prototype.toggleDebugCanvas = function () {
             this.debugCanvas.style.display = (this.debugCanvas.style.display === "none") ? "block" : "none";
         };
+
+        /**
+        * Handles the scaling/sizing based upon the scaleType property.
+        * @method _resizeContainer
+        * @private
+        */
+        Stage.prototype._scaleContainer = function () {
+            if (this._game.deviceTargetOption == Kiwi.TARGET_BROWSER) {
+                this.container.style.width = String(this._width + 'px');
+                this.container.style.height = String(this._height + 'px');
+
+                if (this._scaleType == Kiwi.Stage.SCALE_NONE) {
+                    this.container.style.maxWidth = '';
+                    this.container.style.minWidth = '';
+                }
+
+                //To Fit or STRETCH
+                if (this._scaleType == Kiwi.Stage.SCALE_STRETCH || this._scaleType == Kiwi.Stage.SCALE_FIT) {
+                    this.container.style.minWidth = '100%';
+                    this.container.style.maxWidth = '100%';
+                }
+
+                //If scale stretched then scale the containers height to 100% of its parents.
+                if (this._scaleType == Kiwi.Stage.SCALE_STRETCH) {
+                    this.container.style.minHeight = '100%';
+                    this.container.style.maxHeight = '100%';
+                } else {
+                    this.container.style.minHeight = '';
+                    this.container.style.maxHeight = '';
+                }
+
+                //If it is SCALE to FIT then scale the containers height in ratio with the containers width.
+                if (this._scaleType == Kiwi.Stage.SCALE_FIT) {
+                    this.container.style.height = String((this.container.clientWidth / this._width) * this._height) + 'px';
+                }
+            }
+
+            if (this._game.deviceTargetOption == Kiwi.TARGET_COCOON) {
+                switch (this._scaleType) {
+                    case Kiwi.Stage.SCALE_FIT:
+                        this.canvas.style.cssText = 'idtkscale:ScaleAspectFit';
+                        break;
+
+                    case Kiwi.Stage.SCALE_STRETCH:
+                        this.canvas.style.cssText = 'idtkscale:ScaleToFill';
+                        break;
+
+                    case Kiwi.Stage.SCALE_NONE:
+                        this.canvas.style.cssText = '';
+                        break;
+                }
+            }
+        };
         Stage.DEFAULT_WIDTH = 800;
 
         Stage.DEFAULT_HEIGHT = 600;
+
+        Stage.SCALE_NONE = 0;
+
+        Stage.SCALE_FIT = 1;
+
+        Stage.SCALE_STRETCH = 2;
         return Stage;
     })();
     Kiwi.Stage = Stage;
@@ -1161,6 +1388,24 @@ var Kiwi;
                         console.log("Plugin '" + plugin + "' appears to be valid.");
                         console.log("Name:" + Kiwi.Plugins[plugin].name);
                         console.log("Version:" + Kiwi.Plugins[plugin].version);
+
+                        //test for kiwi version compatiblity
+                        if (typeof Kiwi.Plugins[plugin].minimumKiwiVersion !== "undefined") {
+                            console.log(plugin + " requires minimum Kiwi version " + Kiwi.Plugins[plugin].minimumKiwiVersion);
+                            var parsedKiwiVersion = Kiwi.Utils.Version.parseVersion(Kiwi.VERSION);
+                            var parsedPluginMinVersion = Kiwi.Utils.Version.parseVersion(Kiwi.Plugins[plugin].minimumKiwiVersion);
+                            if (parsedKiwiVersion.majorVersion > parsedPluginMinVersion.majorVersion) {
+                                console.warn("This major version of Kiwi is greater than that required by '" + plugin + "'. It is unknown whether this plugin will work with this version of Kiwi");
+                            } else {
+                                if (Kiwi.Utils.Version.greaterOrEqual(Kiwi.VERSION, Kiwi.Plugins[plugin].minimumKiwiVersion)) {
+                                    console.log("Kiwi version meets minimum version requirements for '" + plugin + "'.");
+                                } else {
+                                    console.warn("Kiwi version (" + Kiwi.VERSION + ") does not meet minimum version requirements for the plugin (" + Kiwi.Plugins[plugin].minimumKiwiVersion + ").");
+                                }
+                            }
+                        } else {
+                            console.warn("'" + plugin + "' is missing the minimumKiwiVersion property. It is unknown whether '" + plugin + "' will work with this version of Kiwi");
+                        }
                     } else {
                         console.log("Plugin '" + plugin + "' appears to be invalid. No property with that name exists on the Kiwi.Plugins object or the Plugin is not registered. Check that the js file containing the plugin has been included. This plugin will be ignored");
                     }
@@ -1169,6 +1414,41 @@ var Kiwi;
                 }
             }
             this._plugins = validPlugins;
+
+            for (var i = 0; i < this._plugins.length; i++) {
+                //test for plugin dependencies on other plugins
+                var pluginName = this._plugins[i];
+                var plugin = Kiwi.Plugins[pluginName];
+
+                if (typeof plugin.pluginDependencies !== "undefined") {
+                    if (plugin.pluginDependencies.length === 0) {
+                        console.log("'" + pluginName + "' does not depend on any other plugins.");
+                    } else {
+                        console.log("'" + pluginName + "' depends on the following plugins:");
+                        for (var j = 0; j < plugin.pluginDependencies.length; j++) {
+                            console.log(plugin.pluginDependencies[j].name, plugin.pluginDependencies[j].minimumVersion);
+                            if (!this.validMinimumPluginVersionExists(plugin.pluginDependencies[j].name, plugin.pluginDependencies[j].minimumVersion)) {
+                                console.warn("'" + plugin.pluginDependencies[j].name + "' version " + plugin.pluginDependencies[j].minimumVersion + " either doesn't exist or does not meet minimum version requirement.");
+                            }
+                        }
+                    }
+                } else {
+                    console.log("'" + pluginName + "' does not depend on any other plugins.");
+                }
+            }
+        };
+
+        PluginManager.prototype.validMinimumPluginVersionExists = function (name, version) {
+            var pluginExists = false;
+            var minVersionSatisfied = false;
+            if (this._plugins.indexOf(name) !== -1) {
+                pluginExists = true;
+                if (Kiwi.Utils.Version.greaterOrEqual(version, Kiwi.Plugins[name].version)) {
+                    minVersionSatisfied = true;
+                }
+            }
+
+            return (pluginExists && minVersionSatisfied);
         };
 
         /**
@@ -1840,10 +2120,6 @@ var Kiwi;
 
             //Rebuild the Libraries again to have access the new files that were loaded.
             this.rebuildLibraries();
-            if (this._game.renderOption == Kiwi.RENDERER_WEBGL) {
-                this._game.renderer.initState(this.current);
-            }
-
             this.current.config.isReady = true;
             this.callCreate();
         };
@@ -1857,6 +2133,9 @@ var Kiwi;
             this.current.audioLibrary.rebuild(this._game.fileStore, this.current);
             this.current.dataLibrary.rebuild(this._game.fileStore, this.current);
             this.current.textureLibrary.rebuild(this._game.fileStore, this.current);
+            if (this._game.renderOption == Kiwi.RENDERER_WEBGL) {
+                this._game.renderer.initState(this.current);
+            }
         };
 
         /**
@@ -1965,14 +2244,20 @@ var Kiwi;
             */
             this.height = 0;
             /**
-            * Used as a reference to a single Cell in the atlas that is to be rendered.
-            * E.g. If you had a spritesheet with 3 frames/cells and you wanted the second frame to be displayed you would change this value to 1
-            * @property cellIndex
-            * @type number
-            * @default 0
+            * The texture atlas that is to be used on this entity.
+            * @property atlas
+            * @type TextureAtlas
             * @public
             */
-            this.cellIndex = 0;
+            this.atlas = null;
+            /**
+            * Holds the current cell that is being used by the entity.
+            * @property _cellIndex
+            * @type number
+            * @default 0
+            * @private
+            */
+            this._cellIndex = 0;
             /**
             * A name for this Entity. This is not checked for uniqueness within the Game, but is very useful for debugging
             * @property name
@@ -2193,6 +2478,39 @@ var Kiwi;
             configurable: true
         });
 
+        Object.defineProperty(Entity.prototype, "cellIndex", {
+            /**
+            * Used as a reference to a single Cell in the atlas that is to be rendered.
+            * E.g. If you had a spritesheet with 3 frames/cells and you wanted the second frame to be displayed you would change this value to 1
+            * @property cellIndex
+            * @type number
+            * @default 0
+            * @public
+            */
+            get: function () {
+                return this._cellIndex;
+            },
+            set: function (val) {
+                //If the entity has a texture atlas
+                if (this.atlas !== null) {
+                    var cell = this.atlas.cells[val];
+
+                    if (cell !== undefined) {
+                        //Update the width/height of the GameObject to be the same as the width/height
+                        this._cellIndex = val;
+                        this.width = cell.w;
+                        this.height = cell.h;
+                    } else {
+                        if (this.game.debug)
+                            console.error('Could not the set the cellIndex of a Entity, to cell that does not exist on its TextureAtlas.');
+                    }
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+
         Object.defineProperty(Entity.prototype, "exists", {
             get: function () {
                 return this._exists;
@@ -2310,7 +2628,8 @@ var Kiwi;
         };
 
         /**
-        * This isn't called until the Entity has been added to a Group or a State
+        * This isn't called until the Entity has been added to a Group or a State.
+        * Note: If added to a Group, who is not 'active' (so the Groups update loop doesn't run) then each member will not execute either.
         * @method update
         * @public
         */
@@ -2318,7 +2637,7 @@ var Kiwi;
         };
 
         /**
-        * This isn't called until the Entity has been added to a layer.
+        * This isn't called until the Entity has been added to a Group/State which is active.
         * This functionality is handled by the sub classes.
         * @method render
         * @param {Camera} camera
@@ -2327,6 +2646,11 @@ var Kiwi;
         Entity.prototype.render = function (camera) {
         };
 
+        /**
+        *
+        *
+        *
+        */
         Entity.prototype.renderGL = function (gl, camera, params) {
             if (typeof params === "undefined") { params = null; }
         };
@@ -3904,16 +4228,19 @@ var Kiwi;
         /**
         * Apply this cameras inverted matrix to a an object with x and y properties representing a point and return the transformed point.
         * Useful for when calculating if coordinates with the mouse.
+        * Note: This method clones the point you pass, so that is doesn't "reset" any properties you set.
         * @method transformPoint
         * @param point {Point}
         * @return Point
         * @public
         */
         Camera.prototype.transformPoint = function (point) {
+            var np = point.clone();
+
             var m = this.transform.getConcatenatedMatrix();
             m.invert();
 
-            return m.transformPoint(point);
+            return m.transformPoint(np);
         };
 
         /**
@@ -4478,8 +4805,8 @@ var Kiwi;
                 this.cellIndex = this.atlas.cellIndex;
 
                 //may need to add an optional other cell frame index here
-                this.width = atlas.cells[0].w;
-                this.height = atlas.cells[0].h;
+                this.width = atlas.cells[this.cellIndex].w;
+                this.height = atlas.cells[this.cellIndex].h;
                 this.transform.rotPointX = this.width / 2;
                 this.transform.rotPointY = this.height / 2;
 
@@ -4610,8 +4937,8 @@ var Kiwi;
                 //Set coordinates and texture
                 this.atlas = atlas;
                 this.cellIndex = this.atlas.cellIndex;
-                this.width = atlas.cells[0].w;
-                this.height = atlas.cells[0].h;
+                this.width = atlas.cells[this.cellIndex].w;
+                this.height = atlas.cells[this.cellIndex].h;
                 this.transform.rotPointX = this.width / 2;
                 this.transform.rotPointY = this.height / 2;
 
@@ -4939,7 +5266,7 @@ var Kiwi;
                             x = 0;
                             break;
                         case Kiwi.GameObjects.Textfield.TEXT_ALIGN_CENTER:
-                            x = this._canvas.width / 2;
+                            x = this._canvas.width * 0.5;
                             break;
                         case Kiwi.GameObjects.Textfield.TEXT_ALIGN_RIGHT:
                             x = this._canvas.width;
@@ -4977,7 +5304,7 @@ var Kiwi;
                         x = 0;
                         break;
                     case Kiwi.GameObjects.Textfield.TEXT_ALIGN_CENTER:
-                        x = -(this._canvas.width / 2);
+                        x = -(this._canvas.width * 0.5);
                         break;
                     case Kiwi.GameObjects.Textfield.TEXT_ALIGN_RIGHT:
                         x = -(this._canvas.width);
@@ -5056,13 +5383,10 @@ var Kiwi;
                     * @public
                     */
                     this.properties = {};
-                    /**
-                    * the offset of this tile
-                    */
-                    this.offset = { x: 0, y: 0 };
                     this.tilemap = tilemap;
                     this.index = index;
                     this.cellIndex = cellIndex;
+                    this.offset = new Kiwi.Geom.Point(0, 0);
                 }
                 /**
                 * The type of object that it is.
@@ -5224,7 +5548,7 @@ var Kiwi;
                     }
 
                     //Get the map information
-                    this.orientation = (json.orientation == undefined) ? "orthogonal" : json.orientation;
+                    this.orientation = (json.orientation == undefined) ? Tilemap.ORTHOGONAL : json.orientation;
                     this.tileWidth = (json.tilewidth == undefined) ? 32 : json.tilewidth;
                     this.tileHeight = (json.tileheight == undefined) ? 32 : json.tileheight;
                     this.width = json.width;
@@ -5289,7 +5613,8 @@ var Kiwi;
                         var iw = tileset.imagewidth - m;
                         var ih = tileset.imageheight - m;
 
-                        var offset = tileset.tileoffset;
+                        //Drawing offsets
+                        var offset = (tileset.tileoffset == undefined) ? { x: 0, y: 0 } : tileset.tileoffset;
 
                         for (var y = m; y < ih; y += th) {
                             for (var x = m; x < iw; x += tw) {
@@ -5297,7 +5622,8 @@ var Kiwi;
                                 var cell = (atlas.cells[startingCell] == undefined) ? -1 : startingCell;
 
                                 var tileType = this.createTileType(cell);
-                                tileType.offset = offset;
+                                tileType.offset.x = offset.x;
+                                tileType.offset.y = offset.y;
 
                                 startingCell++; //Increase the cell to use by one.
                             }
@@ -5519,6 +5845,10 @@ var Kiwi;
                 return TileMap;
             })();
             Tilemap.TileMap = TileMap;
+
+            Tilemap.ISOMETRIC = "isometric";
+
+            Tilemap.ORTHOGONAL = "orthogonal";
         })(GameObjects.Tilemap || (GameObjects.Tilemap = {}));
         var Tilemap = GameObjects.Tilemap;
     })(Kiwi.GameObjects || (Kiwi.GameObjects = {}));
@@ -5569,6 +5899,15 @@ var Kiwi;
                     * @public
                     */
                     this.properties = {};
+                    /**
+                    * The orientation of the of tilemap.
+                    * TileMaps can be either 'orthogonal' (normal) or 'isometric'.
+                    * @property orientation
+                    * @type String
+                    * @default 'orthogonal'
+                    * @public
+                    */
+                    this.orientation = Kiwi.GameObjects.Tilemap.ORTHOGONAL;
 
                     //Request the Shared Texture Atlas renderer.
                     if (this.game.renderOption === Kiwi.RENDERER_WEBGL) {
@@ -5714,6 +6053,8 @@ var Kiwi;
                 * Returns the index of the tile based on the x and y pixel coordinates that are passed.
                 * If no tile is a the coordinates given then -1 is returned instead.
                 * Coordinates are in pixels not tiles and use the world coordinates of the tilemap.
+                * Note: Currently only working for ORTHOGONAL TileMaps.
+                *
                 * @method getIndexFromCoords
                 * @param x {Number} The x coordinate of the Tile you would like to retrieve.
                 * @param y {Number} The y coordinate of the Tile you would like to retrieve.
@@ -5736,6 +6077,8 @@ var Kiwi;
                 * Returns the TileType for a tile that is at a particular coordinate passed.
                 * If no tile is found the null is returned instead.
                 * Coordinates passed are in pixels and use the world coordinates of the tilemap.
+                * Note: Currently only working for ORTHOGONAL TileMaps.
+                *
                 * @method getTileFromXY
                 * @param x {Number}
                 * @param y {Number}
@@ -5921,6 +6264,7 @@ var Kiwi;
                 /**
                 * Returns the tiles which overlap with a provided entities hitbox component.
                 * Only collidable tiles on ANY side will be returned unless you pass a particular side.
+                * Note: Only designed to work with ORTHOGONAL types of tilemaps, results maybe unexpected for other types of tilemaps.
                 *
                 * @method getOverlappingTiles
                 * @param entity {Entity} The entity you would like to check for the overlap.
@@ -5968,6 +6312,7 @@ var Kiwi;
                 /**
                 * Returns the tiles which can collide with other objects (on ANY side unless otherwise specified) within an area provided.
                 * By default the area is the whole tilemap.
+                *
                 * @method getCollidableTiles
                 * @param [x=0] {Number} The x coordinate of the first tile to check.
                 * @param [y=0] {Number} The y coordinate of the first tile to check.
@@ -6039,46 +6384,68 @@ var Kiwi;
                 /**
                 * Used to calculate the position of the tilemap on the stage as well as how many tiles can fit on the screen.
                 * All coordinates calculated are stored as temporary properties (maxX/Y, startX/Y).
+                *
                 * @method _calculateBoundaries
                 * @param camera {Camera}
                 * @param matrix {Matrix}
                 * @private
                 */
                 TileMapLayer.prototype._calculateBoundaries = function (camera, matrix) {
-                    // Translation Stuff
-                    var sx = 1 / this.scaleX;
-                    var sy = 1 / this.scaleY;
+                    //If we are calculating the coordinates for 'regular' then we can do that rather easy
+                    if (this.orientation == Kiwi.GameObjects.Tilemap.ORTHOGONAL) {
+                        // Translation Stuff
+                        var sx = 1 / this.scaleX;
+                        var sy = 1 / this.scaleY;
 
-                    // Work out how many tiles we can fit into our camera and round it up for the edges
-                    this._maxX = Math.min(Math.ceil(camera.width / this.tileWidth) + 1, this.width) * sx;
-                    this._maxY = Math.min(Math.ceil(camera.height / this.tileHeight) + 1, this.height) * sy;
+                        // Work out how many tiles we can fit into our camera and round it up for the edges
+                        this._maxX = Math.min(Math.ceil(camera.width / this.tileWidth) + 1, this.width) * sx;
+                        this._maxY = Math.min(Math.ceil(camera.height / this.tileHeight) + 1, this.height) * sy;
 
-                    // And now work out where in the tilemap the camera actually is
-                    this._startX = Math.floor((-camera.transform.x - this.transform.worldX) / this.tileWidth * sx);
-                    this._startY = Math.floor((-camera.transform.y - this.transform.worldY) / this.tileHeight * sy);
+                        // And now work out where in the tilemap the camera actually is
+                        this._startX = Math.floor((-camera.transform.x - this.transform.worldX) / this.tileWidth * sx);
+                        this._startY = Math.floor((-camera.transform.y - this.transform.worldY) / this.tileHeight * sy);
 
-                    // Boundaries check for the start
-                    if (this._startX < 0)
+                        // Boundaries check for the start
+                        if (this._startX < 0)
+                            this._startX = 0;
+                        if (this._startY < 0)
+                            this._startY = 0;
+
+                        // Check for the Maximum
+                        if (this._maxX > this.width)
+                            this._maxX = this.width;
+                        if (this._maxY > this.height)
+                            this._maxY = this.height;
+
+                        // Width/Height
+                        if (this._startX + this._maxX > this.width)
+                            this._maxX = this.width - this._startX;
+                        if (this._startY + this._maxY > this.height)
+                            this._maxY = this.height - this._startY;
+
+                        return;
+                    }
+
+                    //Otherwise we can't *just yet* so render the whole lot
+                    if (this.orientation == Kiwi.GameObjects.Tilemap.ISOMETRIC) {
                         this._startX = 0;
-                    if (this._startY < 0)
                         this._startY = 0;
-
-                    // Check for the Maximum
-                    if (this._maxX > this.width)
                         this._maxX = this.width;
-                    if (this._maxY > this.height)
                         this._maxY = this.height;
-
-                    // Width/Height
-                    if (this._startX + this._maxX > this.width)
-                        this._maxX = this.width - this._startX;
-                    if (this._startY + this._maxY > this.height)
-                        this._maxY = this.height - this._startY;
+                    }
                 };
 
                 /**
                 * ChartToScreen maps a point in the game tile coordinates into screen pixel
                 * coordinates that indicate where the tile should be drawn.
+                * Note: This is for use in ISOMETRIC Tilemaps.
+                *
+                * @method chartToScreen
+                * @param chartPt {any} A Object containing x/y properties of the tile.
+                * @param tileW {Number} The width of the tile
+                * @param tileH {Number} The height of the tile
+                * @return {Object} With x/y properties of the location of the map onscreen.
+                * @public
                 */
                 TileMapLayer.prototype.chartToScreen = function (chartPt, tileW, tileH) {
                     return {
@@ -6089,6 +6456,14 @@ var Kiwi;
                 /**
                 * ScreenToChart maps a point in screen coordinates into the game tile chart
                 * coordinates for the tile on which the screen point falls on.
+                * This is for use in ISOMETRIC Tilemaps.
+                *
+                * @method screenToChart
+                * @param scrPt {any} An object containing x/y coordinates of the point on the screen you want to convert to tile coordinates.
+                * @param tileW {number} The width of a single tile.
+                * @param tileH {number} The height of a single tile.
+                * @return {Object} With x/y properties of the location of tile on the screen.
+                * @public
                 */
                 TileMapLayer.prototype.screenToChart = function (scrPt, tileW, tileH) {
                     var column = Math.floor(scrPt.x / tileW);
@@ -6133,27 +6508,24 @@ var Kiwi;
                                 var drawX;
                                 var drawY;
 
-                                if (this.orientation == "isometric") {
-                                    // isometric maps
+                                if (this.orientation == Kiwi.GameObjects.Tilemap.ISOMETRIC) {
+                                    // Isometric maps
                                     var offsetX = this._temptype.offset.x;
                                     var offsetY = this._temptype.offset.y;
                                     var w = this.tileWidth * (this.width * 2 - 1);
                                     var h = this.tileHeight * this.height;
 
-                                    // center map
-                                    var shiftY = (this.game.stage.height - h) / 2;
-
-                                    // we want <0,0>'s horizontal center point to be in the screen center, hence the -tileWidth/2.
-                                    var shiftX = this.game.stage.width / 2 - this.tileWidth / 2;
+                                    // We want <0,0>'s horizontal center point to be in the screen center, hence the -tileWidth/2.
+                                    var shiftX = this.tileWidth / 2;
 
                                     var screenPos = this.chartToScreen({ x: x, y: y }, this.tileWidth / 2, this.tileHeight);
 
-                                    drawX = screenPos.x + this._temptype.offset.x + shiftX;
-                                    drawY = screenPos.y - (cell.h - this.tileHeight) + this._temptype.offset.y + shiftY;
+                                    drawX = screenPos.x + this._temptype.offset.x - shiftX;
+                                    drawY = screenPos.y - (cell.h - this.tileHeight) + this._temptype.offset.y;
                                 } else {
-                                    // 'normal' maps
-                                    drawX = x * this.tileWidth;
-                                    drawY = y * this.tileHeight - (cell.h - this.tileHeight);
+                                    // 'Normal' maps
+                                    drawX = x * this.tileWidth + this._temptype.offset.x;
+                                    drawY = y * this.tileHeight - (cell.h - this.tileHeight) + this._temptype.offset.y;
                                 }
 
                                 ctx.drawImage(this.atlas.image, cell.x, cell.y, cell.w, cell.h, drawX, drawY, cell.w, cell.h);
@@ -6197,27 +6569,25 @@ var Kiwi;
 
                             var tx;
                             var ty;
-                            if (this.orientation == "isometric") {
-                                // isometric maps
+
+                            if (this.orientation == Kiwi.GameObjects.Tilemap.ISOMETRIC) {
+                                // Isometric maps
                                 var offsetX = this._temptype.offset.x;
                                 var offsetY = this._temptype.offset.y;
                                 var w = this.tileWidth * (this.width * 2 - 1);
                                 var h = this.tileHeight * this.height;
 
-                                // center map
-                                var shiftY = (this.game.stage.height - h) / 2;
-
-                                // we want <0,0>'s horizontal center point to be in the screen center, hence the -tileWidth/2.
-                                var shiftX = this.game.stage.width / 2 - this.tileWidth / 2;
+                                // We want <0,0>'s horizontal center point to be in the screen center, hence the -tileWidth/2.
+                                var shiftX = this.tileWidth / 2;
 
                                 var screenPos = this.chartToScreen({ x: x, y: y }, this.tileWidth / 2, this.tileHeight);
 
-                                tx = screenPos.x + this._temptype.offset.x + shiftX;
-                                ty = screenPos.y + this._temptype.offset.y + shiftY;
+                                tx = screenPos.x + this._temptype.offset.x - shiftX;
+                                ty = screenPos.y + this._temptype.offset.y;
                             } else {
                                 // 'normal' maps
-                                tx = x * this.tileWidth;
-                                ty = y * this.tileHeight;
+                                tx = x * this.tileWidth + this._temptype.offset.x;
+                                ty = y * this.tileHeight + this._temptype.offset.y;
                             }
 
                             //Set up the points
@@ -6458,6 +6828,7 @@ var Kiwi;
             * When you switch to a particular animation then
             * You can also force the animation to play or to stop by passing a boolean in. But if left as null, the animation will base it off what is currently happening.
             * So if the animation is currently 'playing' then once switched to the animation will play. If not currently playing it will switch to and stop.
+            * If the previous animation played is non-looping and has reached its final frame, it is no longer considered playing, and as such, switching to another animation will not play unless the argument to the play parameter is true.
             *
             * @method switchTo
             * @param val {string|number}
@@ -6638,11 +7009,13 @@ var Kiwi;
     (function (Components) {
         /**
         * The Box Component is used to handle the various 'bounds' that each GameObject has.
-        * There are FOUR different types of bounds (each one is a rectangle) on each box depending on what you are wanting:
+        * There are two main different types of bounds (Bounds and Hitbox) with each one having three variants (each one is a rectangle) on each box depending on what you are wanting:
         * RawBounds: The bounding box of the GameObject before rotation.
         * RawHitbox: The hitbox of the GameObject before rotation. This can be modified to be different than the normal bounds but if not specified it will be the same as the raw bounds.
         * Bounds: The bounding box of the GameObject after rotation.
         * Hitbox: The hitbox of the GameObject after rotation. If you modified the raw hitbox then this one will be modified as well, otherwise it will be the same as the normal bounds.
+        * WorldBounds: The bounding box of the Entity using its world coordinates.
+        * WorldHitbox: The hitbox of the Entity using its world coordinates.
         *
         * @class Box
         * @extends Component
@@ -6663,6 +7036,17 @@ var Kiwi;
                 if (typeof width === "undefined") { width = 0; }
                 if (typeof height === "undefined") { height = 0; }
                 _super.call(this, parent, 'Box');
+                /**
+                * Controls whether the hitbox should update automatically to match the hitbox of the current cell on the entity this Box component is attached to (default behaviour).
+                * Or if the hitbox shouldn't auto update
+                * This property is automatically set to 'false' when you override the hitboxes width/height, but you can set this to true afterwards.
+                *
+                * @property autoUpdate
+                * @type boolean
+                * @default true
+                * @private
+                */
+                this.autoUpdate = true;
 
                 this.entity = parent;
                 this.dirty = true;
@@ -6674,6 +7058,7 @@ var Kiwi;
                 this._hitboxOffset = new Kiwi.Geom.Point();
 
                 this.hitbox = new Kiwi.Geom.Rectangle(0, 0, width, height);
+                this.autoUpdate = true;
             }
             /**
             * The type of object that this is.
@@ -6694,6 +7079,11 @@ var Kiwi;
                 * @public
                 */
                 get: function () {
+                    if (this.dirty && this.autoUpdate == true && this.entity.atlas !== null) {
+                        this._hitboxOffset.x = this.entity.atlas.cells[this.entity.cellIndex].hitboxes[0].x;
+                        this._hitboxOffset.y = this.entity.atlas.cells[this.entity.cellIndex].hitboxes[0].y;
+                    }
+
                     return this._hitboxOffset;
                 },
                 enumerable: true,
@@ -6711,8 +7101,18 @@ var Kiwi;
                 */
                 get: function () {
                     if (this.dirty) {
-                        this._rawHitbox.x = this._rawBounds.x + this._hitboxOffset.x;
-                        this._rawHitbox.y = this._rawBounds.y + this._hitboxOffset.y;
+                        this._rawHitbox.x = this.rawBounds.x + this.hitboxOffset.x;
+                        this._rawHitbox.y = this.rawBounds.y + this.hitboxOffset.y;
+
+                        //If the hitbox has not already been set, then update the width/height based upon the current cell that the entity has.
+                        if (this.autoUpdate == true) {
+                            var atlas = this.entity.atlas;
+
+                            if (atlas !== null) {
+                                this._rawHitbox.width = atlas.cells[this.entity.cellIndex].hitboxes[0].w;
+                                this._rawHitbox.height = atlas.cells[this.entity.cellIndex].hitboxes[0].h;
+                            }
+                        }
                     }
 
                     return this._rawHitbox;
@@ -6736,6 +7136,7 @@ var Kiwi;
                     return this._transformedHitbox;
                 },
                 set: function (value) {
+                    //Use custom hitbox defined by user.
                     this._hitboxOffset.x = value.x;
                     this._hitboxOffset.y = value.y;
 
@@ -6743,6 +7144,8 @@ var Kiwi;
 
                     this._rawHitbox.x += this._rawBounds.x;
                     this._rawHitbox.y += this._rawBounds.y;
+
+                    this.autoUpdate = false;
                 },
                 enumerable: true,
                 configurable: true
@@ -6847,7 +7250,7 @@ var Kiwi;
 
             Object.defineProperty(Box.prototype, "worldBounds", {
                 /**
-                * Returns the 'transformed' world bounds for this entity.
+                * Returns the 'transformed' bounds for this entity using the world coodinates.
                 * This is READ ONLY.
                 * @property worldBounds
                 * @type Rectangle
@@ -6915,7 +7318,7 @@ var Kiwi;
             };
 
             /**
-            * Draws the various bounds on a context that is passed. Useful for debugging.
+            * Draws the various bounds on a context that is passed. Useful for debugging and using in combination with the debug canvas.
             * @method draw
             * @param {CanvasRenderingContext2D} ctx
             * @public
@@ -6935,9 +7338,13 @@ var Kiwi;
                 ctx.strokeRect(this.rawHitbox.x, this.rawHitbox.y, this.rawHitbox.width, this.rawHitbox.height);
             };
 
-            /*
+            /**
             * [REQUIRES COMMENTING]
             * @method extents
+            * @param topLeftPoint {Point}
+            * @param topRightPoint {Point}
+            * @param bottomRightPoint {Point}
+            * @param bottomLeftPoint {Point}
             * @return Rectangle
             */
             Box.prototype.extents = function (topLeftPoint, topRightPoint, bottomRightPoint, bottomLeftPoint) {
@@ -7081,6 +7488,10 @@ var Kiwi;
                 this._isDragging = null;
                 this._justEntered = false;
                 this._tempDragDisabled = false;
+
+                this._tempPoint = new Kiwi.Geom.Point();
+                this._tempCircle = new Kiwi.Geom.Circle(0, 0, 0);
+
                 this.enabled = enabled;
             }
             /**
@@ -7372,7 +7783,7 @@ var Kiwi;
                     return;
                 }
 
-                //reset the temporary properties
+                // Reset the temporary properties
                 this._nowDown = null;
                 this._nowUp = null;
                 this._nowEntered = null;
@@ -7388,12 +7799,14 @@ var Kiwi;
 
                 //If the entity is dragging.
                 if (this.isDragging) {
+                    this._tempPoint = this.game.cameras.defaultCamera.transformPoint(this._isDragging.point);
+
                     if (this._dragSnapToCenter === false) {
-                        this.owner.transform.x = Kiwi.Utils.GameMath.snapTo((this._isDragging.x - this._distance.x), this._dragDistance);
-                        this.owner.transform.y = Kiwi.Utils.GameMath.snapTo((this._isDragging.y - this._distance.y), this._dragDistance);
+                        this.owner.transform.x = Kiwi.Utils.GameMath.snapTo((this._tempPoint.x - this._box.hitboxOffset.x - this._distance.x), this._dragDistance);
+                        this.owner.transform.y = Kiwi.Utils.GameMath.snapTo((this._tempPoint.y - this._box.hitboxOffset.y - this._distance.y), this._dragDistance);
                     } else {
-                        this.owner.transform.x = Kiwi.Utils.GameMath.snapTo((this._isDragging.x - this._box.worldHitbox.width / 2), this._dragDistance);
-                        this.owner.transform.y = Kiwi.Utils.GameMath.snapTo((this._isDragging.y - this._box.worldHitbox.height / 2), this._dragDistance);
+                        this.owner.transform.x = Kiwi.Utils.GameMath.snapTo((this._tempPoint.x - this._box.hitboxOffset.x - this._box.worldHitbox.width / 2), this._dragDistance);
+                        this.owner.transform.y = Kiwi.Utils.GameMath.snapTo((this._tempPoint.y - this._box.hitboxOffset.y - this._box.worldHitbox.height / 2), this._dragDistance);
                     }
                 }
             };
@@ -7465,7 +7878,10 @@ var Kiwi;
             Input.prototype._evaluateTouchPointer = function (pointer) {
                 //if nothing isdown or what is down is the current pointer
                 if (this.isDown === false || this._isDown.id === pointer.id) {
-                    if (Kiwi.Geom.Intersect.circleToRectangle(pointer.circle, this._box.worldHitbox).result) {
+                    this._tempPoint = this.game.cameras.defaultCamera.transformPoint(pointer.point);
+                    this._tempCircle.setTo(this._tempPoint.x, this._tempPoint.y, pointer.circle.diameter);
+
+                    if (Kiwi.Geom.Intersect.circleToRectangle(this._tempCircle, this._box.worldHitbox).result) {
                         if (this.isDown === true && this._isDown.id === pointer.id || this.isDown === false && pointer.duration > 1) {
                             this._nowEntered = pointer;
                         }
@@ -7475,8 +7891,8 @@ var Kiwi;
                         }
 
                         if (this._dragEnabled && this.isDragging == false && this.isDown == true) {
-                            this._distance.x = pointer.x - this._box.worldHitbox.left;
-                            this._distance.y = pointer.y - this._box.worldHitbox.top;
+                            this._distance.x = this._tempPoint.x - this._box.worldHitbox.left;
+                            this._distance.y = this._tempPoint.y - this._box.worldHitbox.top;
                             this._nowDragging = pointer;
                         }
                     } else {
@@ -7520,7 +7936,7 @@ var Kiwi;
                 if (this.isDown === true && this._nowUp !== null && this._isDown.id === this._nowUp.id) {
                     this._onUp.dispatch(this.owner, this._nowUp);
 
-                    //dispatch drag event
+                    // Dispatch drag event
                     if (this.isDragging === true && this._isDragging.id == this._nowUp.id) {
                         this._isDragging = null;
                         this._onDragStopped.dispatch(this.owner, this._nowUp);
@@ -7538,10 +7954,12 @@ var Kiwi;
             * @private
             */
             Input.prototype._evaluateMousePointer = function (pointer) {
-                if (Kiwi.Geom.Intersect.circleToRectangle(pointer.circle, this._box.worldHitbox).result) {
+                this._tempPoint = this.game.cameras.defaultCamera.transformPoint(pointer.point);
+
+                if (Kiwi.Geom.Intersect.pointToRectangle(this._tempPoint, this._box.worldHitbox).result) {
                     if (this._dragEnabled && this.isDragging === false) {
-                        this._distance.x = pointer.x - this._box.worldHitbox.left;
-                        this._distance.y = pointer.y - this._box.worldHitbox.top;
+                        this._distance.x = this._tempPoint.x - this._box.worldHitbox.left;
+                        this._distance.y = this._tempPoint.y - this._box.worldHitbox.top;
                     }
 
                     //  Has it just moved inside?
@@ -10773,8 +11191,11 @@ var Kiwi;
                     this.container.id = id;
                 }
 
+                //Set the containers width/height of the default values.
+                //If the user has change the constraints then the Stage will handle the update to the container.
                 this.container.style.width = Kiwi.Stage.DEFAULT_WIDTH + 'px';
                 this.container.style.height = Kiwi.Stage.DEFAULT_HEIGHT + 'px';
+
                 this.container.style.position = 'relative';
                 this.container.style.overflow = 'hidden';
             };
@@ -10916,6 +11337,13 @@ var Kiwi;
                 * @public
                 */
                 this.windows = false;
+                /**
+                *
+                * @property windowsPhone
+                * @type boolean
+                * @public
+                */
+                this.windowsPhone = false;
                 //  Features
                 /**
                 *
@@ -10974,6 +11402,13 @@ var Kiwi;
                 */
                 this.touch = false;
                 /**
+                * If the type of touch events are pointers (event msPointers)
+                * @property pointerEnabled
+                * @type boolean
+                * @public
+                */
+                this.pointerEnabled = false;
+                /**
                 *
                 * @property css3D
                 * @type boolean
@@ -11023,6 +11458,13 @@ var Kiwi;
                 * @public
                 */
                 this.ieVersion = 0;
+                /**
+                *
+                * @property ieMobile
+                * @type boolean
+                * @public
+                */
+                this.ieMobile = false;
                 /**
                 *
                 * @property mobileSafari
@@ -11165,6 +11607,8 @@ var Kiwi;
                     this.linux = true;
                 } else if (/Mac OS/.test(ua)) {
                     this.macOS = true;
+                } else if (/Windows Phone/.test(ua)) {
+                    this.windowsPhone = true;
                 } else if (/Windows/.test(ua)) {
                     this.windows = true;
                 }
@@ -11192,8 +11636,12 @@ var Kiwi;
                 this.webGL = !!window['WebGLRenderingContext'];
                 this.worker = !!window['Worker'];
 
-                if ('ontouchstart' in document.documentElement || window.navigator.msPointerEnabled) {
+                if ('ontouchstart' in document.documentElement || (window.navigator.msPointerEnabled && window.navigator.msMaxTouchPoints > 0) || (window.navigator.pointerEnabled && window.navigator.maxTouchPoints > 0)) {
                     this.touch = true;
+                }
+
+                if (window.navigator.pointerEnabled || window.navigator.msPointerEnabled) {
+                    this.pointerEnabled = true;
                 }
             };
 
@@ -11204,6 +11652,7 @@ var Kiwi;
             */
             Device.prototype._checkBrowser = function () {
                 var ua = navigator.userAgent;
+                var an = navigator.appName;
 
                 if (/Arora/.test(ua)) {
                     this.arora = true;
@@ -11217,6 +11666,14 @@ var Kiwi;
                     this.mobileSafari = true;
                 } else if (/MSIE (\d+\.\d+);/.test(ua)) {
                     this.ie = true;
+                    this.ieVersion = parseInt(RegExp.$1);
+
+                    if (/IEMobile/.test(ua)) {
+                        this.ieMobile = true;
+                    }
+                } else if (/Trident/.test(ua)) {
+                    this.ie = true;
+                    /rv:(\d+\.\d+)\)/.test(ua);
                     this.ieVersion = parseInt(RegExp.$1);
                 } else if (/Midori/.test(ua)) {
                     this.midori = true;
@@ -11455,7 +11912,9 @@ var Kiwi;
             TextureAtlas.prototype.readJSON = function (atlasJSON) {
                 //populate from json
                 var obj = JSON.parse(atlasJSON);
-                this.name = obj.name;
+
+                if (obj.name !== undefined)
+                    this.name = obj.name;
 
                 for (var i = 0; i < obj.cells.length; i++) {
                     this.cells.push(obj.cells[i]);
@@ -13460,7 +13919,7 @@ var Kiwi;
                 var root = this._game.states.current.members;
 
                 //clear
-                this._game.stage.ctx.fillStyle = this._game.stage.color;
+                this._game.stage.ctx.fillStyle = '#' + this._game.stage.color;
 
                 this._game.stage.ctx.fillRect(0, 0, this._game.stage.canvas.width, this._game.stage.canvas.height);
 
@@ -13562,7 +14021,7 @@ var Kiwi;
                 this._sharedRenderers = {};
                 this._game = game;
                 if (typeof mat4 === "undefined") {
-                    throw "ERROR: gl-matrix.js is missing - you need to include this javascript to use webgl - https://github.com/toji/gl-matrix";
+                    throw "ERROR: gl-matrix.js is missing";
                 }
             }
             /**
@@ -13766,15 +14225,18 @@ var Kiwi;
 
                 var rotOffset = vec2.create();
                 var scale = vec2.create();
-                vec2.set(scale, ct.scaleX, ct.scaleY);
-                vec2.set(rotOffset, ct.rotPointX - cm.tx, ct.rotPointY - cm.ty);
+                var translate = vec2.create();
 
+                vec2.set(scale, ct.scaleX, ct.scaleY);
+                vec2.set(rotOffset, ct.rotPointX + cm.tx, ct.rotPointY + cm.ty);
+                vec2.set(translate, cm.tx, cm.ty);
                 mat3.identity(this.camMatrix);
                 mat3.translate(this.camMatrix, this.camMatrix, rotOffset);
                 mat3.rotate(this.camMatrix, this.camMatrix, ct.rotation);
+                mat3.translate(this.camMatrix, this.camMatrix, translate);
+                mat3.scale(this.camMatrix, this.camMatrix, scale);
                 vec2.negate(rotOffset, rotOffset);
                 mat3.translate(this.camMatrix, this.camMatrix, rotOffset);
-                mat3.scale(this.camMatrix, this.camMatrix, scale);
 
                 this.collateRenderSequence();
                 this.collateBatches();
@@ -16133,7 +16595,8 @@ var Kiwi;
 (function (Kiwi) {
     (function (Input) {
         /**
-        * Handles the initialization and management of the various ways a user can interact with the device/game, whether this is through a Keyboard and Mouse or by a Touch. Also contains some of the general callbacks that are 'global' between both Desktop and Mobile based devices.
+        * Handles the initialization and management of the various ways a user can interact with the device/game,
+        * whether this is through a Keyboard and Mouse or by a Touch. Also contains some of the general callbacks that are 'global' between both Desktop and Mobile based devices.
         *
         * @class InputManager
         * @constructor
@@ -16184,9 +16647,11 @@ var Kiwi;
                 this.keyboard = new Kiwi.Input.Keyboard(this.game);
                 this.keyboard.boot();
 
-                if (Kiwi.DEVICE.touch === true) {
-                    this.touch = new Kiwi.Input.Touch(this.game);
-                    this.touch.boot();
+                this.touch = new Kiwi.Input.Touch(this.game);
+                this.touch.boot();
+
+                //Decided which inputs to map to the up/down events.
+                if (Kiwi.DEVICE.touch == true) {
                     this.touch.touchDown.add(this._onDownEvent, this);
                     this.touch.touchUp.add(this._onUpEvent, this);
                     this._pointers = this.touch.fingers;
@@ -16269,15 +16734,15 @@ var Kiwi;
             InputManager.prototype.update = function () {
                 this.mouse.update();
                 this.keyboard.update();
+                this.touch.update();
 
-                if (Kiwi.DEVICE.touch === true) {
-                    this.touch.update();
+                if (this.touch.touchEnabled) {
                     this.position.setTo(this.touch.x, this.touch.y);
-                    this.isDown = this.touch.isDown;
                 } else {
                     this.position.setTo(this.mouse.x, this.mouse.y);
-                    this.isDown = this.mouse.isDown;
                 }
+
+                this.isDown = this.mouse.isDown || this.touch.isDown;
             };
 
             /**
@@ -16287,10 +16752,7 @@ var Kiwi;
             InputManager.prototype.reset = function () {
                 this.mouse.reset();
                 this.keyboard.reset();
-
-                if (Kiwi.DEVICE.touch === true) {
-                    this.touch.reset();
-                }
+                this.touch.reset();
             };
 
             Object.defineProperty(InputManager.prototype, "x", {
@@ -16775,7 +17237,8 @@ var Kiwi;
                 */
                 this.isUp = true;
                 /**
-                * The developer defined maximum number of touch events. By default this is set to 10 but this can be set to be lower.
+                * The developer defined maximum number of touch events.
+                * By default this is set to 10 but this can be set to be lower.
                 * @property _maxTouchEvents
                 * @type number
                 * @default 10
@@ -16843,48 +17306,82 @@ var Kiwi;
             */
             Touch.prototype.start = function () {
                 var _this = this;
-                if (this._game.deviceTargetOption === Kiwi.TARGET_BROWSER) {
-                    this._domElement.addEventListener('touchstart', function (event) {
-                        return _this.onTouchStart(event);
-                    }, false);
-                    this._domElement.addEventListener('touchmove', function (event) {
-                        return _this.onTouchMove(event);
-                    }, false);
-                    this._domElement.addEventListener('touchend', function (event) {
-                        return _this.onTouchEnd(event);
-                    }, false);
-                    this._domElement.addEventListener('touchenter', function (event) {
-                        return _this.onTouchEnter(event);
-                    }, false);
-                    this._domElement.addEventListener('touchleave', function (event) {
-                        return _this.onTouchLeave(event);
-                    }, false);
-                    this._domElement.addEventListener('touchcancel', function (event) {
-                        return _this.onTouchCancel(event);
-                    }, false);
+                if (Kiwi.DEVICE.touch) {
+                    this.touchEnabled = true;
 
-                    document.addEventListener('touchmove', function (event) {
-                        return _this.consumeTouchMove(event);
-                    }, false);
-                } else if (this._game.deviceTargetOption === Kiwi.TARGET_COCOON) {
-                    this._game.stage.canvas.addEventListener('touchstart', function (event) {
-                        return _this.onTouchStart(event);
-                    }, false);
-                    this._game.stage.canvas.addEventListener('touchmove', function (event) {
-                        return _this.onTouchMove(event);
-                    }, false);
-                    this._game.stage.canvas.addEventListener('touchend', function (event) {
-                        return _this.onTouchEnd(event);
-                    }, false);
-                    this._game.stage.canvas.addEventListener('touchenter', function (event) {
-                        return _this.onTouchEnter(event);
-                    }, false);
-                    this._game.stage.canvas.addEventListener('touchleave', function (event) {
-                        return _this.onTouchLeave(event);
-                    }, false);
-                    this._game.stage.canvas.addEventListener('touchcancel', function (event) {
-                        return _this.onTouchCancel(event);
-                    }, false);
+                    if (this._game.deviceTargetOption === Kiwi.TARGET_BROWSER) {
+                        //If IE....
+                        if (Kiwi.DEVICE.pointerEnabled) {
+                            var pointerUp = 'pointerup', pointerDown = 'pointerdown', pointerEnter = 'pointerenter', pointerLeave = 'pointerleave', pointerCancel = 'pointercancel', pointerMove = 'pointermove';
+
+                            if ((window.navigator.msPointerEnabled)) {
+                                var pointerUp = 'MSPointerUp', pointerDown = 'MSPointerDown', pointerEnter = 'MSPointerEnter', pointerLeave = 'MSPointerLeave', pointerCancel = 'MSPointerCancel', pointerMove = 'MSPointerMove';
+                            }
+
+                            this._domElement.addEventListener(pointerUp, function (event) {
+                                return _this.onPointerStart(event);
+                            }, false);
+                            this._domElement.addEventListener(pointerDown, function (event) {
+                                return _this.onPointerEnd(event);
+                            }, false);
+                            this._domElement.addEventListener(pointerEnter, function (event) {
+                                return _this.onPointerEnter(event);
+                            }, false);
+                            this._domElement.addEventListener(pointerLeave, function (event) {
+                                return _this.onPointerLeave(event);
+                            }, false);
+                            this._domElement.addEventListener(pointerCancel, function (event) {
+                                return _this.onPointerCancel(event);
+                            }, false);
+                            this._domElement.addEventListener(pointerMove, function (event) {
+                                return _this.onPointerMove(event);
+                            }, false);
+                        } else {
+                            this._domElement.addEventListener('touchstart', function (event) {
+                                return _this.onTouchStart(event);
+                            }, false);
+                            this._domElement.addEventListener('touchmove', function (event) {
+                                return _this.onTouchMove(event);
+                            }, false);
+                            this._domElement.addEventListener('touchend', function (event) {
+                                return _this.onTouchEnd(event);
+                            }, false);
+                            this._domElement.addEventListener('touchenter', function (event) {
+                                return _this.onTouchEnter(event);
+                            }, false);
+                            this._domElement.addEventListener('touchleave', function (event) {
+                                return _this.onTouchLeave(event);
+                            }, false);
+                            this._domElement.addEventListener('touchcancel', function (event) {
+                                return _this.onTouchCancel(event);
+                            }, false);
+
+                            document.addEventListener('touchmove', function (event) {
+                                return _this.consumeTouchMove(event);
+                            }, false);
+                        }
+                    } else if (this._game.deviceTargetOption === Kiwi.TARGET_COCOON) {
+                        this._game.stage.canvas.addEventListener('touchstart', function (event) {
+                            return _this.onTouchStart(event);
+                        }, false);
+                        this._game.stage.canvas.addEventListener('touchmove', function (event) {
+                            return _this.onTouchMove(event);
+                        }, false);
+                        this._game.stage.canvas.addEventListener('touchend', function (event) {
+                            return _this.onTouchEnd(event);
+                        }, false);
+                        this._game.stage.canvas.addEventListener('touchenter', function (event) {
+                            return _this.onTouchEnter(event);
+                        }, false);
+                        this._game.stage.canvas.addEventListener('touchleave', function (event) {
+                            return _this.onTouchLeave(event);
+                        }, false);
+                        this._game.stage.canvas.addEventListener('touchcancel', function (event) {
+                            return _this.onTouchCancel(event);
+                        }, false);
+                    }
+                } else {
+                    this.touchEnabled = false;
                 }
             };
 
@@ -16901,6 +17398,7 @@ var Kiwi;
             Object.defineProperty(Touch.prototype, "x", {
                 /**
                 * Gets the position of the latest finger on the x axis.
+                * @property x
                 * @type number
                 * @public
                 */
@@ -16914,6 +17412,7 @@ var Kiwi;
             Object.defineProperty(Touch.prototype, "y", {
                 /**
                 * Gets the position of the latest finger on the y axis.
+                * @property y
                 * @type number
                 * @public
                 */
@@ -16953,118 +17452,53 @@ var Kiwi;
             });
 
             /**
-            * This method runs when the a touch start event is fired by the browser and then assigns the event to a pointer that is currently not active.
-            * @method onTouchStart
-            * @param {Any} event
+            *-------------------------
+            * Generic Methods for Dealing with Pointers
+            *-------------------------
+            */
+            /**
+            * This method is in charge of registering a "finger"  (either from a Touch/Pointer start method) and assigning it a Finger,
+            * You have to pass this method a id which is used to idenfied when released/cancelled.
+            * @method _registerFinger
+            * @param event {Any}
+            * @param id {Number}
             * @private
             */
-            Touch.prototype.onTouchStart = function (event) {
-                for (var i = 0; i < event.changedTouches.length; i++) {
-                    for (var f = 0; f < this._maxPointers; f++) {
-                        if (this._fingers[f].active === false) {
-                            this._fingers[f].start(event.changedTouches[i]);
-                            this.latestFinger = this._fingers[f];
+            Touch.prototype._registerFinger = function (event, id) {
+                for (var f = 0; f < this._maxPointers; f++) {
+                    if (this._fingers[f].active === false) {
+                        this._fingers[f].id = id;
+                        this._fingers[f].start(event);
+                        this.latestFinger = this._fingers[f];
 
-                            this.touchDown.dispatch(this._fingers[f].x, this._fingers[f].y, this._fingers[f].timeDown, this._fingers[f].timeUp, this._fingers[f].duration, this._fingers[f]);
+                        this.touchDown.dispatch(this._fingers[f].x, this._fingers[f].y, this._fingers[f].timeDown, this._fingers[f].timeUp, this._fingers[f].duration, this._fingers[f]);
 
-                            this.isDown = true;
-                            this.isUp = false;
-                            break;
-                        }
+                        this.isDown = true;
+                        this.isUp = false;
+                        break;
                     }
                 }
             };
 
             /**
-            * Doesn't appear to be supported by most browsers yet but if it was it would fire events when a touch is canceled.
-            * @method onTouchCancel
-            * @param {Any} event
+            * This method is in charge of deregistering (removing) a "finger" when it has been released,
+            * You have to pass this method a id which is used to identfy the finger to deregister.
+            * @method _deregisterFinger
+            * @param event {Any}
+            * @param id {Number}
             * @private
             */
-            Touch.prototype.onTouchCancel = function (event) {
-                for (var i = 0; i < event.changedTouches.length; i++) {
-                    for (var f = 0; f < this._fingers.length; f++) {
-                        if (this._fingers[f].id === event.changedTouches[i].identifier) {
-                            this._fingers[f].stop(event.changedTouches[i]);
-                            this.touchCancel.dispatch(this._fingers[f].x, this._fingers[f].y, this._fingers[f].timeDown, this._fingers[f].timeUp, this._fingers[f].duration, this._fingers[f]);
-                            break;
-                        }
-                    }
-                }
-            };
+            Touch.prototype._deregisterFinger = function (event, id) {
+                for (var f = 0; f < this._fingers.length; f++) {
+                    if (this._fingers[f].active && this._fingers[f].id === id) {
+                        this._fingers[f].stop(event);
+                        this.latestFinger = this._fingers[f];
 
-            /**
-            * Doesn't appear to be supported by most browsers yet. But if it was would fire events when touch events enter an element.
-            * @method onTouchEnter
-            * @param {Any} event
-            * @private
-            */
-            Touch.prototype.onTouchEnter = function (event) {
-                for (var i = 0; i < event.changedTouches.length; i++) {
-                    for (var f = 0; f < this._maxPointers; f++) {
-                        if (this._fingers[f].active === false) {
-                            this._fingers[f].start(event.changedTouches[i]);
-                            break;
-                        }
-                    }
-                }
-            };
+                        this.touchUp.dispatch(this._fingers[f].x, this._fingers[f].y, this._fingers[f].timeDown, this._fingers[f].timeUp, this._fingers[f].duration, this._fingers[f]);
 
-            /**
-            * Doesn't appear to be supported by most browsers yet. Would fire events when a 'finger' leaves an element.
-            * Would be handly for when an finger 'leaves' the stage.
-            * @method onTouchLeave
-            * @param {Any} event
-            * @private
-            */
-            Touch.prototype.onTouchLeave = function (event) {
-                for (var i = 0; i < event.changedTouches.length; i++) {
-                    for (var f = 0; f < this._fingers.length; f++) {
-                        if (this._fingers[f].id === event.changedTouches[i].identifier) {
-                            this._fingers[f].leave(event.changedTouches[i]);
-                            break;
-                        }
-                    }
-                }
-            };
-
-            /**
-            * When a touch pointer moves. This method updates the appropriate pointer.
-            * @method onTouchMove
-            * @param {Any} event
-            * @private
-            */
-            Touch.prototype.onTouchMove = function (event) {
-                for (var i = 0; i < event.changedTouches.length; i++) {
-                    for (var f = 0; f < this._fingers.length; f++) {
-                        if (this._fingers[f].id === event.changedTouches[i].identifier) {
-                            this._fingers[f].move(event.changedTouches[i]);
-                            this.latestFinger = this._fingers[f];
-                            break;
-                        }
-                    }
-                }
-            };
-
-            /**
-            * When a touch event gets released.
-            * @method onTouchEnd
-            * @param {Any} event
-            * @private
-            */
-            Touch.prototype.onTouchEnd = function (event) {
-                for (var i = 0; i < event.changedTouches.length; i++) {
-                    for (var f = 0; f < this._fingers.length; f++) {
-                        if (this._fingers[f].id === event.changedTouches[i].identifier) {
-                            this._fingers[f].stop(event.changedTouches[i]);
-                            this.latestFinger = this._fingers[f];
-
-                            this.touchUp.dispatch(this._fingers[f].x, this._fingers[f].y, this._fingers[f].timeDown, this._fingers[f].timeUp, this._fingers[f].duration, this._fingers[f]);
-
-                            this.isDown = false;
-                            this.isUp = true;
-                            break;
-                        }
+                        this.isDown = false;
+                        this.isUp = true;
+                        break;
                     }
                 }
 
@@ -17077,12 +17511,255 @@ var Kiwi;
             };
 
             /**
+            * This method is in charge of cancelling (removing) a "finger".
+            * You have to pass this method a id which is used to idenfied the finger that was cancelled.
+            * @method _cancelFinger
+            * @param event {Any}
+            * @param id {Number}
+            * @private
+            */
+            Touch.prototype._cancelFinger = function (event, id) {
+                for (var f = 0; f < this._fingers.length; f++) {
+                    if (this._fingers[f].active && this._fingers[f].id === id) {
+                        this._fingers[f].stop(event);
+                        this.touchCancel.dispatch(this._fingers[f].x, this._fingers[f].y, this._fingers[f].timeDown, this._fingers[f].timeUp, this._fingers[f].duration, this._fingers[f]);
+                        break;
+                    }
+                }
+
+                for (var i = 0; i < this._fingers.length; i++) {
+                    if (this._fingers[i].active) {
+                        this.isDown = true;
+                        this.isUp = false;
+                    }
+                }
+            };
+
+            /**
+            * This method is in charge of creating and assigning (removing) a "finger" when it has entered the dom element.
+            * You have to pass this method a id which is used to idenfied the finger that was cancelled.
+            * @method _enterFinger
+            * @param event {Any}
+            * @param id {Number}
+            * @private
+            */
+            Touch.prototype._enterFinger = function (event, id) {
+                for (var f = 0; f < this._maxPointers; f++) {
+                    if (this._fingers[f].active === false) {
+                        this._fingers[f].id = id;
+                        this._fingers[f].start(event);
+                        this.latestFinger = this._fingers[f];
+                        this.isDown = true;
+                        this.isUp = false;
+                        break;
+                    }
+                }
+            };
+
+            /**
+            * This method is in charge of removing an assigned "finger" when it has left the DOM Elemetn.
+            * You have to pass this method a id which is used to idenfied the finger that left.
+            * @method _leaveFinger
+            * @param event {Any}
+            * @param id {Number}
+            * @private
+            */
+            Touch.prototype._leaveFinger = function (event, id) {
+                for (var f = 0; f < this._fingers.length; f++) {
+                    if (this._fingers[f].active && this._fingers[f].id === id) {
+                        this._fingers[f].leave(event);
+                        break;
+                    }
+                }
+            };
+
+            /**
+            * This method is in charge of updating the coordinates of a "finger" when it has moved..
+            * You have to pass this method a id which is used to idenfied the finger that moved.
+            * @method _moveFinger
+            * @param event {Any}
+            * @param id {Number}
+            * @private
+            */
+            Touch.prototype._moveFinger = function (event, id) {
+                for (var f = 0; f < this._fingers.length; f++) {
+                    if (this._fingers[f].active && this._fingers[f].id === id) {
+                        this._fingers[f].move(event);
+                        this.latestFinger = this._fingers[f];
+                        break;
+                    }
+                }
+            };
+
+            /**
+            *-------------------
+            * Touch Events
+            *-------------------
+            **/
+            /**
+            * This method runs when the a touch start event is fired by the browser and then assigns the event to a pointer that is currently not active.
+            * https://developer.mozilla.org/en-US/docs/DOM/TouchList
+            * @method onTouchStart
+            * @param {Any} event
+            * @private
+            */
+            Touch.prototype.onTouchStart = function (event) {
+                for (var i = 0; i < event.changedTouches.length; i++) {
+                    this._registerFinger(event.changedTouches[i], event.changedTouches[i].identifier);
+                }
+            };
+
+            /**
+            * Doesn't appear to be supported by most browsers yet but if it was it would fire events when a touch is canceled.
+            * http://www.w3.org/TR/touch-events/#dfn-touchcancel
+            * @method onTouchCancel
+            * @param {Any} event
+            * @private
+            */
+            Touch.prototype.onTouchCancel = function (event) {
+                for (var i = 0; i < event.changedTouches.length; i++) {
+                    this._cancelFinger(event.changedTouches[i], event.changedTouches[i].identifier);
+                }
+            };
+
+            /**
+            * Doesn't appear to be supported by most browsers yet. But if it was would fire events when touch events enter an element.
+            * @method onTouchEnter
+            * @param {Any} event
+            * @private
+            */
+            Touch.prototype.onTouchEnter = function (event) {
+                for (var i = 0; i < event.changedTouches.length; i++) {
+                    this._enterFinger(event.changedTouches[i], event.changedTouches[i].identifier);
+                }
+            };
+
+            /**
+            * Doesn't appear to be supported by most browsers yet. Would fire events when a 'finger' leaves an element.
+            * Would be handly for when an finger 'leaves' the stage.
+            * @method onTouchLeave
+            * @param {Any} event
+            * @private
+            */
+            Touch.prototype.onTouchLeave = function (event) {
+                for (var i = 0; i < event.changedTouches.length; i++) {
+                    this._leaveFinger(event.changedTouches[i], event.changedTouches[i].identifier);
+                }
+            };
+
+            /**
+            * When a touch pointer moves. This method updates the appropriate pointer.
+            * @method onTouchMove
+            * @param {Any} event
+            * @private
+            */
+            Touch.prototype.onTouchMove = function (event) {
+                for (var i = 0; i < event.changedTouches.length; i++) {
+                    this._moveFinger(event.changedTouches[i], event.changedTouches[i].identifier);
+                }
+            };
+
+            /**
+            * When a touch event gets released.
+            * https://developer.mozilla.org/en-US/docs/DOM/TouchList
+            * @method onTouchEnd
+            * @param {Any} event
+            * @private
+            */
+            Touch.prototype.onTouchEnd = function (event) {
+                for (var i = 0; i < event.changedTouches.length; i++) {
+                    this._deregisterFinger(event.changedTouches[i], event.changedTouches[i].identifier);
+                }
+            };
+
+            /**
+            *-------------------
+            * Pointer Events
+            *-------------------
+            **/
+            /**
+            * Event that is fired when a pointer is initially pressed.
+            * @method onPointerStart
+            * @param event {PointerEvent}
+            * @private
+            */
+            Touch.prototype.onPointerStart = function (event) {
+                if (event.type === 'touch') {
+                    this._registerFinger(event, event.pointerId);
+                }
+            };
+
+            /**
+            * Event that is fired by a pointer event listener upon a pointer canceling for some reason.
+            * @method onPointerCancel
+            * @param event {PointerEvent}
+            * @private
+            */
+            Touch.prototype.onPointerCancel = function (event) {
+                if (event.type === 'touch') {
+                    this._cancelFinger(event, event.pointerId);
+                }
+            };
+
+            /**
+            * Event that is fired by a pointer event listener upon a pointer entering the DOM Element the event listener is attached to.
+            * @method onPointerEnter
+            * @param event {PointerEvent}
+            * @private
+            */
+            Touch.prototype.onPointerEnter = function (event) {
+                if (event.type === 'touch') {
+                    this._enterFinger(event, event.pointerId);
+                }
+            };
+
+            /**
+            * Event that is fired by a pointer event listener upon a pointer being leaving the DOM Element the event listener is attached to.
+            * @method onPointerLeave
+            * @param event {PointerEvent}
+            * @private
+            */
+            Touch.prototype.onPointerLeave = function (event) {
+                if (event.type === 'touch') {
+                    this._leaveFinger(event, event.pointerId);
+                }
+            };
+
+            /**
+            * Event that is fired by a pointer event listener upon a pointer moving.
+            * @method onPointerMove
+            * @param event {PointerEvent}
+            */
+            Touch.prototype.onPointerMove = function (event) {
+                if (event.type === 'touch') {
+                    this._moveFinger(event, event.pointerId);
+                }
+            };
+
+            /**
+            * Event that is fired by a pointer event listener upon a pointer being released.
+            * @method onPointerEnd
+            * @param event {PointerEvent}
+            * @private
+            */
+            Touch.prototype.onPointerEnd = function (event) {
+                if (event.type === 'touch') {
+                    this._deregisterFinger(event, event.pointerId);
+                }
+            };
+
+            /**
+            *-----------------
+            * Normal Methods
+            *-----------------
+            **/
+            /**
             * The update loop fro the touch manager.
             * @method update
             * @public
             */
             Touch.prototype.update = function () {
-                if (this.isDown) {
+                if (this.touchEnabled && this.isDown) {
                     for (var i = 0; i < this._fingers.length; i++) {
                         if (this._fingers[i].active) {
                             this._fingers[i].update();
@@ -17098,44 +17775,46 @@ var Kiwi;
             */
             Touch.prototype.stop = function () {
                 var _this = this;
-                if (this._game.deviceTargetOption === Kiwi.TARGET_BROWSER) {
-                    this._domElement.removeEventListener('touchstart', function (event) {
-                        return _this.onTouchStart(event);
-                    }, false);
-                    this._domElement.removeEventListener('touchmove', function (event) {
-                        return _this.onTouchMove(event);
-                    }, false);
-                    this._domElement.removeEventListener('touchend', function (event) {
-                        return _this.onTouchEnd(event);
-                    }, false);
-                    this._domElement.removeEventListener('touchenter', function (event) {
-                        return _this.onTouchEnter(event);
-                    }, false);
-                    this._domElement.removeEventListener('touchleave', function (event) {
-                        return _this.onTouchLeave(event);
-                    }, false);
-                    this._domElement.removeEventListener('touchcancel', function (event) {
-                        return _this.onTouchCancel(event);
-                    }, false);
-                } else if (this._game.deviceTargetOption === Kiwi.TARGET_COCOON) {
-                    this._game.stage.canvas.removeEventListener('touchstart', function (event) {
-                        return _this.onTouchStart(event);
-                    }, false);
-                    this._game.stage.canvas.removeEventListener('touchmove', function (event) {
-                        return _this.onTouchMove(event);
-                    }, false);
-                    this._game.stage.canvas.removeEventListener('touchend', function (event) {
-                        return _this.onTouchEnd(event);
-                    }, false);
-                    this._game.stage.canvas.removeEventListener('touchenter', function (event) {
-                        return _this.onTouchEnter(event);
-                    }, false);
-                    this._game.stage.canvas.removeEventListener('touchleave', function (event) {
-                        return _this.onTouchLeave(event);
-                    }, false);
-                    this._game.stage.canvas.removeEventListener('touchcancel', function (event) {
-                        return _this.onTouchCancel(event);
-                    }, false);
+                if (this.touchEnabled) {
+                    if (this._game.deviceTargetOption === Kiwi.TARGET_BROWSER) {
+                        this._domElement.removeEventListener('touchstart', function (event) {
+                            return _this.onTouchStart(event);
+                        }, false);
+                        this._domElement.removeEventListener('touchmove', function (event) {
+                            return _this.onTouchMove(event);
+                        }, false);
+                        this._domElement.removeEventListener('touchend', function (event) {
+                            return _this.onTouchEnd(event);
+                        }, false);
+                        this._domElement.removeEventListener('touchenter', function (event) {
+                            return _this.onTouchEnter(event);
+                        }, false);
+                        this._domElement.removeEventListener('touchleave', function (event) {
+                            return _this.onTouchLeave(event);
+                        }, false);
+                        this._domElement.removeEventListener('touchcancel', function (event) {
+                            return _this.onTouchCancel(event);
+                        }, false);
+                    } else if (this._game.deviceTargetOption === Kiwi.TARGET_COCOON) {
+                        this._game.stage.canvas.removeEventListener('touchstart', function (event) {
+                            return _this.onTouchStart(event);
+                        }, false);
+                        this._game.stage.canvas.removeEventListener('touchmove', function (event) {
+                            return _this.onTouchMove(event);
+                        }, false);
+                        this._game.stage.canvas.removeEventListener('touchend', function (event) {
+                            return _this.onTouchEnd(event);
+                        }, false);
+                        this._game.stage.canvas.removeEventListener('touchenter', function (event) {
+                            return _this.onTouchEnter(event);
+                        }, false);
+                        this._game.stage.canvas.removeEventListener('touchleave', function (event) {
+                            return _this.onTouchLeave(event);
+                        }, false);
+                        this._game.stage.canvas.removeEventListener('touchcancel', function (event) {
+                            return _this.onTouchCancel(event);
+                        }, false);
+                    }
                 }
             };
 
@@ -17398,8 +18077,8 @@ var Kiwi;
                 this.screenX = event.screenX;
                 this.screenY = event.screenY;
 
-                this.x = (this.pageX - this.game.stage.offset.x) * this.game.stage.scale;
-                this.y = (this.pageY - this.game.stage.offset.y) * this.game.stage.scale;
+                this.x = (this.pageX - this.game.stage.offset.x) * this.game.stage.scaleX;
+                this.y = (this.pageY - this.game.stage.offset.y) * this.game.stage.scaleY;
 
                 this.point.setTo(this.x, this.y);
                 this.circle.x = this.x;
@@ -17610,7 +18289,6 @@ var Kiwi;
             * @public
             */
             Finger.prototype.start = function (event) {
-                this.id = event.identifier;
                 this.active = true;
                 _super.prototype.start.call(this, event);
             };
@@ -28604,6 +29282,62 @@ var Kiwi;
     })(Kiwi.Utils || (Kiwi.Utils = {}));
     var Utils = Kiwi.Utils;
 })(Kiwi || (Kiwi = {}));
+var Kiwi;
+(function (Kiwi) {
+    (function (Utils) {
+        var Version = (function () {
+            function Version() {
+            }
+            Version.parseVersion = function (version) {
+                var split = version.split(".");
+                return {
+                    majorVersion: parseInt(split[0]),
+                    minorVersion: parseInt(split[1]),
+                    patchVersion: parseInt(split[2])
+                };
+            };
+
+            // version1 == version2
+            Version.compareVersions = function (version1, version2) {
+                var v1 = Version.parseVersion(version1);
+                var v2 = Version.parseVersion(version2);
+                if (v1.majorVersion > v2.majorVersion) {
+                    return "greater";
+                }
+                if (v1.majorVersion < v2.majorVersion) {
+                    return "less";
+                }
+
+                // major versions must be equal
+                if (v1.minorVersion > v2.minorVersion) {
+                    return "greater";
+                }
+                if (v1.minorVersion < v2.minorVersion) {
+                    return "less";
+                }
+
+                //minor versions must be equal
+                if (v1.patchVersion > v2.patchVersion) {
+                    return "greater";
+                }
+                if (v1.patchVersion < v2.patchVersion) {
+                    return "less";
+                }
+
+                //patch versions must be equal
+                return "equal";
+            };
+
+            Version.greaterOrEqual = function (version1, version2) {
+                var comp = Version.compareVersions(version1, version2);
+                return (comp == "greater" || comp == "equal");
+            };
+            return Version;
+        })();
+        Utils.Version = Version;
+    })(Kiwi.Utils || (Kiwi.Utils = {}));
+    var Utils = Kiwi.Utils;
+})(Kiwi || (Kiwi = {}));
 /// <reference path="core/Game.ts" />
 /// <reference path="core/Stage.ts" />
 /// <reference path="core/ComponentManager.ts" />
@@ -28716,6 +29450,7 @@ var Kiwi;
 /// <reference path="utils/GameMath.ts" />
 /// <reference path="utils/RandomDataGenerator.ts" />
 /// <reference path="utils/RequestAnimationFrame.ts" />
+/// <reference path="utils/Version.ts" />
 /// <reference path="WebGL.d.ts"/>
 /**
 * Module - Kiwi (Core)
@@ -28730,7 +29465,6 @@ var Kiwi;
     * @property VERSION
     * @static
     * @type string
-    * @default '1.0'
     * @public
     */
     Kiwi.VERSION = "0.7.0";
@@ -28799,7 +29533,7 @@ var Kiwi;
     Kiwi.DEBUG_OFF = 1;
 
     /**
-    * Contains the Device class that is used to detirmine which features are supported by the users browser.
+    * Contains the Device class that is used to determine which features are supported by the users browser.
     * @property DEVICE
     * @static
     * @type Device

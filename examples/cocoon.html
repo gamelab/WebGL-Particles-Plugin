@@ -2,13 +2,16 @@
 <html>
 
 <head>
+  <script src="js/gator.js"></script>
+  
 	<script src="js/kiwi.js"></script>
   <!--script src="js/kiwi.min.js"></script-->
 
-  <script src="../particles-gl-0.9.5.min.js"></script>
+  <!--script src="../particles-gl-0.9.5.min.js"></script-->
   <script src="../src/gameobject.js"></script>
   <script src="../src/renderer.js"></script>
-  <script src="../src/shader.js"></script>
+  <!--script src="../src/shader.js"></script-->
+  <script src="../src/shaderLite.js"></script>
   
 </head>
 <body>
@@ -18,9 +21,10 @@
 
 	<script type="text/javascript">
 
+    //var gator = new Gator;
 		var MyState = new Kiwi.State("myState");
 		
-		var MyGame = new Kiwi.Game("testGameContainer","testGame",MyState,{plugins:["ParticlesGL"],renderer:Kiwi.RENDERER_WEBGL});
+		var MyGame = new Kiwi.Game("testGameContainer","testGame",MyState,{deviceTarget:Kiwi.TARGET_COCOON,plugins:["ParticlesGL"],renderer:Kiwi.RENDERER_WEBGL});
 
 		MyState.preload = function() {
 			this.game.stage.color="000000"
@@ -37,7 +41,7 @@
 			var particle = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,300,config);
 
 			//if you haven't started the particle objects yet then you can adjust the configuration
-			particle.config.numParts = 50;
+			particle.config.numParts = 500;
 			//start the particle object
 
       particle.startEmitting(true,false);
@@ -98,7 +102,7 @@ var config = {
     0.5,
     0.6
   ],
-  "alpha": "1",
+  "alpha": 1,
   "colEnv0": [
     0.3686274509803922,
     0.050980392156862744,

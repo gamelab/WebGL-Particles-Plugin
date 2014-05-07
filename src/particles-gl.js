@@ -24,7 +24,16 @@ Kiwi.Plugins.ParticlesGL = {
   * @default '1.0.0'
   * @public
   */
-  version:'0.9.0'
+  version:'0.9.0',
+
+  minimumKiwiVersion:'0.7.0',
+
+  pluginDependencies: [
+    {
+
+    }
+
+  ]
 
 };
 

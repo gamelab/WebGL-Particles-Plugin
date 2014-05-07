@@ -13,7 +13,7 @@ Kiwi.Renderers.StatelessParticleRenderer = function (gl,shaderManager,params){
    
     this.vertexBuffer = new Kiwi.Renderers.GLArrayBuffer(gl, 11);
 
-    this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
+    this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShaderLite");
     this.resetTime();
 
 };
@@ -39,7 +39,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.resetPauseTime = function () 
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.enable = function (gl, params) {
     
-    this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
+    this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShaderLite");
     var cfg = this._config;
     this._setStandardUniforms(gl,params.stageResolution,params.textureAtlas,params.camMatrix)
     this._setConfigUniforms(gl);
@@ -72,6 +72,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms = function
     gl.uniform3fv(this.shaderPair.uniforms.uColEnv2.location, new Float32Array(cfg.colEnv2));
     gl.uniform3fv(this.shaderPair.uniforms.uColEnv3.location, new Float32Array(cfg.colEnv3));
     gl.uniform2fv(this.shaderPair.uniforms.uColEnvKeyframes.location, new Float32Array(cfg.colEnvKeyframes));
+   
     gl.uniform1f(this.shaderPair.uniforms.uAlpha.location, cfg.alpha);
     gl.uniform4fv(this.shaderPair.uniforms.uAlphaGradient.location, new Float32Array(cfg.alphaGradient));
     gl.uniform2fv(this.shaderPair.uniforms.uAlphaStops.location, new Float32Array(cfg.alphaStops));
