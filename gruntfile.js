@@ -1,12 +1,11 @@
+
 module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    BASE_PATH: '',
-    DEVELOPMENT_PATH: '',
-
+    
     yuidoc: {
             compile: {
                 name: '<%= pkg.name %>',
@@ -15,8 +14,8 @@ module.exports = function(grunt) {
                 url: '<%= pkg.homepage %>',
                 options: {
                     extension: '.js',                               
-                    paths: '<%= DEVELOPMENT_PATH %>' + 'src/',
-                    outdir: '<%= BASE_PATH %>' + 'docs/'
+                    paths: 'src/',
+                    outdir: 'docs/'
                 }
             }
         },
@@ -24,31 +23,48 @@ module.exports = function(grunt) {
     uglify: {
             build: {
                 files: {
-                'particles-gl-<%= pkg.version %>.min.js': ['<%= pkg.main %>']
+                '<%= pkg.filenameBase %>-<%= pkg.version %>.min.js': ['<%= pkg.main %>']
             }
         }
     },
  
-    copy: {
-
-        whole: {
-          src: ['src/**', 'examples/**', 'docs/**', 'assets/**', 'libs/**', 'README.md','particles-gl-<%= pkg.version %>.min.js'],
-          dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/'
+    concat: {
+          build: {
+            src:['src/*'],
+            dest: '<%= pkg.filenameBase %>-<%= pkg.version %>.js'
+          }
+    },
+    
+    connect: {
+      server: {
+        options: {
+          port: 9000,
+          base: './'
         }
-
+      }
     }
-
  });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
-  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-connect');
+  
+  grunt.registerTask("default", [
+    "uglify:build",
+    "concat:build"
+    ]);
+  
+  grunt.registerTask("full", [
+    "concat:build",
+    "uglify:build",
+    "yuidoc:compile"
+    ]);
 
-  
-  
-  
-  grunt.registerTask("default", ["uglify:build"]);
-  grunt.registerTask("full", ["uglify:build","yuidoc:compile","copy:whole"]);
+  grunt.registerTask('serve', [
+    'connect:server:keepalive'
+    ]);
+
   
   
 

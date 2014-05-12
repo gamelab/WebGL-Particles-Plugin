@@ -23,6 +23,7 @@ Thumbs.db
 *.map
 *.orig
 
+bower_components/*
 node_modules/*
 /obj/debug/*
 *.map

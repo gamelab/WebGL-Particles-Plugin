@@ -29,10 +29,7 @@ Kiwi.Plugins.ParticlesGL = {
   minimumKiwiVersion:'0.7.0',
 
   pluginDependencies: [
-    {
-
-    }
-
+    
   ]
 
 };

@@ -1428,7 +1428,7 @@ var Kiwi;
                         for (var j = 0; j < plugin.pluginDependencies.length; j++) {
                             console.log(plugin.pluginDependencies[j].name, plugin.pluginDependencies[j].minimumVersion);
                             if (!this.validMinimumPluginVersionExists(plugin.pluginDependencies[j].name, plugin.pluginDependencies[j].minimumVersion)) {
-                                console.warn("'" + plugin.pluginDependencies[j].name + "' version " + plugin.pluginDependencies[j].minimumVersion + " either doesn't exist or does not meet minimum version requirement.");
+                                console.warn("'" + plugin.pluginDependencies[j].name + " either doesn't exist or does not meet minimum version requirement ( " + plugin.pluginDependencies[j].minimumVersion + ").");
                             }
                         }
                     }
