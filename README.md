@@ -31,6 +31,10 @@ The ParticlesGL plugin lets you create particle effects game objects in your Kiw
 If you have any problems then feel free to contact us via the http://www.kiwijs.org/help
 
 
+##Dependencies
+----------------------------------------------------------------------------------------
+- Kiwi.js version 1.0.0 or greater
+
 ##How to Include: 
 ----------------------------------------------------------------------------------------
 
