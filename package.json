@@ -5,17 +5,17 @@
     "description": "A WebGL particle plugin.",
     "author": {
         "name" : "GameLab",
-        "email" : ""
+        "email" : "support@kiwijs.org"
         },
 
     "homepage": "http://kiwijs.org/",
-    "bugs": "",
+    "bugs": "https://github.com/gamelab/WebGL-Particles-Plugin/issues",
     "license": "MIT",
-    "licenseUrl": "",
+    "licenseUrl": "https://github.com/gamelab/WebGL-Particles-Plugin/blob/master/license.txt",
 
     "repository": {
         "type": "git",
-        "url": ""
+        "url": "https://github.com/gamelab/WebGL-Particles-Plugin"
     },
 
     "main": "src/*.js",
