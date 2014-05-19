@@ -63,7 +63,7 @@ To create a particle gameobject, do the following.
   	var particles = new Kiwi.GameObjects.StatelessParticles(this,this.textures.particle,400,300,config);
 
 The last parameter in the above code contains the config object for the effect. If you leave it out a default config will be used.
-The config obkect has many properties which are described below along with some terminology.
+The config object has many properties which are described below along with some terminology.
 
 To start the particle effect
 	particles.startEmitting();

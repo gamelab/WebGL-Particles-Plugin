@@ -261,7 +261,6 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
          * @public
          */
         startEmitting : function (loop,removeOnComplete,numParts) {
-            console.log('startEmitting')
             if (typeof loop === "undefined") { loop = true; }
             if (typeof removeOnComplete === "undefined") { removeOnComplete = false }
             if (typeof numParts === "undefined") { numParts = this.config.numParts; }
@@ -280,8 +279,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
 
             this.effectState = "started";
             clearTimeout(this._timer);
-            console.log ("started")
-        
+       
         },
         
         /**
@@ -292,7 +290,6 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
          * @public
          */
         stopEmitting : function(immediate,remove) {
-            console.log('stopEmitting')
             if (typeof immediate === "undefined") { immediate = false; }
             if (typeof remove === "undefined") { remove = false; }
 
@@ -301,11 +298,9 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
                   this.remove();
                 } else if (immediate && !remove) {
                   this.effectState = "stopped";
-                  console.log ("stopped")
                 } else if (!immediate && !remove) {
                   this.glRenderer.pause();
                   this.effectState = "stopping";
-                  console.log ("stopping")
                   this.scheduleStop (this.timeoutLength * 1000,false);
                 } else if (!immediate && remove) {
                   this.config.loop = false;
@@ -328,7 +323,6 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             clearTimeout(this._timer);
             this._timer = setTimeout(function(milliseconds) {
                 that.effectState = "stopped";
-                console.log ("stopped")
                 if (remove) that.remove.call(that);
             },milliseconds)
         },

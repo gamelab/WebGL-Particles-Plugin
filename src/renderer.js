@@ -13,7 +13,7 @@ Kiwi.Renderers.StatelessParticleRenderer = function (gl,shaderManager,params){
    
     this.vertexBuffer = new Kiwi.Renderers.GLArrayBuffer(gl, 11);
 
-    this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShaderLite");
+    this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
     this.resetTime();
 
 };
@@ -39,7 +39,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.resetPauseTime = function () 
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.enable = function (gl, params) {
     
-    this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShaderLite");
+    this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
     var cfg = this._config;
     this._setStandardUniforms(gl,params.stageResolution,params.textureAtlas,params.camMatrix)
     this._setConfigUniforms(gl);

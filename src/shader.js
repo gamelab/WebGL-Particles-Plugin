@@ -13,11 +13,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.init = function(gl) {
     this.attributes.aXYVxVy = gl.getAttribLocation(this.shaderProgram, "aXYVxVy");
     this.attributes.aBirthLifespanAngle = gl.getAttribLocation(this.shaderProgram, "aBirthLifespanAngle");
     this.attributes.aCellXYWH = gl.getAttribLocation(this.shaderProgram, "aCellXYWH");
-
-
     this.initUniforms(gl);
-
-
 }
 
 
