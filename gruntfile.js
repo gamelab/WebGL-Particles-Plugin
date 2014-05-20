@@ -23,7 +23,7 @@ module.exports = function(grunt) {
     uglify: {
             build: {
                 files: {
-                '<%= pkg.filenameBase %>-<%= pkg.version %>.min.js': ['<%= pkg.main %>']
+                '<%= pkg.filenameBase %>-<%= pkg.version %>.min.js': ['<%= pkg.main %>*.js']
             }
         }
     },

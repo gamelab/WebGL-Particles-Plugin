@@ -34,13 +34,6 @@
             "classes": {},
             "fors": {},
             "namespaces": {}
-        },
-        "src\\shaderLite.js": {
-            "name": "src\\shaderLite.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
         }
     },
     "modules": {
@@ -314,7 +307,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 287,
+            "line": 285,
             "description": "Stops the system from emitting particles.",
             "itemtype": "method",
             "name": "stopEmitting",
@@ -336,7 +329,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 319,
+            "line": 314,
             "description": "Schedules the particle effect to stop (discontinue rendering), and optionally marks the gameobject for removal.",
             "itemtype": "method",
             "name": "scheduleStop",
@@ -358,7 +351,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 339,
+            "line": 333,
             "description": "Immediately marks the gameobject for removal.",
             "itemtype": "method",
             "name": "remove",
@@ -368,7 +361,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 350,
+            "line": 344,
             "description": "Sets the configuration object and optionally regenerates particles and sets runtime properties.",
             "itemtype": "method",
             "name": "setConfig",
@@ -395,7 +388,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 366,
+            "line": 360,
             "description": "Generates particles based on configuration object.",
             "itemtype": "method",
             "name": "_generateParticles",
@@ -405,7 +398,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 502,
+            "line": 496,
             "description": "Instructs the renderer to draw the particles.",
             "itemtype": "method",
             "name": "renderGL",
@@ -415,7 +408,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 514,
+            "line": 508,
             "description": "Returns a point on a unit arc based on a total number of points and an index",
             "itemtype": "method",
             "name": "regularPointCirclePerimeter",
@@ -447,7 +440,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 528,
+            "line": 522,
             "description": "Returns a point on a unit arc",
             "itemtype": "method",
             "name": "randomPointCirclePerimeter",
@@ -469,7 +462,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 540,
+            "line": 534,
             "description": "Returns a point within the sector of a circle",
             "itemtype": "method",
             "name": "randomPointCirclePerimeter",
@@ -491,7 +484,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 554,
+            "line": 548,
             "description": "Returns a point within the unit square",
             "itemtype": "method",
             "name": "randomPointRect",
@@ -501,7 +494,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 563,
+            "line": 557,
             "description": "Returns a point on the perimeter of the unit square",
             "itemtype": "method",
             "name": "randomPointRectPerimeter",
@@ -511,7 +504,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 578,
+            "line": 572,
             "description": "Returns a point on a unit line based on a total number of points and an index.",
             "itemtype": "method",
             "name": "regularPointLine",
@@ -538,7 +531,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 593,
+            "line": 587,
             "description": "Returns a point on a unit line.",
             "itemtype": "method",
             "name": "regularPointLine",
@@ -594,7 +587,7 @@
         },
         {
             "file": "src\\shader.js",
-            "line": 89,
+            "line": 85,
             "itemtype": "property",
             "name": "texture2DFrag",
             "type": "Array",
@@ -606,31 +599,7 @@
         },
         {
             "file": "src\\shader.js",
-            "line": 111,
-            "itemtype": "property",
-            "name": "texture2DVert",
-            "type": "Array",
-            "access": "public",
-            "tagname": "",
-            "class": "",
-            "module": "Kiwi",
-            "namespace": "Kiwi.Plugins"
-        },
-        {
-            "file": "src\\shaderLite.js",
-            "line": 89,
-            "itemtype": "property",
-            "name": "texture2DFrag",
-            "type": "Array",
-            "access": "public",
-            "tagname": "",
-            "class": "",
-            "module": "Kiwi",
-            "namespace": "Kiwi.Plugins"
-        },
-        {
-            "file": "src\\shaderLite.js",
-            "line": 111,
+            "line": 107,
             "itemtype": "property",
             "name": "texture2DVert",
             "type": "Array",
