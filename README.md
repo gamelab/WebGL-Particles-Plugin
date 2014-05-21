@@ -3,7 +3,7 @@ WebGL Particles
 
 Name: ParticlesGL
 
-Version: 1.0.0
+Version: 1.0.2
 
 Type: GameObject Plugin
 
@@ -15,12 +15,12 @@ KiwiJS last version tested: 1.0.0
 
 Tutorials for this plugin can be found on the Kiwi.JS website here:
 
-[Using the ParticlesGL Plugin](UPDATE ME)
+[Using the ParticlesGL Plugin](http://www.kiwijs.org/using-the-particle-effects-plugin)
 
 
 ##Version Release Notes
-1.0.0
-  - First Release ready for Kiwi.js version 1.0.0
+1.0.2
+  - Updated link to website tutorials.
 
 
 ##Description:

@@ -2,7 +2,7 @@
     "project": {
         "name": "ParticlesGL",
         "description": "A WebGL particle plugin.",
-        "version": "1.0.0",
+        "version": "1.0.2",
         "url": "http://kiwijs.org/"
     },
     "files": {
@@ -568,7 +568,6 @@
             "itemtype": "property",
             "name": "version",
             "type": "String",
-            "default": "'1.0.0'",
             "access": "public",
             "tagname": "",
             "class": "Kiwi.Plugins.ParticlesGL",
@@ -578,7 +577,7 @@
         },
         {
             "file": "src\\particles-gl.js",
-            "line": 37,
+            "line": 36,
             "description": "Registers this plugin with the Global Kiwi Plugins Manager if it is avaiable.",
             "class": "Kiwi.Plugins.ParticlesGL",
             "module": "Kiwi",
@@ -617,7 +616,7 @@
         },
         {
             "message": "Missing item type\nRegisters this plugin with the Global Kiwi Plugins Manager if it is avaiable.",
-            "line": " src\\particles-gl.js:37"
+            "line": " src\\particles-gl.js:36"
         }
     ]
 }
