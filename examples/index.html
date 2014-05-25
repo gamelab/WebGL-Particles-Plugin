@@ -36,17 +36,15 @@
 			//if you haven't started the particle objects yet then you can adjust the configuration
 			particle.config.numParts = 50;
 			//start the particle object
-
-      particle.startEmitting(true,false);
-   
-      setTimeout(function(){
-        particle.stopEmitting(false,false);
-        
-      },5000);
-
+ 
 			this.addChild(particle);
+
+     
 			
 		};
+
+    PlayState.update = function () {
+    Kiwi.State.prototype.update.call(this);
 
 var config = {
   "numParts": 10,
