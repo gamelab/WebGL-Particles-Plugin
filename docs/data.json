@@ -586,7 +586,7 @@
         },
         {
             "file": "src\\shader.js",
-            "line": 85,
+            "line": 88,
             "itemtype": "property",
             "name": "texture2DFrag",
             "type": "Array",
@@ -598,7 +598,7 @@
         },
         {
             "file": "src\\shader.js",
-            "line": 107,
+            "line": 110,
             "itemtype": "property",
             "name": "texture2DVert",
             "type": "Array",

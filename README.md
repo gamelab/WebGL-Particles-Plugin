@@ -143,4 +143,5 @@ Runtime properties are set up to one time per frame for the entire emitter
  * "alphaGradient" (array of 4 numbers 0 < n < 1): the alpha value at each color stop in the color envelope
  * "alphaStops" ((array of 2 numbers 0 < n < 1): determines the second and third alpha stop. The first and fourth are locked to 0 and 1 respectively
  * "additive" (boolean) : Use additive blending for compositing particles when true.
+ * "startAngle" (number) : The anglulat offset of the particle - to which rotation calculated from angular velocity will be added to.
 
