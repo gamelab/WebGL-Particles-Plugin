@@ -285,7 +285,8 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
 	        &quot;}&quot;,   
 
 	        &quot;vCol.a *= uAlpha;&quot;,
-	        &quot;float ang = uStartAngle + age * angularVelocity;&quot;,
+	        //&quot;float ang = uStartAngle + age * angularVelocity;&quot;,
+            &quot;float ang = age * angularVelocity;&quot;,
 	        &quot;vec2 ratio = vec2(1.0 / uTextureSize.x,1.0 / uTextureSize.y);&quot;,
 	        &quot;vec4 normCell = aCellXYWH;&quot;,
 	        &quot;normCell.xz *= ratio;&quot;,
