@@ -76,7 +76,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms = function
     gl.uniform1f(this.shaderPair.uniforms.uAlpha.location, cfg.alpha);
     gl.uniform4fv(this.shaderPair.uniforms.uAlphaGradient.location, new Float32Array(cfg.alphaGradient));
     gl.uniform2fv(this.shaderPair.uniforms.uAlphaStops.location, new Float32Array(cfg.alphaStops));
-    gl.uniform1f(this.shaderPair.uniforms.uStartAngle.location, cfg.startAngle);
+    gl.uniform1f(this.shaderPair.uniforms.uStartAngle.location, cfg.startAngle || 0);
     gl.uniform1i(this.shaderPair.uniforms.uLoop.location, (cfg.loop) ? 1 : 0);
 };
 
