@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.0</em>
+            <em>API Docs for: 1.0.2</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -173,7 +173,10 @@ Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
         },
         uLoop: {
             type: &quot;1i&quot;
-        }    
+        },
+        uStartAngle: {
+            type: &quot;1f&quot;
+        }  
     }
 
 /**
@@ -226,6 +229,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
     &quot;uniform vec2 uColEnvKeyframes;&quot;,
     &quot;uniform vec4 uAlphaGradient;&quot;,
     &quot;uniform vec2 uAlphaStops;&quot;,
+    &quot;uniform float uStartAngle;&quot;,
     
     &quot;uniform float uAlpha;&quot;,
     &quot;uniform bool uLoop;&quot;,
@@ -281,7 +285,8 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
 	        &quot;}&quot;,   
 
 	        &quot;vCol.a *= uAlpha;&quot;,
-	        &quot;float ang = age * angularVelocity;&quot;,
+	        //&quot;float ang = uStartAngle + age * angularVelocity;&quot;,
+            &quot;float ang = age * angularVelocity;&quot;,
 	        &quot;vec2 ratio = vec2(1.0 / uTextureSize.x,1.0 / uTextureSize.y);&quot;,
 	        &quot;vec4 normCell = aCellXYWH;&quot;,
 	        &quot;normCell.xz *= ratio;&quot;,
