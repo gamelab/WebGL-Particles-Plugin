@@ -79,7 +79,10 @@ Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
         },
         uLoop: {
             type: "1i"
-        }    
+        },
+        uStartAngle: {
+            type: "1f"
+        }  
     }
 
 /**
@@ -132,6 +135,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
     "uniform vec2 uColEnvKeyframes;",
     "uniform vec4 uAlphaGradient;",
     "uniform vec2 uAlphaStops;",
+    "uniform float uStartAngle;",
     
     "uniform float uAlpha;",
     "uniform bool uLoop;",
@@ -187,7 +191,8 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
 	        "}",   
 
 	        "vCol.a *= uAlpha;",
-	        "float ang = age * angularVelocity;",
+	        //"float ang = uStartAngle + age * angularVelocity;",
+            "float ang = age * angularVelocity;",
 	        "vec2 ratio = vec2(1.0 / uTextureSize.x,1.0 / uTextureSize.y);",
 	        "vec4 normCell = aCellXYWH;",
 	        "normCell.xz *= ratio;",

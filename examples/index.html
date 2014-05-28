@@ -5,7 +5,7 @@
 	<script src="js/kiwi.js"></script>
   
 
-  <script src="../particlesgl-1.0.0.js"></script>
+  <script src="../particlesgl-1.0.2.js"></script>
   
 </head>
 <body>
@@ -36,17 +36,14 @@
 			//if you haven't started the particle objects yet then you can adjust the configuration
 			particle.config.numParts = 50;
 			//start the particle object
-
       particle.startEmitting(true,false);
-   
-      setTimeout(function(){
-        particle.stopEmitting(false,false);
-        
-      },5000);
-
+      particle.setConfigProp("startAngle",0,true,false)
 			this.addChild(particle);
+
+     
 			
 		};
+
 
 var config = {
   "numParts": 10,
@@ -72,8 +69,8 @@ var config = {
   "velShape": "radial",
   "velOffsetX": -100,
   "velOffsetY": 50,
-  "velAngMin": 2.8,
-  "velAngMax": -8.1,
+  "velAngMin": 0,
+  "velAngMax": 0,
   "velRadius": 250.8,
   "velRadialStart": 5.358160803622591,
   "velRadialEnd": 3.647738136668149,
@@ -91,6 +88,7 @@ var config = {
   "startSize": 39,
   "endSize": 140,
   "loop": false,
+  "startAngle": 0,
   "colEnvKeyframes": [
     0.5,
     0.6

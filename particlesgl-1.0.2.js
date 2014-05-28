@@ -356,6 +356,31 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             if (doUniforms) this.glRenderer._setConfigUniforms();
         },
 
+        /**
+        * Sets a property on the configuration object and optionally regenerates particles and sets runtime properties.
+        * @method setConfigProp
+        * @param {string} prop : the name of the property to set
+        * @param {any} val: the value of the property to set
+        * @param {boolean} doGenerate : immediately regenerate particles
+        * @param {boolean} doUniforms : apply runtime properties
+        * @public
+        */
+        setConfigProp : function (prop,val,doGenerate,doUniforms) {
+            this.config[prop] = val;
+            this.setConfig(this.config,doGenerate,doUniforms)
+
+        },
+
+        /**
+        * Gets the configuration object. To change it, use setConfig or setConfigProp.
+        * @method getConfig
+        * @return {object}
+        * @public
+        */
+        getConfig : function () {
+            return this.config;
+        },
+
 
         /**
         * Generates particles based on configuration object.
@@ -739,7 +764,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms = function
     gl.uniform1f(this.shaderPair.uniforms.uAlpha.location, cfg.alpha);
     gl.uniform4fv(this.shaderPair.uniforms.uAlphaGradient.location, new Float32Array(cfg.alphaGradient));
     gl.uniform2fv(this.shaderPair.uniforms.uAlphaStops.location, new Float32Array(cfg.alphaStops));
-    
+    gl.uniform1f(this.shaderPair.uniforms.uStartAngle.location, cfg.startAngle);
     gl.uniform1i(this.shaderPair.uniforms.uLoop.location, (cfg.loop) ? 1 : 0);
 };
 
@@ -911,7 +936,10 @@ Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
         },
         uLoop: {
             type: "1i"
-        }    
+        },
+        uStartAngle: {
+            type: "1f"
+        }  
     }
 
 /**
@@ -964,6 +992,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
     "uniform vec2 uColEnvKeyframes;",
     "uniform vec4 uAlphaGradient;",
     "uniform vec2 uAlphaStops;",
+    "uniform float uStartAngle;",
     
     "uniform float uAlpha;",
     "uniform bool uLoop;",
@@ -1019,7 +1048,8 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
 	        "}",   
 
 	        "vCol.a *= uAlpha;",
-	        "float ang = age * angularVelocity;",
+	        //"float ang = uStartAngle + age * angularVelocity;",
+            "float ang = age * angularVelocity;",
 	        "vec2 ratio = vec2(1.0 / uTextureSize.x,1.0 / uTextureSize.y);",
 	        "vec4 normCell = aCellXYWH;",
 	        "normCell.xz *= ratio;",

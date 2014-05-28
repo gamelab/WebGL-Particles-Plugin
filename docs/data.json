@@ -388,7 +388,53 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 360,
+            "line": 359,
+            "description": "Sets a property on the configuration object and optionally regenerates particles and sets runtime properties.",
+            "itemtype": "method",
+            "name": "setConfigProp",
+            "params": [
+                {
+                    "name": "prop",
+                    "description": ": the name of the property to set",
+                    "type": "String"
+                },
+                {
+                    "name": "val:",
+                    "description": "the value of the property to set",
+                    "type": "Any"
+                },
+                {
+                    "name": "doGenerate",
+                    "description": ": immediately regenerate particles",
+                    "type": "Boolean"
+                },
+                {
+                    "name": "doUniforms",
+                    "description": ": apply runtime properties",
+                    "type": "Boolean"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 374,
+            "description": "Gets the configuration object. To change it, use setConfig or setConfigProp.",
+            "itemtype": "method",
+            "name": "getConfig",
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticles"
+        },
+        {
+            "file": "src\\gameobject.js",
+            "line": 385,
             "description": "Generates particles based on configuration object.",
             "itemtype": "method",
             "name": "_generateParticles",
@@ -398,7 +444,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 496,
+            "line": 521,
             "description": "Instructs the renderer to draw the particles.",
             "itemtype": "method",
             "name": "renderGL",
@@ -408,7 +454,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 508,
+            "line": 533,
             "description": "Returns a point on a unit arc based on a total number of points and an index",
             "itemtype": "method",
             "name": "regularPointCirclePerimeter",
@@ -440,7 +486,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 522,
+            "line": 547,
             "description": "Returns a point on a unit arc",
             "itemtype": "method",
             "name": "randomPointCirclePerimeter",
@@ -462,7 +508,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 534,
+            "line": 559,
             "description": "Returns a point within the sector of a circle",
             "itemtype": "method",
             "name": "randomPointCirclePerimeter",
@@ -484,7 +530,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 548,
+            "line": 573,
             "description": "Returns a point within the unit square",
             "itemtype": "method",
             "name": "randomPointRect",
@@ -494,7 +540,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 557,
+            "line": 582,
             "description": "Returns a point on the perimeter of the unit square",
             "itemtype": "method",
             "name": "randomPointRectPerimeter",
@@ -504,7 +550,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 572,
+            "line": 597,
             "description": "Returns a point on a unit line based on a total number of points and an index.",
             "itemtype": "method",
             "name": "regularPointLine",
@@ -531,7 +577,7 @@
         },
         {
             "file": "src\\gameobject.js",
-            "line": 587,
+            "line": 612,
             "description": "Returns a point on a unit line.",
             "itemtype": "method",
             "name": "regularPointLine",
@@ -586,7 +632,7 @@
         },
         {
             "file": "src\\shader.js",
-            "line": 85,
+            "line": 88,
             "itemtype": "property",
             "name": "texture2DFrag",
             "type": "Array",
@@ -598,7 +644,7 @@
         },
         {
             "file": "src\\shader.js",
-            "line": 107,
+            "line": 110,
             "itemtype": "property",
             "name": "texture2DVert",
             "type": "Array",
