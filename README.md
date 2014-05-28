@@ -22,7 +22,6 @@ Tutorials for this plugin can be found on the Kiwi.JS website here:
 1.0.2
   - Updated link to website tutorials.
 
-
 ##Description:
 The ParticlesGL plugin lets you create particle effects game objects in your Kiwi.js games.
 If you have any problems then feel free to contact us via the http://www.kiwijs.org/help
