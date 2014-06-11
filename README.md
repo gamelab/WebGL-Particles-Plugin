@@ -3,7 +3,7 @@ WebGL Particles
 
 Name: ParticlesGL
 
-Version: 1.0.2
+Version: 1.0.3
 
 Type: GameObject Plugin
 
