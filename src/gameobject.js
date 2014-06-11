@@ -274,7 +274,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             this.setConfig(this.config,true,true);
                       
             if (!loop && removeOnComplete) {
-                this.scheduleRemoval(this.timeoutLength * 1000);
+                this.scheduleStop( this.timeoutLength * 1000, true );
             }
 
             this.effectState = "started";

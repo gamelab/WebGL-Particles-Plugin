@@ -274,7 +274,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             this.setConfig(this.config,true,true);
                       
             if (!loop && removeOnComplete) {
-                this.scheduleRemoval(this.timeoutLength * 1000);
+                this.scheduleStop( this.timeoutLength * 1000, true );
             }
 
             this.effectState = "started";
@@ -667,7 +667,7 @@ Kiwi.Plugins.ParticlesGL = {
   */
   version:'1.0.2',
 
-  minimumKiwiVersion:'0.7.0',
+  minimumKiwiVersion:'1.0.0',
 
   pluginDependencies: [
     
@@ -764,7 +764,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms = function
     gl.uniform1f(this.shaderPair.uniforms.uAlpha.location, cfg.alpha);
     gl.uniform4fv(this.shaderPair.uniforms.uAlphaGradient.location, new Float32Array(cfg.alphaGradient));
     gl.uniform2fv(this.shaderPair.uniforms.uAlphaStops.location, new Float32Array(cfg.alphaStops));
-    gl.uniform1f(this.shaderPair.uniforms.uStartAngle.location, cfg.startAngle);
+    gl.uniform1f(this.shaderPair.uniforms.uStartAngle.location, cfg.startAngle || 0);
     gl.uniform1i(this.shaderPair.uniforms.uLoop.location, (cfg.loop) ? 1 : 0);
 };
 
