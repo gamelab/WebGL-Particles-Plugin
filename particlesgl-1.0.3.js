@@ -828,7 +828,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl,transform
 
     gl.drawArrays(gl.POINTS, 0,this._config.numParts);
     //return to standard blendfunc
-    gl.blendFunc( gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE,gl.ONE);
 };
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.updateStageResolution = function (gl, res) {
