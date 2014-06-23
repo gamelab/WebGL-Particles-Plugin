@@ -11,7 +11,7 @@ Author: Kiwi.js Team
 
 Website: www.kiwijs.org
 
-KiwiJS last version tested: 1.0.0
+KiwiJS last version tested: 1.0.1
 
 Tutorials for this plugin can be found on the Kiwi.JS website here:
 
@@ -19,6 +19,11 @@ Tutorials for this plugin can be found on the Kiwi.JS website here:
 
 
 ##Version Release Notes
+1.0.3
+  - removeOnComplete method functions properly.
+  - Compatibility fixes for Kiwi.js v1.0.1
+  - Dependency updated to Kiwi.js v1.0.1
+
 1.0.2
   - Updated link to website tutorials.
 
@@ -28,7 +33,7 @@ If you have any problems then feel free to contact us via the http://www.kiwijs.
 
 
 ##Dependencies
-- Kiwi.js version 1.0.0 or greater
+- Kiwi.js version 1.0.1 or greater
 
 ##How to Include: 
 
@@ -127,7 +132,7 @@ Determines the spawn time and lifespan of particles
   * "maxLifespan" (number)  : The maximum lifespan of each particle. A random start time between "minLifespan" and "maxLifespan" will be generated
 
 ### Textures
-Determines which image/spritesheet/textureatlas will be used as bitmap textures. If a textureAtlas or a spritesheet is used then individual cells can be selected.
+Determines which image/spritesheet/textureatlas will be used as bitmap textures. If a textureAtlas or a spritesheet is used then individual cells can be selected. You can also use a canvas and draw in real time.
 
 ###Runtime
 Runtime properties are set up to one time per frame for the entire emitter
