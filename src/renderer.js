@@ -100,18 +100,14 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.pause = function (gl) {
     gl.uniform1f(this.shaderPair.uniforms.uPauseTime.location, this.pauseTime);
 }
 
-Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl,transform) {
+Kiwi.Renderers.StatelessParticleRenderer.prototype.modelMatrix = new Float32Array([
+    1,0,0,
+    0,1,0,
+    0,0,1]);
 
-    var m = transform.getConcatenatedMatrix();
-
-    var modelMatrix = new Float32Array([
-        m.a,m.b,0,
-        m.c,m.d,0,
-        m.tx,m.ty,1
-    ]);
-
+Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl) {
     var modelViewMatrix = mat3.create();
-    mat3.mul(modelViewMatrix,this.camMatrix,modelMatrix);
+    mat3.mul(modelViewMatrix,this.camMatrix,this.modelMatrix);
     gl.uniformMatrix3fv(this.shaderPair.uniforms.uCamMatrix.location, false, modelViewMatrix);
 
     // calculate time

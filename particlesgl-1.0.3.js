@@ -60,6 +60,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             if (typeof atlas == "undefined") {
                 console.error('A Texture Atlas was not passed when instantiating a new StatelessParticles.');
                 this.willRender = false;
+                this.visible = false;
                 this.active = false;
                 return;
             }
@@ -278,6 +279,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             }
 
             this.effectState = "started";
+            this.visible = true;
             clearTimeout(this._timer);
        
         },
@@ -298,6 +300,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
                   this.remove();
                 } else if (immediate && !remove) {
                   this.effectState = "stopped";
+                  this.visible = false;
                 } else if (!immediate && !remove) {
                   this.glRenderer.pause();
                   this.effectState = "stopping";
@@ -323,6 +326,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             clearTimeout(this._timer);
             this._timer = setTimeout(function(milliseconds) {
                 that.effectState = "stopped";
+                that.visible = false;
                 if (remove) that.remove.call(that);
             },milliseconds)
         },
@@ -524,8 +528,12 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         * @private
         */
         renderGL : function (gl, camera, params) {
-            if (this.effectState !== "stopped")
-                this.glRenderer.draw(gl,this.transform);
+            var m = this.transform.getConcatenatedMatrix();
+            this.glRenderer.modelMatrix = new Float32Array([
+                m.a,m.b,0,
+                m.c,m.d,0,
+                m.tx,m.ty,1
+            ]);
         },
 
         
@@ -667,7 +675,7 @@ Kiwi.Plugins.ParticlesGL = {
   */
   version:'1.0.3',
 
-  minimumKiwiVersion:'1.0.0',
+  minimumKiwiVersion:'1.0.1',
 
   pluginDependencies: [
     
@@ -788,18 +796,14 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.pause = function (gl) {
     gl.uniform1f(this.shaderPair.uniforms.uPauseTime.location, this.pauseTime);
 }
 
-Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl,transform) {
+Kiwi.Renderers.StatelessParticleRenderer.prototype.modelMatrix = new Float32Array([
+    1,0,0,
+    0,1,0,
+    0,0,1]);
 
-    var m = transform.getConcatenatedMatrix();
-
-    var modelMatrix = new Float32Array([
-        m.a,m.b,0,
-        m.c,m.d,0,
-        m.tx,m.ty,1
-    ]);
-
+Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl) {
     var modelViewMatrix = mat3.create();
-    mat3.mul(modelViewMatrix,this.camMatrix,modelMatrix);
+    mat3.mul(modelViewMatrix,this.camMatrix,this.modelMatrix);
     gl.uniformMatrix3fv(this.shaderPair.uniforms.uCamMatrix.location, false, modelViewMatrix);
 
     // calculate time
