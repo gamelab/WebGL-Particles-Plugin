@@ -1,6 +1,6 @@
 {
   "name": "ParticlesGL",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "dependencies": {
   	"kiwi.js": "https://github.com/gamelab/kiwi.js.git#dev"
   }

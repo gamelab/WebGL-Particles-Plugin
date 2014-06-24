@@ -23,7 +23,7 @@ Kiwi.Plugins.ParticlesGL = {
   * @type String
   * @public
   */
-  version:'1.0.3',
+  version:'1.1.0',
 
   minimumKiwiVersion:'1.0.1',
 
