@@ -111,6 +111,9 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             "velHeight": 100,
             "velAngle": 0,
             "velLength": 30,
+            "angStartMin": 0,
+            "angStartMax": 0,
+            "angVelocityConform": false,
             "minStartTime": 1,
             "maxStartTime": 6,
             "minLifespan": 3,
@@ -489,6 +492,16 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
                 var diff = Math.max(cfg.velAngMax,cfg.velAngMin) - Math.min (cfg.velAngMax,cfg.velAngMin);
                 velAng = cfg.velAngMin +this.rnd() * diff;
 
+                // Angular spawn parameters
+                var startAng;
+                var angDiff = Math.abs(cfg.angStartMax - cfg.angStartMin);
+                startAng = cfg.angStartMin + this.rnd() * angDiff;
+                if(cfg.angVelocityConform)
+                {
+                    // Base angle is based on velocity vector
+                    startAng += Math.atan2( vel.y, vel.x );
+                }
+
                 pos.x += cfg.posOffsetX;
                 pos.y += cfg.posOffsetY;
 
@@ -512,7 +525,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
                     }
                 }
 
-                vertexItems.push(startTime,lifespan,velAng);
+                vertexItems.push(startTime,lifespan,velAng,startAng);
                 var cell = this.atlas.cells[cellIndex];
                 vertexItems.push(cell.x,cell.y,cell.w,cell.h);
             }
@@ -707,7 +720,7 @@ Kiwi.Renderers.StatelessParticleRenderer = function (gl,shaderManager,params){
         console.log("no particle configuration supplied");
     }
    
-    this.vertexBuffer = new Kiwi.Renderers.GLArrayBuffer(gl, 11);
+    this.vertexBuffer = new Kiwi.Renderers.GLArrayBuffer(gl, 12);
 
     this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
     this.resetTime();
@@ -822,13 +835,13 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl) {
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer.buffer);
 
     gl.enableVertexAttribArray(this.shaderPair.attributes.aXYVxVy);
-    gl.vertexAttribPointer(this.shaderPair.attributes.aXYVxVy, 4, gl.FLOAT, false, 44, 0);
+    gl.vertexAttribPointer(this.shaderPair.attributes.aXYVxVy, 4, gl.FLOAT, false, 48, 0);
 
     gl.enableVertexAttribArray(this.shaderPair.attributes.aBirthLifespanAngle);
-    gl.vertexAttribPointer(this.shaderPair.attributes.aBirthLifespanAngle, 3, gl.FLOAT, false, 44, 16);
+    gl.vertexAttribPointer(this.shaderPair.attributes.aBirthLifespanAngle, 4, gl.FLOAT, false, 48, 16);
 
     gl.enableVertexAttribArray(this.shaderPair.attributes.aCellXYWH);
-    gl.vertexAttribPointer(this.shaderPair.attributes.aCellXYWH, 4, gl.FLOAT, false, 44, 28);
+    gl.vertexAttribPointer(this.shaderPair.attributes.aCellXYWH, 4, gl.FLOAT, false, 48, 32);
 
     gl.drawArrays(gl.POINTS, 0,this._config.numParts);
     //return to standard blendfunc
@@ -881,7 +894,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.init = function(gl) {
 
 Kiwi.Shaders.StatelessParticleShader.prototype.attributes = {
     aXYVxVy: null,
-    aBirthLifespan: null,
+    aBirthLifespanAngle: null,
     aCellXYWH: null
 };
 
@@ -978,7 +991,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.fragSource = [
 Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
     "precision mediump float;",
     "attribute vec4 aXYVxVy;",
-    "attribute vec3 aBirthLifespanAngle;",
+    "attribute vec4 aBirthLifespanAngle;",
   	"attribute vec4 aCellXYWH;",
 
     "uniform mat3 uCamMatrix;",
@@ -1012,6 +1025,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
         "float birthTime = aBirthLifespanAngle.x;",
         "float lifespan = aBirthLifespanAngle.y;",
         "float angularVelocity = aBirthLifespanAngle.z;",
+        "float angleStart = aBirthLifespanAngle.w;",
         "float deathTime = birthTime + lifespan;",
         "float age = mod(uT-birthTime,lifespan);",
         "float pauseTimeAge = mod(uPauseTime-birthTime,lifespan);",
@@ -1053,7 +1067,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
 
 	        "vCol.a *= uAlpha;",
 	        //"float ang = uStartAngle + age * angularVelocity;",
-            "float ang = age * angularVelocity;",
+            "float ang = age * angularVelocity + angleStart;",
 	        "vec2 ratio = vec2(1.0 / uTextureSize.x,1.0 / uTextureSize.y);",
 	        "vec4 normCell = aCellXYWH;",
 	        "normCell.xz *= ratio;",

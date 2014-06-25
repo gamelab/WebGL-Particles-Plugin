@@ -11,7 +11,7 @@ Kiwi.Renderers.StatelessParticleRenderer = function (gl,shaderManager,params){
         console.log("no particle configuration supplied");
     }
    
-    this.vertexBuffer = new Kiwi.Renderers.GLArrayBuffer(gl, 11);
+    this.vertexBuffer = new Kiwi.Renderers.GLArrayBuffer(gl, 12);
 
     this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
     this.resetTime();
@@ -126,13 +126,13 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl) {
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer.buffer);
 
     gl.enableVertexAttribArray(this.shaderPair.attributes.aXYVxVy);
-    gl.vertexAttribPointer(this.shaderPair.attributes.aXYVxVy, 4, gl.FLOAT, false, 44, 0);
+    gl.vertexAttribPointer(this.shaderPair.attributes.aXYVxVy, 4, gl.FLOAT, false, 48, 0);
 
     gl.enableVertexAttribArray(this.shaderPair.attributes.aBirthLifespanAngle);
-    gl.vertexAttribPointer(this.shaderPair.attributes.aBirthLifespanAngle, 3, gl.FLOAT, false, 44, 16);
+    gl.vertexAttribPointer(this.shaderPair.attributes.aBirthLifespanAngle, 4, gl.FLOAT, false, 48, 16);
 
     gl.enableVertexAttribArray(this.shaderPair.attributes.aCellXYWH);
-    gl.vertexAttribPointer(this.shaderPair.attributes.aCellXYWH, 4, gl.FLOAT, false, 44, 28);
+    gl.vertexAttribPointer(this.shaderPair.attributes.aCellXYWH, 4, gl.FLOAT, false, 48, 32);
 
     gl.drawArrays(gl.POINTS, 0,this._config.numParts);
     //return to standard blendfunc

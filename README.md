@@ -19,6 +19,9 @@ Tutorials for this plugin can be found on the Kiwi.JS website here:
 
 
 ##Version Release Notes
+1.1.0
+ - Added angStartMin, angStartMax, and angVelocityConform config fields, allowing the particle to spawn with extant rotation.
+
 1.0.3
   - removeOnComplete method functions properly.
   - Compatibility fixes for Kiwi.js v1.0.1
@@ -123,6 +126,12 @@ Determines the velocity vector (a pair of numbers representeing direction and sp
      * "velRadialEnd" (number) : The ending angle in radians of the radial distribution
      * "velConstrainRadial" (boolean) : Toggle whether to generate velocity vectors within the radial field, or on its edge
      * "velRandomRadial" (boolean : Toggle random or regular distribution along the edge of the radial distribution
+
+### Angle Start
+Determines initial angle.
+  * "angStartMin" (number) : The minimum start angle of each particle. A random start angle between "angStartMin" and "angStartMax" will be generated
+  * "angStartMax" (number) : The minimum start angle of each particle. A random start angle between "angStartMin" and "angStartMax" will be generated
+  * "angVelocityConform" (boolean) : Toggle velocity conformity. If false, particles default to standard orientation. If true, particles are emitted facing their birth velocity. Standard orientation assumes rotation 0, in which the "front" of a particle is pointing to the right.
 
 ### Lifespan
 Determines the spawn time and lifespan of particles

@@ -111,6 +111,9 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             "velHeight": 100,
             "velAngle": 0,
             "velLength": 30,
+            "angStartMin": 0,
+            "angStartMax": 0,
+            "angVelocityConform": false,
             "minStartTime": 1,
             "maxStartTime": 6,
             "minLifespan": 3,
@@ -489,6 +492,16 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
                 var diff = Math.max(cfg.velAngMax,cfg.velAngMin) - Math.min (cfg.velAngMax,cfg.velAngMin);
                 velAng = cfg.velAngMin +this.rnd() * diff;
 
+                // Angular spawn parameters
+                var startAng;
+                var angDiff = Math.abs(cfg.angStartMax - cfg.angStartMin);
+                startAng = cfg.angStartMin + this.rnd() * angDiff;
+                if(cfg.angVelocityConform)
+                {
+                    // Base angle is based on velocity vector
+                    startAng += Math.atan2( vel.y, vel.x );
+                }
+
                 pos.x += cfg.posOffsetX;
                 pos.y += cfg.posOffsetY;
 
@@ -512,7 +525,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
                     }
                 }
 
-                vertexItems.push(startTime,lifespan,velAng);
+                vertexItems.push(startTime,lifespan,velAng,startAng);
                 var cell = this.atlas.cells[cellIndex];
                 vertexItems.push(cell.x,cell.y,cell.w,cell.h);
             }
