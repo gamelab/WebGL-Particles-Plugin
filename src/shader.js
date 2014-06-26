@@ -35,9 +35,6 @@ Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
         uResolution: {
             type: "2fv"
         },
-        uTextureSize: {
-            type: "2fv"
-        },
         uSampler: {
             type: "1i",
         },
@@ -80,7 +77,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
         uLoop: {
             type: "1i"
         },
-        uStartAngle: {
+        uWorldAngle: {
             type: "1f"
         }  
     }
@@ -135,7 +132,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
     "uniform vec2 uColEnvKeyframes;",
     "uniform vec4 uAlphaGradient;",
     "uniform vec2 uAlphaStops;",
-    "uniform float uStartAngle;",
+    "uniform float uWorldAngle;",
     
     "uniform float uAlpha;",
     "uniform bool uLoop;",
@@ -143,6 +140,8 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
     "varying vec4 vCol;",
     "varying mat4 vRotationMatrix;",
     "varying vec4 vCell;",
+
+    "vec3 deadPos = vec3(-0.02, -0.02, 0.01);",
 
    "void main(void) {",
    
@@ -156,14 +155,13 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
         "float age = mod(uT-birthTime,lifespan);",
         "float pauseTimeAge = mod(uPauseTime-birthTime,lifespan);",
 
-      
-        "lerp =  age / lifespan;",
-        "gl_PointSize = mix(uPointSizeRange.x,uPointSizeRange.y,lerp);",
-        
         "float loopBirthTime = (uT - birthTime) / lifespan;",
         "if (uT < birthTime || (uT >= deathTime && !uLoop ) || (uT >= uPauseTime - pauseTimeAge + lifespan)) {",
-            "gl_Position = vec4(9999.0,0,0,0);",
+            "gl_Position = vec4(deadPos.x,deadPos.y,0,0);",
+            "gl_PointSize = deadPos.z;",
         "} else {", 
+            "lerp =  age / lifespan;",
+            "gl_PointSize = mix(uPointSizeRange.x,uPointSizeRange.y,lerp);",
             "vec2 pos = aXYVxVy.xy; ",
             "vec2 vel = aXYVxVy.zw;",
             "pos += age * vel;",
@@ -192,8 +190,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
 	        "}",   
 
 	        "vCol.a *= uAlpha;",
-	        //"float ang = uStartAngle + age * angularVelocity;",
-            "float ang = age * angularVelocity + angleStart;",
+            "float ang = age * angularVelocity + angleStart + uWorldAngle;",
 	        "vec2 ratio = vec2(1.0 / uTextureSize.x,1.0 / uTextureSize.y);",
 	        "vec4 normCell = aCellXYWH;",
 	        "normCell.xz *= ratio;",

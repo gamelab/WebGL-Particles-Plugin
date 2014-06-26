@@ -143,7 +143,7 @@ Determines the spawn time and lifespan of particles
 ### Textures
 Determines which image/spritesheet/textureatlas will be used as bitmap textures. If a textureAtlas or a spritesheet is used then individual cells can be selected. You can also use a canvas and draw in real time.
 
-###Runtime
+### Runtime
 Runtime properties are set up to one time per frame for the entire emitter
  * "startSize"  (number) : The particle start size in pixels 
  * "endSize"  (number) : The particle end size in pixels
@@ -158,3 +158,5 @@ Runtime properties are set up to one time per frame for the entire emitter
  * "additive" (boolean) : Use additive blending for compositing particles when true.
  * "startAngle" (number) : The anglulat offset of the particle - to which rotation calculated from angular velocity will be added to.
 
+### Using Transforms
+Particles can move and rotate freely. However, their scaling behaviour is limited. Scaling a particle object will scale the path along which the particles move, causing them to appear to move slower or faster. However, it will not change the size or orientation of the particles. For example, if you have a particle effect which shoots a rocket to the right, you can scale the game object by -1 to shoot to the left. However, the rocket will still face right, and appear to be facing backwards. If you want to change the direction of a particle effect, either use rotation or create a duplicate particle effect pointing in the other direction.

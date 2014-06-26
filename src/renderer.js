@@ -16,6 +16,12 @@ Kiwi.Renderers.StatelessParticleRenderer = function (gl,shaderManager,params){
     this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
     this.resetTime();
 
+    this.worldAngle = 0;
+    this.modelMatrix = new Float32Array([
+    1,0,0,
+    0,1,0,
+    0,0,1]);
+
 };
 Kiwi.extend(Kiwi.Renderers.StatelessParticleRenderer,Kiwi.Renderers.Renderer);
 
@@ -76,7 +82,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms = function
     gl.uniform1f(this.shaderPair.uniforms.uAlpha.location, cfg.alpha);
     gl.uniform4fv(this.shaderPair.uniforms.uAlphaGradient.location, new Float32Array(cfg.alphaGradient));
     gl.uniform2fv(this.shaderPair.uniforms.uAlphaStops.location, new Float32Array(cfg.alphaStops));
-    gl.uniform1f(this.shaderPair.uniforms.uStartAngle.location, cfg.startAngle || 0);
+    gl.uniform1f(this.shaderPair.uniforms.uWorldAngle.location, this.worldAngle);
     gl.uniform1i(this.shaderPair.uniforms.uLoop.location, (cfg.loop) ? 1 : 0);
 };
 
@@ -100,10 +106,16 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.pause = function (gl) {
     gl.uniform1f(this.shaderPair.uniforms.uPauseTime.location, this.pauseTime);
 }
 
-Kiwi.Renderers.StatelessParticleRenderer.prototype.modelMatrix = new Float32Array([
-    1,0,0,
-    0,1,0,
-    0,0,1]);
+Kiwi.Renderers.StatelessParticleRenderer.prototype.deriveWorldAngle = function(transform) {
+    var m = transform.matrix;
+    this.worldAngle = Math.acos(m.a / transform.scaleX);
+    // acos does not distinguish between positive and negative angles, so is wrong half the time
+    // However, we know that sin will always be negative when the angle is below 0 (and above -PI).
+    if(Math.asin(m.b / transform.scaleX) < 0)
+        this.worldAngle *= -1;
+    // Update shader information
+    this.gl.uniform1f(this.shaderPair.uniforms.uWorldAngle.location, this.worldAngle);
+}
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl) {
     var modelViewMatrix = mat3.create();

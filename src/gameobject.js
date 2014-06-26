@@ -547,6 +547,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
                 m.c,m.d,0,
                 m.tx,m.ty,1
             ]);
+            this.glRenderer.deriveWorldAngle( this.transform );
         },
 
         

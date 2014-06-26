@@ -547,6 +547,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
                 m.c,m.d,0,
                 m.tx,m.ty,1
             ]);
+            this.glRenderer.deriveWorldAngle( this.transform );
         },
 
         
@@ -725,6 +726,12 @@ Kiwi.Renderers.StatelessParticleRenderer = function (gl,shaderManager,params){
     this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
     this.resetTime();
 
+    this.worldAngle = 0;
+    this.modelMatrix = new Float32Array([
+    1,0,0,
+    0,1,0,
+    0,0,1]);
+
 };
 Kiwi.extend(Kiwi.Renderers.StatelessParticleRenderer,Kiwi.Renderers.Renderer);
 
@@ -785,7 +792,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms = function
     gl.uniform1f(this.shaderPair.uniforms.uAlpha.location, cfg.alpha);
     gl.uniform4fv(this.shaderPair.uniforms.uAlphaGradient.location, new Float32Array(cfg.alphaGradient));
     gl.uniform2fv(this.shaderPair.uniforms.uAlphaStops.location, new Float32Array(cfg.alphaStops));
-    gl.uniform1f(this.shaderPair.uniforms.uStartAngle.location, cfg.startAngle || 0);
+    gl.uniform1f(this.shaderPair.uniforms.uWorldAngle.location, this.worldAngle);
     gl.uniform1i(this.shaderPair.uniforms.uLoop.location, (cfg.loop) ? 1 : 0);
 };
 
@@ -809,10 +816,16 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.pause = function (gl) {
     gl.uniform1f(this.shaderPair.uniforms.uPauseTime.location, this.pauseTime);
 }
 
-Kiwi.Renderers.StatelessParticleRenderer.prototype.modelMatrix = new Float32Array([
-    1,0,0,
-    0,1,0,
-    0,0,1]);
+Kiwi.Renderers.StatelessParticleRenderer.prototype.deriveWorldAngle = function(transform) {
+    var m = transform.matrix;
+    this.worldAngle = Math.acos(m.a / transform.scaleX);
+    // acos does not distinguish between positive and negative angles, so is wrong half the time
+    // However, we know that sin will always be negative when the angle is below 0 (and above -PI).
+    if(Math.asin(m.b / transform.scaleX) < 0)
+        this.worldAngle *= -1;
+    // Update shader information
+    this.gl.uniform1f(this.shaderPair.uniforms.uWorldAngle.location, this.worldAngle);
+}
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl) {
     var modelViewMatrix = mat3.create();
@@ -909,9 +922,6 @@ Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
         uResolution: {
             type: "2fv"
         },
-        uTextureSize: {
-            type: "2fv"
-        },
         uSampler: {
             type: "1i",
         },
@@ -954,7 +964,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
         uLoop: {
             type: "1i"
         },
-        uStartAngle: {
+        uWorldAngle: {
             type: "1f"
         }  
     }
@@ -1009,7 +1019,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
     "uniform vec2 uColEnvKeyframes;",
     "uniform vec4 uAlphaGradient;",
     "uniform vec2 uAlphaStops;",
-    "uniform float uStartAngle;",
+    "uniform float uWorldAngle;",
     
     "uniform float uAlpha;",
     "uniform bool uLoop;",
@@ -1017,6 +1027,8 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
     "varying vec4 vCol;",
     "varying mat4 vRotationMatrix;",
     "varying vec4 vCell;",
+
+    "vec3 deadPos = vec3(-0.02, -0.02, 0.01);",
 
    "void main(void) {",
    
@@ -1030,14 +1042,13 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
         "float age = mod(uT-birthTime,lifespan);",
         "float pauseTimeAge = mod(uPauseTime-birthTime,lifespan);",
 
-      
-        "lerp =  age / lifespan;",
-        "gl_PointSize = mix(uPointSizeRange.x,uPointSizeRange.y,lerp);",
-        
         "float loopBirthTime = (uT - birthTime) / lifespan;",
         "if (uT < birthTime || (uT >= deathTime && !uLoop ) || (uT >= uPauseTime - pauseTimeAge + lifespan)) {",
-            "gl_Position = vec4(9999.0,0,0,0);",
+            "gl_Position = vec4(deadPos.x,deadPos.y,0,0);",
+            "gl_PointSize = deadPos.z;",
         "} else {", 
+            "lerp =  age / lifespan;",
+            "gl_PointSize = mix(uPointSizeRange.x,uPointSizeRange.y,lerp);",
             "vec2 pos = aXYVxVy.xy; ",
             "vec2 vel = aXYVxVy.zw;",
             "pos += age * vel;",
@@ -1066,8 +1077,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
 	        "}",   
 
 	        "vCol.a *= uAlpha;",
-	        //"float ang = uStartAngle + age * angularVelocity;",
-            "float ang = age * angularVelocity + angleStart;",
+            "float ang = age * angularVelocity + angleStart + uWorldAngle;",
 	        "vec2 ratio = vec2(1.0 / uTextureSize.x,1.0 / uTextureSize.y);",
 	        "vec4 normCell = aCellXYWH;",
 	        "normCell.xz *= ratio;",
