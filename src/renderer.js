@@ -106,14 +106,8 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.pause = function (gl) {
     gl.uniform1f(this.shaderPair.uniforms.uPauseTime.location, this.pauseTime);
 }
 
-Kiwi.Renderers.StatelessParticleRenderer.prototype.deriveWorldAngle = function(transform) {
-    var m = transform.matrix;
-    this.worldAngle = Math.acos(m.a / transform.scaleX);
-    // acos does not distinguish between positive and negative angles, so is wrong half the time
-    // However, we know that sin will always be negative when the angle is below 0 (and above -PI).
-    if(Math.asin(m.b / transform.scaleX) < 0)
-        this.worldAngle *= -1;
-    // Update shader information
+Kiwi.Renderers.StatelessParticleRenderer.prototype.setWorldAngle = function(angle) {
+    this.worldAngle = angle;
     this.gl.uniform1f(this.shaderPair.uniforms.uWorldAngle.location, this.worldAngle);
 }
 

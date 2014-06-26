@@ -547,7 +547,28 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
                 m.c,m.d,0,
                 m.tx,m.ty,1
             ]);
-            this.glRenderer.deriveWorldAngle( this.transform );
+            this.glRenderer.setWorldAngle( this.deriveWorldAngle( this.transform, camera ) );
+        },
+
+        
+        /**
+        * Computes a collapsed world rotation for the renderer.
+        * @method deriveWorldAngle
+        * @param {Kiwi.Geom.Transform} transform: the transform of the gameObject
+        * @param {Kiwi.Camera} camera: the camera being rendered
+        * @private
+        */
+        deriveWorldAngle: function( transform, camera ) {
+            var m = transform.getConcatenatedMatrix();
+            // Apply camera perspective
+            m.prependMatrix( camera.transform.getConcatenatedMatrix() );
+            m.prependMatrix( new Kiwi.Geom.Matrix(1, 0, 0, 1, -camera.transform.rotPointX, -camera.transform.rotPointY) );
+            var worldAngle = Math.acos(m.a / (transform.scaleX * camera.transform.scaleX) );
+            // acos does not distinguish between positive and negative angles, so is wrong half the time
+            // However, we know that sin will always be negative when the angle is below 0 (and above -PI).
+            if(Math.asin(m.b / (transform.scaleX * camera.transform.scaleX) ) < 0)
+                worldAngle *= -1;
+            return( worldAngle );
         },
 
         
