@@ -39,11 +39,12 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
     var protoProps = {
 
         constructor : function (state, atlas, x, y, config){
+            this.config = this.buildDefaultConfig();
             if (typeof x === "undefined") { x = 0; }
             if (typeof y === "undefined") { y = 0; }
-            if (typeof config === "undefined") { config = this.defaultConfig; }
-         
-            this.config = config;
+            if( typeof config != "undefined") {
+                this.mergeConfig( this.config, config );
+            }
             
             this.randoms = function() {
                 var arr = []
@@ -76,89 +77,109 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
 
         },
 
+
         /**
-        * The default configuration object.
-        * @property defaultConfig
-        * @type object
-        */
-        defaultConfig : {
-            "numParts": 20,
-            "posOffsetX": 0,
-            "posOffsetY": 0,
-            "posRadius": 50,
-            "posRadialStart": 4.363323129985823,
-            "posRadialEnd": 5.061454830783556,
-            "posWidth": 100,
-            "posHeight": 100,
-            "posAngle": 0,
-            "posLength": 100,
-            "posConstrainRect": true,
-            "posConstrainRadial": true,
-            "posShape": "radial",
-            "maxVel": 100,
-            "minVel": 70,
-            "velConstrainRect": false,
-            "velConstrainRadial": false,
-            "velShape": "line",
-            "velOffsetX": 0,
-            "velOffsetY": 0,
-            "velAngMin": -2,
-            "velAngMax": +2,
-            "velRadius": 100,
-            "velRadialStart": 0,
-            "velRadialEnd": 6.283185307179586,
-            "velWidth": 100,
-            "velHeight": 100,
-            "velAngle": 0,
-            "velLength": 30,
-            "angStartMin": 0,
-            "angStartMax": 0,
-            "angVelocityConform": false,
-            "minStartTime": 1,
-            "maxStartTime": 6,
-            "minLifespan": 3,
-            "maxLifespan": 5,
-            "gravityX": -20,
-            "gravityY": 30,
-            "startSize": 4,
-            "endSize": 150,
-            "loop": true,
-            "colEnvKeyframes": [
-                0.5,
-                0.6
-            ],
-            "alpha": "1",
-            "colEnv0": [
-                1,
-                0,
-                0
-            ],
-            "colEnv1": [
-                1,
-                1,
-                0
-            ],
-            "colEnv2": [
-                1,
-                1,
-                1
-            ],
-            "colEnv3": [
-                0,
-                0,
-                0
-            ],
-            "alphaGradient": [
-                1,
-                1,
-                1,
-                0
-            ],
-            "alphaStops": [
-                0.3,
-                0.7
-            ]
+         * Populates a new object with default config parameters
+         * @method buildDefaultConfig
+         * @return {object}
+         * @public
+         */
+        buildDefaultConfig: function()
+        {
+            return {
+                "numParts": 20,
+                "posOffsetX": 0,
+                "posOffsetY": 0,
+                "posRadius": 50,
+                "posRadialStart": 4.363323129985823,
+                "posRadialEnd": 5.061454830783556,
+                "posWidth": 100,
+                "posHeight": 100,
+                "posAngle": 0,
+                "posLength": 100,
+                "posConstrainRect": true,
+                "posConstrainRadial": true,
+                "posShape": "radial",
+                "maxVel": 100,
+                "minVel": 70,
+                "velConstrainRect": false,
+                "velConstrainRadial": false,
+                "velShape": "line",
+                "velOffsetX": 0,
+                "velOffsetY": 0,
+                "velAngMin": -2,
+                "velAngMax": +2,
+                "velRadius": 100,
+                "velRadialStart": 0,
+                "velRadialEnd": 6.283185307179586,
+                "velWidth": 100,
+                "velHeight": 100,
+                "velAngle": 0,
+                "velLength": 30,
+                "angStartMin": 0,
+                "angStartMax": 0,
+                "angVelocityConform": false,
+                "minStartTime": 1,
+                "maxStartTime": 6,
+                "minLifespan": 3,
+                "maxLifespan": 5,
+                "gravityX": 0,
+                "gravityY": -50,
+                "startSize": 4,
+                "endSize": 150,
+                "loop": true,
+                "colEnvKeyframes": [
+                    0.5,
+                    0.6
+                ],
+                "alpha": "1",
+                "colEnv0": [
+                    1,
+                    0,
+                    0
+                ],
+                "colEnv1": [
+                    1,
+                    1,
+                    0
+                ],
+                "colEnv2": [
+                    1,
+                    1,
+                    1
+                ],
+                "colEnv3": [
+                    0,
+                    0,
+                    0
+                ],
+                "alphaGradient": [
+                    1,
+                    1,
+                    1,
+                    0
+                ],
+                "alphaStops": [
+                    0.3,
+                    0.7
+                ]
+            };
         },
+
+
+        /**
+         * Merges config objects, overwriting the first config with all definitions in the second while preserving non-revised terms.
+         * @method mergeConfig
+         * @param {object} config1: The config object to modify
+         * @param {object} config2: The config object to copy in
+         * @public
+         */
+        mergeConfig: function(config1, config2) {
+            for(var i in config2) {
+                config1[i] = config2[i];
+            }
+        },
+
 
         /**
         * Returns the state of the particle effect. Either "stopped","started" or "stopping" 
@@ -550,7 +571,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             this.glRenderer.setWorldAngle( this.deriveWorldAngle( this.transform, camera ) );
         },
 
-        
+
         /**
         * Computes a collapsed world rotation for the renderer.
         * @method deriveWorldAngle

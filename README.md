@@ -21,6 +21,9 @@ Tutorials for this plugin can be found on the Kiwi.JS website here:
 ##Version Release Notes
 1.1.0
  - Added angStartMin, angStartMax, and angVelocityConform config fields, allowing the particle to spawn with extant rotation.
+ - Complied rotation to parent, state, and camera rotation for flawless particle-to-world continuity.
+ - Much more forgiving config; specify only those parameters you wish to differ from default. Other parameters will be filled in automatically.
+ - Default config tweaked to a more pleasing effect.
 
 1.0.3
   - removeOnComplete method functions properly.
@@ -68,6 +71,9 @@ The config object has many properties which are described below along with some 
 
 To start the particle effect
 	particles.startEmitting();
+
+### Using Transforms
+Particles can move and rotate freely. However, their scaling behaviour is limited. Scaling a particle object will scale the path along which the particles move, causing them to appear to move slower or faster. However, it will not change the size or orientation of the particles. For example, if you have a particle effect which shoots a rocket to the right, you can scale the game object by -1 to shoot to the left. However, the rocket will still face right, and appear to be facing backwards. If you want to change the direction of a particle effect, either use rotation or create a duplicate particle effect pointing in the other direction.
 
 ### Generation
 
@@ -157,6 +163,3 @@ Runtime properties are set up to one time per frame for the entire emitter
  * "alphaStops" ((array of 2 numbers 0 < n < 1): determines the second and third alpha stop. The first and fourth are locked to 0 and 1 respectively
  * "additive" (boolean) : Use additive blending for compositing particles when true.
  * "startAngle" (number) : The anglulat offset of the particle - to which rotation calculated from angular velocity will be added to.
-
-### Using Transforms
-Particles can move and rotate freely. However, their scaling behaviour is limited. Scaling a particle object will scale the path along which the particles move, causing them to appear to move slower or faster. However, it will not change the size or orientation of the particles. For example, if you have a particle effect which shoots a rocket to the right, you can scale the game object by -1 to shoot to the left. However, the rocket will still face right, and appear to be facing backwards. If you want to change the direction of a particle effect, either use rotation or create a duplicate particle effect pointing in the other direction.
