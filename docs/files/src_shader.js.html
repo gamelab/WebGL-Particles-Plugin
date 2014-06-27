@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\shader.js - ParticlesGL</title>
+    <title>src/shader.js - ParticlesGL</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.2</em>
+            <em>API Docs for: 1.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -88,7 +88,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src\shader.js</h1>
+                        <h1 class="file-heading">File: src/shader.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -114,7 +114,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.init = function(gl) {
 
 Kiwi.Shaders.StatelessParticleShader.prototype.attributes = {
     aXYVxVy: null,
-    aBirthLifespan: null,
+    aBirthLifespanAngle: null,
     aCellXYWH: null
 };
 
@@ -127,9 +127,6 @@ Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
         	type: &quot;2fv&quot;
         },
         uResolution: {
-            type: &quot;2fv&quot;
-        },
-        uTextureSize: {
             type: &quot;2fv&quot;
         },
         uSampler: {
@@ -174,7 +171,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
         uLoop: {
             type: &quot;1i&quot;
         },
-        uStartAngle: {
+        uWorldAngle: {
             type: &quot;1f&quot;
         }  
     }
@@ -211,7 +208,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.fragSource = [
 Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
     &quot;precision mediump float;&quot;,
     &quot;attribute vec4 aXYVxVy;&quot;,
-    &quot;attribute vec3 aBirthLifespanAngle;&quot;,
+    &quot;attribute vec4 aBirthLifespanAngle;&quot;,
   	&quot;attribute vec4 aCellXYWH;&quot;,
 
     &quot;uniform mat3 uCamMatrix;&quot;,
@@ -229,7 +226,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
     &quot;uniform vec2 uColEnvKeyframes;&quot;,
     &quot;uniform vec4 uAlphaGradient;&quot;,
     &quot;uniform vec2 uAlphaStops;&quot;,
-    &quot;uniform float uStartAngle;&quot;,
+    &quot;uniform float uWorldAngle;&quot;,
     
     &quot;uniform float uAlpha;&quot;,
     &quot;uniform bool uLoop;&quot;,
@@ -238,6 +235,8 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
     &quot;varying mat4 vRotationMatrix;&quot;,
     &quot;varying vec4 vCell;&quot;,
 
+    &quot;vec3 deadPos = vec3(-0.02, -0.02, 0.01);&quot;,
+
    &quot;void main(void) {&quot;,
    
   		
@@ -245,18 +244,18 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
         &quot;float birthTime = aBirthLifespanAngle.x;&quot;,
         &quot;float lifespan = aBirthLifespanAngle.y;&quot;,
         &quot;float angularVelocity = aBirthLifespanAngle.z;&quot;,
+        &quot;float angleStart = aBirthLifespanAngle.w;&quot;,
         &quot;float deathTime = birthTime + lifespan;&quot;,
         &quot;float age = mod(uT-birthTime,lifespan);&quot;,
         &quot;float pauseTimeAge = mod(uPauseTime-birthTime,lifespan);&quot;,
 
-      
-        &quot;lerp =  age / lifespan;&quot;,
-        &quot;gl_PointSize = mix(uPointSizeRange.x,uPointSizeRange.y,lerp);&quot;,
-        
         &quot;float loopBirthTime = (uT - birthTime) / lifespan;&quot;,
         &quot;if (uT &lt; birthTime || (uT &gt;= deathTime &amp;&amp; !uLoop ) || (uT &gt;= uPauseTime - pauseTimeAge + lifespan)) {&quot;,
-            &quot;gl_Position = vec4(9999.0,0,0,0);&quot;,
+            &quot;gl_Position = vec4(deadPos.x,deadPos.y,0,0);&quot;,
+            &quot;gl_PointSize = deadPos.z;&quot;,
         &quot;} else {&quot;, 
+            &quot;lerp =  age / lifespan;&quot;,
+            &quot;gl_PointSize = mix(uPointSizeRange.x,uPointSizeRange.y,lerp);&quot;,
             &quot;vec2 pos = aXYVxVy.xy; &quot;,
             &quot;vec2 vel = aXYVxVy.zw;&quot;,
             &quot;pos += age * vel;&quot;,
@@ -285,8 +284,7 @@ Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
 	        &quot;}&quot;,   
 
 	        &quot;vCol.a *= uAlpha;&quot;,
-	        //&quot;float ang = uStartAngle + age * angularVelocity;&quot;,
-            &quot;float ang = age * angularVelocity;&quot;,
+            &quot;float ang = age * angularVelocity + angleStart + uWorldAngle;&quot;,
 	        &quot;vec2 ratio = vec2(1.0 / uTextureSize.x,1.0 / uTextureSize.y);&quot;,
 	        &quot;vec4 normCell = aCellXYWH;&quot;,
 	        &quot;normCell.xz *= ratio;&quot;,

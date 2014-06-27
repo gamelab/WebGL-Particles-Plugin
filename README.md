@@ -24,6 +24,7 @@ Tutorials for this plugin can be found on the Kiwi.JS website here:
  - Complied rotation to parent, state, and camera rotation for flawless particle-to-world continuity.
  - Much more forgiving config; specify only those parameters you wish to differ from default. Other parameters will be filled in automatically.
  - Default config tweaked to a more pleasing effect.
+ - Deprecated config parameter "startAngle" because it didn't do anything and we have better alternatives.
 
 1.0.3
   - removeOnComplete method functions properly.
@@ -44,23 +45,22 @@ If you have any problems then feel free to contact us via the http://www.kiwijs.
 ##How to Include: 
 
 First Step:
-- Copy either the particlesgl.js or the particlesgl.min.js file into your project directory. We recommend that you save the files under a plugin directory that lives inside of your project directory so that you can easily manage all of the plugins but that is not required.
+- Copy either the particlesgl-1.1.0.js or the particlesgl-1.1.0.min.js file into your project directory. We recommend that you save the files under a plugin directory that lives inside of your project directory so that you can easily manage all of the plugins, but that is not required.
 
 Second Step:
-- Link in the JavaScript file particlesgl.js or the min version of the file) into your HTML file. Make sure you link it in underneath the link to the main Kiwi.js file AND underneath the Cocoon files if you are using Cocoon.
+- Link in the JavaScript file (particlesgl-1.1.0.js or the min version) into your HTML file. Make sure you link it in underneath the link to the main Kiwi.js file AND underneath the Cocoon files if you are using Cocoon, as requires them to be loaded first.
 
 ##How to use
 
 Check out the example found in the "examples" folder of this repository.
 Read tha API docs found in the "docs" folder of this repository.
-[Look at the tutorials on the Kiwijs.org website.](Something)
+[Look at the tutorials on the Kiwijs.org website.](http://www.kiwijs.org/using-the-particle-effects-plugin)
 
 You'll need to include an image, spritesheet or texture atlas that contains the particle sprites eg
 
 	MyState.preload = function() {
        this.addImage('particle', 'assets/particle_01.png');
   	};
-
 
 To create a particle gameobject, do the following. 
 
@@ -75,7 +75,10 @@ To start the particle effect
 ### Using Transforms
 Particles can move and rotate freely. However, their scaling behaviour is limited. Scaling a particle object will scale the path along which the particles move, causing them to appear to move slower or faster. However, it will not change the size or orientation of the particles. For example, if you have a particle effect which shoots a rocket to the right, you can scale the game object by -1 to shoot to the left. However, the rocket will still face right, and appear to be facing backwards. If you want to change the direction of a particle effect, either use rotation or create a duplicate particle effect pointing in the other direction.
 
-### Generation
+### Textures
+Determines which image/spritesheet/textureatlas will be used as bitmap textures. If a textureAtlas or a spritesheet is used then individual cells can be selected. You can also use a canvas and draw in real time.
+
+## Config Parameters
 
 Determines how the particles spawn. These values are fixed until the next time particles are generated.
 
@@ -146,9 +149,6 @@ Determines the spawn time and lifespan of particles
   * "minLifespan" (number)  : The minimum lifespan of each particle. A random start time between "minLifespan" and "maxLifespan" will be generated
   * "maxLifespan" (number)  : The maximum lifespan of each particle. A random start time between "minLifespan" and "maxLifespan" will be generated
 
-### Textures
-Determines which image/spritesheet/textureatlas will be used as bitmap textures. If a textureAtlas or a spritesheet is used then individual cells can be selected. You can also use a canvas and draw in real time.
-
 ### Runtime
 Runtime properties are set up to one time per frame for the entire emitter
  * "startSize"  (number) : The particle start size in pixels 
@@ -162,4 +162,3 @@ Runtime properties are set up to one time per frame for the entire emitter
  * "alphaGradient" (array of 4 numbers 0 < n < 1): the alpha value at each color stop in the color envelope
  * "alphaStops" ((array of 2 numbers 0 < n < 1): determines the second and third alpha stop. The first and fourth are locked to 0 and 1 respectively
  * "additive" (boolean) : Use additive blending for compositing particles when true.
- * "startAngle" (number) : The anglulat offset of the particle - to which rotation calculated from angular velocity will be added to.

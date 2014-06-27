@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\gameobject.js - ParticlesGL</title>
+    <title>src/gameobject.js - ParticlesGL</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.2</em>
+            <em>API Docs for: 1.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -88,7 +88,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src\gameobject.js</h1>
+                        <h1 class="file-heading">File: src/gameobject.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -133,11 +133,12 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
     var protoProps = {
 
         constructor : function (state, atlas, x, y, config){
+            this.config = this.buildDefaultConfig();
             if (typeof x === &quot;undefined&quot;) { x = 0; }
             if (typeof y === &quot;undefined&quot;) { y = 0; }
-            if (typeof config === &quot;undefined&quot;) { config = this.defaultConfig; }
-         
-            this.config = config;
+            if( typeof config != &quot;undefined&quot;) {
+                this.mergeConfig( this.config, config );
+            }
             
             this.randoms = function() {
                 var arr = []
@@ -154,6 +155,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             if (typeof atlas == &quot;undefined&quot;) {
                 console.error(&#x27;A Texture Atlas was not passed when instantiating a new StatelessParticles.&#x27;);
                 this.willRender = false;
+                this.visible = false;
                 this.active = false;
                 return;
             }
@@ -169,86 +171,109 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
 
         },
 
+
         /**
-        * The default configuration object.
-        * @property defaultConfig
-        * @type object
-        */
-        defaultConfig : {
-            &quot;numParts&quot;: 20,
-            &quot;posOffsetX&quot;: 0,
-            &quot;posOffsetY&quot;: 0,
-            &quot;posRadius&quot;: 50,
-            &quot;posRadialStart&quot;: 4.363323129985823,
-            &quot;posRadialEnd&quot;: 5.061454830783556,
-            &quot;posWidth&quot;: 100,
-            &quot;posHeight&quot;: 100,
-            &quot;posAngle&quot;: 0,
-            &quot;posLength&quot;: 100,
-            &quot;posConstrainRect&quot;: true,
-            &quot;posConstrainRadial&quot;: true,
-            &quot;posShape&quot;: &quot;radial&quot;,
-            &quot;maxVel&quot;: 100,
-            &quot;minVel&quot;: 70,
-            &quot;velConstrainRect&quot;: false,
-            &quot;velConstrainRadial&quot;: false,
-            &quot;velShape&quot;: &quot;line&quot;,
-            &quot;velOffsetX&quot;: 0,
-            &quot;velOffsetY&quot;: 0,
-            &quot;velAngMin&quot;: -2,
-            &quot;velAngMax&quot;: +2,
-            &quot;velRadius&quot;: 100,
-            &quot;velRadialStart&quot;: 0,
-            &quot;velRadialEnd&quot;: 6.283185307179586,
-            &quot;velWidth&quot;: 100,
-            &quot;velHeight&quot;: 100,
-            &quot;velAngle&quot;: 0,
-            &quot;velLength&quot;: 30,
-            &quot;minStartTime&quot;: 1,
-            &quot;maxStartTime&quot;: 6,
-            &quot;minLifespan&quot;: 3,
-            &quot;maxLifespan&quot;: 5,
-            &quot;gravityX&quot;: -20,
-            &quot;gravityY&quot;: 30,
-            &quot;startSize&quot;: 4,
-            &quot;endSize&quot;: 150,
-            &quot;loop&quot;: true,
-            &quot;colEnvKeyframes&quot;: [
-                0.5,
-                0.6
-            ],
-            &quot;alpha&quot;: &quot;1&quot;,
-            &quot;colEnv0&quot;: [
-                1,
-                0,
-                0
-            ],
-            &quot;colEnv1&quot;: [
-                1,
-                1,
-                0
-            ],
-            &quot;colEnv2&quot;: [
-                1,
-                1,
-                1
-            ],
-            &quot;colEnv3&quot;: [
-                0,
-                0,
-                0
-            ],
-            &quot;alphaGradient&quot;: [
-                1,
-                1,
-                1,
-                0
-            ],
-            &quot;alphaStops&quot;: [
-                0.3,
-                0.7
-            ]
+         * Populates a new object with default config parameters
+         * @method buildDefaultConfig
+         * @return {object}
+         * @public
+         */
+        buildDefaultConfig: function()
+        {
+            return {
+                &quot;numParts&quot;: 20,
+                &quot;posOffsetX&quot;: 0,
+                &quot;posOffsetY&quot;: 0,
+                &quot;posRadius&quot;: 50,
+                &quot;posRadialStart&quot;: 4.363323129985823,
+                &quot;posRadialEnd&quot;: 5.061454830783556,
+                &quot;posWidth&quot;: 100,
+                &quot;posHeight&quot;: 100,
+                &quot;posAngle&quot;: 0,
+                &quot;posLength&quot;: 100,
+                &quot;posConstrainRect&quot;: true,
+                &quot;posConstrainRadial&quot;: true,
+                &quot;posShape&quot;: &quot;radial&quot;,
+                &quot;maxVel&quot;: 100,
+                &quot;minVel&quot;: 70,
+                &quot;velConstrainRect&quot;: false,
+                &quot;velConstrainRadial&quot;: false,
+                &quot;velShape&quot;: &quot;line&quot;,
+                &quot;velOffsetX&quot;: 0,
+                &quot;velOffsetY&quot;: 0,
+                &quot;velAngMin&quot;: -2,
+                &quot;velAngMax&quot;: +2,
+                &quot;velRadius&quot;: 100,
+                &quot;velRadialStart&quot;: 0,
+                &quot;velRadialEnd&quot;: 6.283185307179586,
+                &quot;velWidth&quot;: 100,
+                &quot;velHeight&quot;: 100,
+                &quot;velAngle&quot;: 0,
+                &quot;velLength&quot;: 30,
+                &quot;angStartMin&quot;: 0,
+                &quot;angStartMax&quot;: 0,
+                &quot;angVelocityConform&quot;: false,
+                &quot;minStartTime&quot;: 1,
+                &quot;maxStartTime&quot;: 6,
+                &quot;minLifespan&quot;: 3,
+                &quot;maxLifespan&quot;: 5,
+                &quot;gravityX&quot;: 0,
+                &quot;gravityY&quot;: -50,
+                &quot;startSize&quot;: 4,
+                &quot;endSize&quot;: 150,
+                &quot;loop&quot;: true,
+                &quot;colEnvKeyframes&quot;: [
+                    0.5,
+                    0.6
+                ],
+                &quot;alpha&quot;: &quot;1&quot;,
+                &quot;colEnv0&quot;: [
+                    1,
+                    0,
+                    0
+                ],
+                &quot;colEnv1&quot;: [
+                    1,
+                    1,
+                    0
+                ],
+                &quot;colEnv2&quot;: [
+                    1,
+                    1,
+                    1
+                ],
+                &quot;colEnv3&quot;: [
+                    0,
+                    0,
+                    0
+                ],
+                &quot;alphaGradient&quot;: [
+                    1,
+                    1,
+                    1,
+                    0
+                ],
+                &quot;alphaStops&quot;: [
+                    0.3,
+                    0.7
+                ]
+            };
         },
+
+
+        /**
+         * Merges config objects, overwriting the first config with all definitions in the second while preserving non-revised terms.
+         * @method mergeConfig
+         * @param {object} config1: The config object to modify
+         * @param {object} config2: The config object to copy in
+         * @public
+         */
+        mergeConfig: function(config1, config2) {
+            for(var i in config2) {
+                config1[i] = config2[i];
+            }
+        },
+
 
         /**
         * Returns the state of the particle effect. Either &quot;stopped&quot;,&quot;started&quot; or &quot;stopping&quot; 
@@ -368,10 +393,11 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             this.setConfig(this.config,true,true);
                       
             if (!loop &amp;&amp; removeOnComplete) {
-                this.scheduleRemoval(this.timeoutLength * 1000);
+                this.scheduleStop( this.timeoutLength * 1000, true );
             }
 
             this.effectState = &quot;started&quot;;
+            this.visible = true;
             clearTimeout(this._timer);
        
         },
@@ -392,6 +418,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
                   this.remove();
                 } else if (immediate &amp;&amp; !remove) {
                   this.effectState = &quot;stopped&quot;;
+                  this.visible = false;
                 } else if (!immediate &amp;&amp; !remove) {
                   this.glRenderer.pause();
                   this.effectState = &quot;stopping&quot;;
@@ -417,6 +444,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             clearTimeout(this._timer);
             this._timer = setTimeout(function(milliseconds) {
                 that.effectState = &quot;stopped&quot;;
+                that.visible = false;
                 if (remove) that.remove.call(that);
             },milliseconds)
         },
@@ -579,6 +607,16 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
                 var diff = Math.max(cfg.velAngMax,cfg.velAngMin) - Math.min (cfg.velAngMax,cfg.velAngMin);
                 velAng = cfg.velAngMin +this.rnd() * diff;
 
+                // Angular spawn parameters
+                var startAng;
+                var angDiff = Math.abs(cfg.angStartMax - cfg.angStartMin);
+                startAng = cfg.angStartMin + this.rnd() * angDiff;
+                if(cfg.angVelocityConform)
+                {
+                    // Base angle is based on velocity vector
+                    startAng += Math.atan2( vel.y, vel.x );
+                }
+
                 pos.x += cfg.posOffsetX;
                 pos.y += cfg.posOffsetY;
 
@@ -602,7 +640,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
                     }
                 }
 
-                vertexItems.push(startTime,lifespan,velAng);
+                vertexItems.push(startTime,lifespan,velAng,startAng);
                 var cell = this.atlas.cells[cellIndex];
                 vertexItems.push(cell.x,cell.y,cell.w,cell.h);
             }
@@ -618,8 +656,34 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         * @private
         */
         renderGL : function (gl, camera, params) {
-            if (this.effectState !== &quot;stopped&quot;)
-                this.glRenderer.draw(gl,this.transform);
+            var m = this.transform.getConcatenatedMatrix();
+            this.glRenderer.modelMatrix = new Float32Array([
+                m.a,m.b,0,
+                m.c,m.d,0,
+                m.tx,m.ty,1
+            ]);
+            this.glRenderer.setWorldAngle( this.deriveWorldAngle( this.transform, camera ) );
+        },
+
+
+        /**
+        * Computes a collapsed world rotation for the renderer.
+        * @method deriveWorldAngle
+        * @param {Kiwi.Geom.Transform} transform: the transform of the gameObject
+        * @param {Kiwi.Camera} camera: the camera being rendered
+        * @private
+        */
+        deriveWorldAngle: function( transform, camera ) {
+            var m = transform.getConcatenatedMatrix();
+            // Apply camera perspective
+            m.prependMatrix( camera.transform.getConcatenatedMatrix() );
+            m.prependMatrix( new Kiwi.Geom.Matrix(1, 0, 0, 1, -camera.transform.rotPointX, -camera.transform.rotPointY) );
+            var worldAngle = Math.acos(m.a / (transform.scaleX * camera.transform.scaleX) );
+            // acos does not distinguish between positive and negative angles, so is wrong half the time
+            // However, we know that sin will always be negative when the angle is below 0 (and above -PI).
+            if(Math.asin(m.b / (transform.scaleX * camera.transform.scaleX) ) &lt; 0)
+                worldAngle *= -1;
+            return( worldAngle );
         },
 
         

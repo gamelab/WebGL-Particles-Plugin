@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.2</em>
+            <em>API Docs for: 1.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -100,7 +100,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_gameobject.js.html#l10"><code>src\gameobject.js:10</code></a>
+            Defined in: <a href="../files/src_gameobject.js.html#l10"><code>src&#x2F;gameobject.js:10</code></a>
         </div>
     
 
@@ -195,7 +195,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l10"><code>src\gameobject.js:10</code></a>
+        <a href="../files/src_gameobject.js.html#l10"><code>src&#x2F;gameobject.js:10</code></a>
         
         </p>
 
@@ -351,7 +351,28 @@
                             </li>
                         
                             <li class="index-item method public">
+                                <a href="#method_buildDefaultConfig">buildDefaultConfig</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method_deriveWorldAngle">deriveWorldAngle</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
                                 <a href="#method_getConfig">getConfig</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_mergeConfig">mergeConfig</a>
 
                                 
                                 
@@ -479,13 +500,6 @@
 
                     <ul class="index-list properties extends">
                         
-                            <li class="index-item property">
-                                <a href="#property_defaultConfig">defaultConfig</a>
-
-                                
-                                
-                            </li>
-                        
                             <li class="index-item property private">
                                 <a href="#property_drawingVectors">drawingVectors</a>
 
@@ -597,7 +611,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l385"><code>src\gameobject.js:385</code></a>
+        <a href="../files/src_gameobject.js.html#l413"><code>src&#x2F;gameobject.js:413</code></a>
         
         </p>
 
@@ -612,6 +626,192 @@
 
     </div>
 
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_buildDefaultConfig" class="method item public">
+    <h3 class="name"><code>buildDefaultConfig</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_gameobject.js.html#l81"><code>src&#x2F;gameobject.js:81</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Populates a new object with default config parameters</p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_deriveWorldAngle" class="method item private">
+    <h3 class="name"><code>deriveWorldAngle</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>transform:</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>camera:</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_gameobject.js.html#l575"><code>src&#x2F;gameobject.js:575</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Computes a collapsed world rotation for the renderer.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">transform:</code>
+                        <span class="type">Kiwi.Geom.Transform</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the transform of the gameObject</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">camera:</code>
+                        <span class="type">Kiwi.Camera</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the camera being rendered</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
     
 
     
@@ -658,7 +858,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l374"><code>src\gameobject.js:374</code></a>
+        <a href="../files/src_gameobject.js.html#l402"><code>src&#x2F;gameobject.js:402</code></a>
         
         </p>
 
@@ -687,6 +887,119 @@
                 
             </div>
         </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_mergeConfig" class="method item public">
+    <h3 class="name"><code>mergeConfig</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>config1:</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>config2:</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_gameobject.js.html#l170"><code>src&#x2F;gameobject.js:170</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Merges config objects, overwriting the first config with all definitions in the second while preserving non-revised terms.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">config1:</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The config object to modify</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">config2:</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The config object to copy in</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
     
 
     
@@ -731,7 +1044,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l243"><code>src\gameobject.js:243</code></a>
+        <a href="../files/src_gameobject.js.html#l268"><code>src&#x2F;gameobject.js:268</code></a>
         
         </p>
 
@@ -804,7 +1117,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l169"><code>src\gameobject.js:169</code></a>
+        <a href="../files/src_gameobject.js.html#l194"><code>src&#x2F;gameobject.js:194</code></a>
         
         </p>
 
@@ -889,7 +1202,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l559"><code>src\gameobject.js:559</code></a>
+        <a href="../files/src_gameobject.js.html#l623"><code>src&#x2F;gameobject.js:623</code></a>
         
         </p>
 
@@ -1002,7 +1315,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l547"><code>src\gameobject.js:547</code></a>
+        <a href="../files/src_gameobject.js.html#l611"><code>src&#x2F;gameobject.js:611</code></a>
         
         </p>
 
@@ -1099,7 +1412,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l573"><code>src\gameobject.js:573</code></a>
+        <a href="../files/src_gameobject.js.html#l637"><code>src&#x2F;gameobject.js:637</code></a>
         
         </p>
 
@@ -1156,7 +1469,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l582"><code>src\gameobject.js:582</code></a>
+        <a href="../files/src_gameobject.js.html#l646"><code>src&#x2F;gameobject.js:646</code></a>
         
         </p>
 
@@ -1241,7 +1554,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l533"><code>src\gameobject.js:533</code></a>
+        <a href="../files/src_gameobject.js.html#l597"><code>src&#x2F;gameobject.js:597</code></a>
         
         </p>
 
@@ -1349,97 +1662,6 @@
                     
                 </li>
             
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_gameobject.js.html#l612"><code>src\gameobject.js:612</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Returns a point on a unit line.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">radians</code>
-                        <span class="type">Number</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>: the angle of the line</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_regularPointLine" class="method item private">
-    <h3 class="name"><code>regularPointLine</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>radians</code>
-                    
-                </li>
-            
                 <li class="arg">
                     
                         <code>index</code>
@@ -1483,7 +1705,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l597"><code>src\gameobject.js:597</code></a>
+        <a href="../files/src_gameobject.js.html#l661"><code>src&#x2F;gameobject.js:661</code></a>
         
         </p>
 
@@ -1562,6 +1784,97 @@
 </div>
 
                 
+                    <div id="method_regularPointLine" class="method item private">
+    <h3 class="name"><code>regularPointLine</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>radians</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_gameobject.js.html#l676"><code>src&#x2F;gameobject.js:676</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns a point on a unit line.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">radians</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>: the angle of the line</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_remove" class="method item public">
     <h3 class="name"><code>remove</code></h3>
 
@@ -1596,7 +1909,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l333"><code>src\gameobject.js:333</code></a>
+        <a href="../files/src_gameobject.js.html#l361"><code>src&#x2F;gameobject.js:361</code></a>
         
         </p>
 
@@ -1653,7 +1966,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l521"><code>src\gameobject.js:521</code></a>
+        <a href="../files/src_gameobject.js.html#l559"><code>src&#x2F;gameobject.js:559</code></a>
         
         </p>
 
@@ -1726,7 +2039,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l314"><code>src\gameobject.js:314</code></a>
+        <a href="../files/src_gameobject.js.html#l341"><code>src&#x2F;gameobject.js:341</code></a>
         
         </p>
 
@@ -1845,7 +2158,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l344"><code>src\gameobject.js:344</code></a>
+        <a href="../files/src_gameobject.js.html#l372"><code>src&#x2F;gameobject.js:372</code></a>
         
         </p>
 
@@ -1986,7 +2299,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l359"><code>src\gameobject.js:359</code></a>
+        <a href="../files/src_gameobject.js.html#l387"><code>src&#x2F;gameobject.js:387</code></a>
         
         </p>
 
@@ -2137,7 +2450,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l255"><code>src\gameobject.js:255</code></a>
+        <a href="../files/src_gameobject.js.html#l280"><code>src&#x2F;gameobject.js:280</code></a>
         
         </p>
 
@@ -2266,7 +2579,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l285"><code>src\gameobject.js:285</code></a>
+        <a href="../files/src_gameobject.js.html#l311"><code>src&#x2F;gameobject.js:311</code></a>
         
         </p>
 
@@ -2337,51 +2650,6 @@
                 <h2 class="off-left">Properties</h2>
 
                 
-                    <div id="property_defaultConfig" class="property item">
-    <h3 class="name"><code>defaultConfig</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_gameobject.js.html#l78"><code>src\gameobject.js:78</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>The default configuration object.</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
                     <div id="property_drawingVectors" class="property item private">
     <h3 class="name"><code>drawingVectors</code></h3>
     <span class="type">Array</span>
@@ -2407,7 +2675,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l179"><code>src\gameobject.js:179</code></a>
+        <a href="../files/src_gameobject.js.html#l204"><code>src&#x2F;gameobject.js:204</code></a>
         
         </p>
 
@@ -2454,7 +2722,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l227"><code>src\gameobject.js:227</code></a>
+        <a href="../files/src_gameobject.js.html#l252"><code>src&#x2F;gameobject.js:252</code></a>
         
         </p>
 
@@ -2501,7 +2769,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l219"><code>src\gameobject.js:219</code></a>
+        <a href="../files/src_gameobject.js.html#l244"><code>src&#x2F;gameobject.js:244</code></a>
         
         </p>
 
@@ -2548,7 +2816,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l203"><code>src\gameobject.js:203</code></a>
+        <a href="../files/src_gameobject.js.html#l228"><code>src&#x2F;gameobject.js:228</code></a>
         
         </p>
 
@@ -2595,7 +2863,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l195"><code>src\gameobject.js:195</code></a>
+        <a href="../files/src_gameobject.js.html#l220"><code>src&#x2F;gameobject.js:220</code></a>
         
         </p>
 
@@ -2642,7 +2910,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l159"><code>src\gameobject.js:159</code></a>
+        <a href="../files/src_gameobject.js.html#l184"><code>src&#x2F;gameobject.js:184</code></a>
         
         </p>
 
@@ -2689,7 +2957,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l235"><code>src\gameobject.js:235</code></a>
+        <a href="../files/src_gameobject.js.html#l260"><code>src&#x2F;gameobject.js:260</code></a>
         
         </p>
 
@@ -2736,7 +3004,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l187"><code>src\gameobject.js:187</code></a>
+        <a href="../files/src_gameobject.js.html#l212"><code>src&#x2F;gameobject.js:212</code></a>
         
         </p>
 
@@ -2783,7 +3051,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l211"><code>src\gameobject.js:211</code></a>
+        <a href="../files/src_gameobject.js.html#l236"><code>src&#x2F;gameobject.js:236</code></a>
         
         </p>
 
