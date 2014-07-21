@@ -87,6 +87,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         buildDefaultConfig: function()
         {
             return {
+                "additive": false,
                 "numParts": 20,
                 "posOffsetX": 0,
                 "posOffsetY": 0,
@@ -569,6 +570,7 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
                 m.tx,m.ty,1
             ]);
             this.glRenderer.setWorldAngle( this.deriveWorldAngle( this.transform, camera ) );
+            this.glRenderer.setTextureUniforms( gl, this.atlas );
         },
 
 

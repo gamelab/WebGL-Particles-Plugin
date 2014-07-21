@@ -30,7 +30,12 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.RENDERER_ID = "StatelessParti
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.setConfig = function (config) {
     this._config = config;
-    this._setConfigUniforms(this.gl)
+    this._setConfigUniforms(this.gl);
+    // Set desired blend mode
+    if(config.additive)
+        this.blendMode.setMode("ADDITIVE");
+    else
+        this.blendMode.setMode("NORMAL");
 }
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.resetTime = function () {
@@ -47,19 +52,17 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.enable = function (gl, params
     
     this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
     var cfg = this._config;
-    this._setStandardUniforms(gl,params.stageResolution,params.textureAtlas,params.camMatrix)
+    this._setStandardUniforms(gl,params.stageResolution,params.camMatrix)
     this._setConfigUniforms(gl);
 }
 
-Kiwi.Renderers.StatelessParticleRenderer.prototype._setStandardUniforms = function (gl,stageResolution,textureAtlas,camMatrix){
+Kiwi.Renderers.StatelessParticleRenderer.prototype._setStandardUniforms = function (gl,stageResolution, camMatrix){
 
     //Texture
     gl.uniform1i(this.shaderPair.uniforms.uSampler.location, 0);
 
     //Standard uniforms
     gl.uniform2fv(this.shaderPair.uniforms.uResolution.location, stageResolution);
-    gl.uniform2fv(this.shaderPair.uniforms.uTextureSize.location, new Float32Array([textureAtlas.image.width,textureAtlas.image.height]));
-   
     gl.uniformMatrix3fv(this.shaderPair.uniforms.uCamMatrix.location, false, camMatrix);
    
     this.camMatrix = new Float32Array(camMatrix.buffer);
@@ -85,6 +88,11 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms = function
     gl.uniform1f(this.shaderPair.uniforms.uWorldAngle.location, this.worldAngle);
     gl.uniform1i(this.shaderPair.uniforms.uLoop.location, (cfg.loop) ? 1 : 0);
 };
+
+Kiwi.Renderers.StatelessParticleRenderer.prototype.setTextureUniforms = function( gl, textureAtlas) {
+    // Texture uniforms must be set late in the pipeline, so are separated to here.
+    gl.uniform2fv(this.shaderPair.uniforms.uTextureSize.location, new Float32Array([textureAtlas.image.width,textureAtlas.image.height]));
+}
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.disable = function (gl) {
     gl.disableVertexAttribArray(this.shaderPair.attributes.aXYVxVy);
@@ -121,14 +129,6 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl) {
 
     gl.uniform1f(this.shaderPair.uniforms.uT.location, this.time / 1000);
 
-
-    gl.blendEquationSeparate(gl.FUNC_ADD,gl.FUNC_ADD)
-
-    if (this._config.additive )
-        gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE, gl.ONE,gl.ONE);
-    else
-        gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE,gl.ONE);
-
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer.buffer);
 
     gl.enableVertexAttribArray(this.shaderPair.attributes.aXYVxVy);
@@ -141,8 +141,6 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function (gl) {
     gl.vertexAttribPointer(this.shaderPair.attributes.aCellXYWH, 4, gl.FLOAT, false, 48, 32);
 
     gl.drawArrays(gl.POINTS, 0,this._config.numParts);
-    //return to standard blendfunc
-    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE,gl.ONE);
 };
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.updateStageResolution = function (gl, res) {

@@ -11,7 +11,7 @@ Author: Kiwi.js Team
 
 Website: www.kiwijs.org
 
-KiwiJS last version tested: 1.0.1
+KiwiJS last version tested: 1.1.0
 
 Tutorials for this plugin can be found on the Kiwi.JS website here:
 
@@ -25,6 +25,7 @@ Tutorials for this plugin can be found on the Kiwi.JS website here:
  - Much more forgiving config; specify only those parameters you wish to differ from default. Other parameters will be filled in automatically.
  - Default config tweaked to a more pleasing effect.
  - Deprecated config parameter "startAngle" because it didn't do anything and we have better alternatives.
+ - Fully integrated particle renderer with new rendering pipeline in core Kiwi.js library version 1.1.0.
 
 1.0.3
   - removeOnComplete method functions properly.
@@ -40,7 +41,7 @@ If you have any problems then feel free to contact us via the http://www.kiwijs.
 
 
 ##Dependencies
-- Kiwi.js version 1.0.1 or greater
+- Kiwi.js version 1.1.0 or greater (new in plugin version 1.1.0)
 
 ##How to Include: 
 
