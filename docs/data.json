@@ -8,7 +8,9 @@
     "files": {
         "src/gameobject.js": {
             "name": "src/gameobject.js",
-            "modules": {},
+            "modules": {
+                "GameObjects": 1
+            },
             "classes": {
                 "StatelessParticles": 1
             },
@@ -28,10 +30,25 @@
                 "Kiwi.Plugins": 1
             }
         },
+        "src/renderer.js": {
+            "name": "src/renderer.js",
+            "modules": {
+                "Renderers": 1
+            },
+            "classes": {
+                "StatelessParticleRenderer": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "src/shader.js": {
             "name": "src/shader.js",
-            "modules": {},
-            "classes": {},
+            "modules": {
+                "Shaders": 1
+            },
+            "classes": {
+                "StatelessParticleShader": 1
+            },
             "fors": {},
             "namespaces": {}
         }
@@ -40,18 +57,40 @@
         "Kiwi": {
             "name": "Kiwi",
             "submodules": {
-                "Plugins": 1
+                "GameObjects": 1,
+                "Plugins": 1,
+                "Renderers": 1,
+                "Shaders": 1
             },
             "classes": {
                 "StatelessParticles": 1,
-                "Kiwi.Plugins.ParticlesGL": 1
+                "Kiwi.Plugins.ParticlesGL": 1,
+                "StatelessParticleRenderer": 1,
+                "StatelessParticleShader": 1
             },
             "fors": {},
             "namespaces": {
                 "Kiwi.Plugins": 1
             },
-            "file": "src/particles-gl.js",
-            "line": 1
+            "file": "src/shader.js",
+            "line": 7
+        },
+        "GameObjects": {
+            "name": "GameObjects",
+            "submodules": {},
+            "classes": {
+                "StatelessParticles": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "Kiwi",
+            "namespace": "",
+            "file": "src/gameobject.js",
+            "line": 7,
+            "tag": "main",
+            "itemtype": "main",
+            "description": "Creates a particle game object"
         },
         "Plugins": {
             "name": "Plugins",
@@ -68,7 +107,41 @@
             "namespace": "",
             "file": "src/particles-gl.js",
             "line": 1,
-            "description": "The particles plugin creates a new gameobject \"StatelessParticles\" to the Kiwi.GameObject object"
+            "description": "The particles plugin creates a new gameobject \"StatelessParticles\"."
+        },
+        "Renderers": {
+            "name": "Renderers",
+            "submodules": {},
+            "classes": {
+                "StatelessParticleRenderer": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "Kiwi",
+            "namespace": "",
+            "file": "src/renderer.js",
+            "line": 7,
+            "tag": "main",
+            "itemtype": "main",
+            "description": "Renderer used by the Kiwi.GameObjects.StatelessParticle"
+        },
+        "Shaders": {
+            "name": "Shaders",
+            "submodules": {},
+            "classes": {
+                "StatelessParticleShader": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "Kiwi",
+            "namespace": "",
+            "file": "src/shader.js",
+            "line": 7,
+            "tag": "main",
+            "itemtype": "main",
+            "description": "Shader for stateless particles"
         }
     },
     "classes": {
@@ -81,35 +154,37 @@
             "plugin_for": [],
             "extension_for": [],
             "module": "Kiwi",
+            "submodule": "GameObjects",
+            "namespace": "",
             "file": "src/gameobject.js",
-            "line": 10,
+            "line": 7,
             "description": "Creates a particle game object",
             "extends": "Kiwi.Entity",
             "is_constructor": 1,
             "params": [
                 {
                     "name": "state",
-                    "description": ": the state to which the game object belongs",
+                    "description": "State to which the game object belongs",
                     "type": "Kiwi.State"
                 },
                 {
                     "name": "atlas",
-                    "description": ": the texture for the particle object",
+                    "description": "Texture for the particle object",
                     "type": "Kiwi.Textures.TextureAtlas"
                 },
                 {
                     "name": "x",
-                    "description": ": the x position of the game object",
+                    "description": "X position of the game object",
                     "type": "Number"
                 },
                 {
                     "name": "y",
-                    "description": ": the y position of the game object",
+                    "description": "Y position of the game object",
                     "type": "Number"
                 },
                 {
                     "name": "config",
-                    "description": ": the particle configuration object",
+                    "description": "Particle configuration object",
                     "type": "Object"
                 }
             ],
@@ -133,19 +208,74 @@
             "namespace": "Kiwi.Plugins",
             "file": "src/particles-gl.js",
             "line": 1,
-            "description": "The particles plugin creates a new gameobject \"StatelessParticles\" to the Kiwi.GameObject object"
+            "description": "The particles plugin creates a new gameobject \"StatelessParticles\"."
+        },
+        "StatelessParticleRenderer": {
+            "name": "StatelessParticleRenderer",
+            "shortname": "StatelessParticleRenderer",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Kiwi",
+            "submodule": "Renderers",
+            "namespace": "",
+            "file": "src/renderer.js",
+            "line": 7,
+            "description": "Renderer used by the Kiwi.GameObjects.StatelessParticle",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "gl",
+                    "description": "",
+                    "type": "WebGLRenderingContext"
+                },
+                {
+                    "name": "shaderManager",
+                    "description": "",
+                    "type": "Kiwi.Shaders.ShaderManager"
+                },
+                {
+                    "name": "params",
+                    "description": "Parameter object",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "config",
+                            "description": "Configuration definitions",
+                            "type": "Object",
+                            "optional": true
+                        }
+                    ]
+                }
+            ],
+            "access": "public",
+            "tagname": ""
+        },
+        "StatelessParticleShader": {
+            "name": "StatelessParticleShader",
+            "shortname": "StatelessParticleShader",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Kiwi",
+            "submodule": "Shaders",
+            "namespace": "",
+            "file": "src/shader.js",
+            "line": 7,
+            "description": "Shader for stateless particles",
+            "is_constructor": 1,
+            "access": "public",
+            "tagname": ""
         }
     },
     "classitems": [
         {
             "file": "src/gameobject.js",
-            "line": 2,
-            "description": "* @module Kiwi\n * @submodule GameObjects\n * @main StatelessParticles",
-            "class": "StatelessParticles"
-        },
-        {
-            "file": "src/gameobject.js",
-            "line": 83,
+            "line": 81,
             "description": "Populates a new object with default config parameters",
             "itemtype": "method",
             "name": "buildDefaultConfig",
@@ -155,45 +285,51 @@
             },
             "access": "public",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 173,
-            "description": "Merges config objects, overwriting the first config with all definitions in the second while preserving non-revised terms.",
+            "line": 171,
+            "description": "Merges config objects, overwriting the first config with all\ndefinitions in the second while preserving non-revised terms.",
             "itemtype": "method",
             "name": "mergeConfig",
             "params": [
                 {
-                    "name": "config1:",
-                    "description": "The config object to modify",
+                    "name": "config1",
+                    "description": "Config object to modify",
                     "type": "Object"
                 },
                 {
-                    "name": "config2:",
-                    "description": "The config object to copy in",
+                    "name": "config2",
+                    "description": "Config object to copy in",
                     "type": "Object"
                 }
             ],
             "access": "public",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 187,
-            "description": "Returns the state of the particle effect. Either \"stopped\",\"started\" or \"stopping\"",
+            "line": 188,
+            "description": "Returns the state of the particle effect.\nEither \"stopped\",\"started\" or \"stopping\"",
             "itemtype": "property",
             "name": "state",
             "type": "boolean",
             "readonly": "",
             "access": "public",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 197,
+            "line": 199,
             "description": "The type of object that this is.",
             "itemtype": "method",
             "name": "objType",
@@ -202,100 +338,118 @@
             },
             "access": "public",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 207,
-            "description": "An array of vectors that conatains generated velocities if useDrawingVectors is true. Used by the particle editor.",
+            "line": 209,
+            "description": "An array of vectors that conatains generated velocities\nif useDrawingVectors is true. Used by the particle editor.",
             "itemtype": "property",
             "name": "drawingVectors",
             "type": "array",
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 215,
-            "description": "If true, velocity vectors will be stored on particle generation. Used by the particle editor.",
+            "line": 218,
+            "description": "If true, velocity vectors will be stored on particle generation.\nUsed by the particle editor.",
             "itemtype": "property",
             "name": "useDrawingVectors",
             "type": "boolean",
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 223,
-            "description": "A function delegated to return a random number. Used by the particle editor.",
+            "line": 227,
+            "description": "A function delegated to return a random number.\nUsed by the particle editor.",
             "itemtype": "property",
             "name": "rnd",
             "type": "function",
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 231,
-            "description": "If useRandoms is true, This array will contain pregenerate random numbers which will be used every new generation refresh. Used by the particle editor.",
+            "line": 236,
+            "description": "If useRandoms is true, This array will contain pregenerate random\nnumbers which will be used every new generation refresh.\nUsed by the particle editor.",
             "itemtype": "property",
             "name": "randoms",
             "type": "array",
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 239,
+            "line": 246,
             "description": "If true, pregenerate random numbers. Used by the particle editor.",
             "itemtype": "property",
             "name": "useRandoms",
             "type": "boolean",
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 247,
+            "line": 254,
             "description": "The number of random numbers to generate if useRandoms is true.",
             "itemtype": "property",
             "name": "numRandoms",
             "type": "number",
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 255,
-            "description": "The index of the next random number in useRandoms. Used by the particle editor.",
+            "line": 262,
+            "description": "The index of the next random number in useRandoms.\nUsed by the particle editor.",
             "itemtype": "property",
             "name": "nextRandomIndex",
             "type": "number",
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 263,
-            "description": "The maximum loop length of the system. Used for calculating the timeout when stopping emission. This is calculated when the particles are generated. It can be overridden once the emission has started.",
+            "line": 271,
+            "description": "The maximum loop length of the system. Used for calculating\nthe timeout when stopping emission. This is calculated when\nthe particles are generated. It can be overridden once\nthe emission has started.",
             "itemtype": "property",
             "name": "timeoutLength",
             "type": "number",
             "access": "public",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 271,
-            "description": "Get the next random number from the randoms list. Used by the particle editor.",
+            "line": 282,
+            "description": "Get the next random number from the randoms list.\nUsed by the particle editor.",
             "itemtype": "method",
             "name": "nextRandom",
             "return": {
@@ -303,93 +457,103 @@
             },
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 283,
-            "description": "Starts the system emitting particles. Particles will be regenerated each time.",
+            "line": 297,
+            "description": "Starts the system emitting particles.\nParticles will be regenerated each time.",
             "itemtype": "method",
             "name": "startEmitting",
             "params": [
                 {
                     "name": "loop",
-                    "description": ": Set to true for continuous looping. Overrides and updates the config loop setting.",
+                    "description": "Set to true for continuous looping.\n\tOverrides and updates the config loop setting.",
                     "type": "Boolean"
                 },
                 {
                     "name": "removeOnComplete",
-                    "description": ": if not looping, then the gameobject will destroy itself after one full emission cycle.",
+                    "description": "If not looping, then\n\tthe gameobject will destroy itself after one full emission cycle.",
                     "type": "Boolean"
                 },
                 {
                     "name": "numParts",
-                    "description": ": the number of particles to generate, set on the config object - if not provided the current config value will be used",
+                    "description": "Number of particles to generate,\n\tset on the config object - if not provided\n\tthe current config value will be used",
                     "type": "Number"
                 }
             ],
             "access": "public",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 314,
+            "line": 338,
             "description": "Stops the system from emitting particles.",
             "itemtype": "method",
             "name": "stopEmitting",
             "params": [
                 {
                     "name": "immediate",
-                    "description": ": stops the emitter and removes any existing particles.",
+                    "description": "Stops the emitter\n\tand removes any existing particles.",
                     "type": "Boolean"
                 },
                 {
                     "name": "remove",
-                    "description": ": if true the gameobject will mark itself for removal either immediately, or after a completed cycle.",
+                    "description": "If true the gameobject will mark itself\n\tfor removal either immediately, or after a completed cycle.",
                     "type": "Boolean"
                 }
             ],
             "access": "public",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 344,
-            "description": "Schedules the particle effect to stop (discontinue rendering), and optionally marks the gameobject for removal.",
+            "line": 372,
+            "description": "Schedules the particle effect to stop (discontinue rendering),\n\tand optionally marks the gameobject for removal.",
             "itemtype": "method",
             "name": "scheduleStop",
             "params": [
                 {
                     "name": "milliseconds",
-                    "description": ": the delay time in milliseconds before being marked for removal.",
+                    "description": "Delay time in milliseconds\n\tbefore being marked for removal.",
                     "type": "Number"
                 },
                 {
                     "name": "remove",
-                    "description": ": mark the gameobject for removal.",
+                    "description": "Mark the gameobject for removal.",
                     "type": "Boolean"
                 }
             ],
             "access": "public",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 364,
+            "line": 395,
             "description": "Immediately marks the gameobject for removal.",
             "itemtype": "method",
             "name": "remove",
             "access": "public",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 375,
-            "description": "Sets the configuration object and optionally regenerates particles and sets runtime properties.",
+            "line": 405,
+            "description": "Sets the configuration object and optionally regenerates particles\n\tand sets runtime properties.",
             "itemtype": "method",
             "name": "setConfig",
             "params": [
@@ -405,50 +569,54 @@
                 },
                 {
                     "name": "doUniforms",
-                    "description": "Apply runtime properties.\n\tDeprecated: the shader will apply runtime properties before rendering,\n\tand this parameter only served to create errors.",
+                    "description": "Apply runtime properties.\n\tDeprecated: would apply runtime properties before rendering,\n\tand this parameter only served to create errors.",
                     "type": "Boolean"
                 }
             ],
             "access": "public",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 391,
-            "description": "Sets a property on the configuration object and optionally regenerates particles and sets runtime properties.",
+            "line": 424,
+            "description": "Sets a property on the configuration object and optionally\nregenerates particles and sets runtime properties.",
             "itemtype": "method",
             "name": "setConfigProp",
             "params": [
                 {
                     "name": "prop",
-                    "description": ": the name of the property to set",
+                    "description": "Name of the property to set",
                     "type": "String"
                 },
                 {
-                    "name": "val:",
-                    "description": "the value of the property to set",
+                    "name": "val",
+                    "description": "Value of the property to set",
                     "type": "Any"
                 },
                 {
                     "name": "doGenerate",
-                    "description": ": immediately regenerate particles",
+                    "description": "Immediately regenerate particles",
                     "type": "Boolean"
                 },
                 {
                     "name": "doUniforms",
-                    "description": ": apply runtime properties",
+                    "description": "Apply runtime properties.\n\tDeprecated: would apply runtime properties before rendering,\n\tand this parameter only served to create errors.",
                     "type": "Boolean"
                 }
             ],
             "access": "public",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 406,
-            "description": "Gets the configuration object. To change it, use setConfig or setConfigProp.",
+            "line": 441,
+            "description": "Gets the configuration object.\n\tTo change it, use setConfig or setConfigProp.",
             "itemtype": "method",
             "name": "getConfig",
             "return": {
@@ -457,176 +625,196 @@
             },
             "access": "public",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 417,
+            "line": 453,
             "description": "Generates particles based on configuration object.",
             "itemtype": "method",
             "name": "_generateParticles",
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 563,
+            "line": 629,
             "description": "Instructs the renderer to draw the particles.",
             "itemtype": "method",
             "name": "renderGL",
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 580,
+            "line": 646,
             "description": "Computes a collapsed world rotation for the renderer.",
             "itemtype": "method",
             "name": "deriveWorldAngle",
             "params": [
                 {
-                    "name": "transform:",
-                    "description": "the transform of the gameObject",
+                    "name": "transform",
+                    "description": "Transform of the gameObject",
                     "type": "Kiwi.Geom.Transform"
                 },
                 {
-                    "name": "camera:",
-                    "description": "the camera being rendered",
+                    "name": "camera",
+                    "description": "Camera being rendered",
                     "type": "Kiwi.Camera"
                 }
             ],
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 602,
-            "description": "Returns a point on a unit arc based on a total number of points and an index",
+            "line": 673,
+            "description": "Returns a point on a unit arc based on a total number of points\n\tand an index",
             "itemtype": "method",
             "name": "regularPointCirclePerimeter",
             "params": [
                 {
                     "name": "a",
-                    "description": ": the start angle of the arc",
+                    "description": "Start angle of the arc",
                     "type": "Number"
                 },
                 {
                     "name": "b",
-                    "description": ": the end angle of the ard",
+                    "description": "End angle of the arc",
                     "type": "Number"
                 },
                 {
                     "name": "index",
-                    "description": ": the point index",
+                    "description": "Point index",
                     "type": "Number"
                 },
                 {
                     "name": "total",
-                    "description": ": the total number of points",
+                    "description": "Total number of points",
                     "type": "Number"
                 }
             ],
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 616,
+            "line": 688,
             "description": "Returns a point on a unit arc",
             "itemtype": "method",
             "name": "randomPointCirclePerimeter",
             "params": [
                 {
                     "name": "a",
-                    "description": ": the start angle of the arc",
+                    "description": "Start angle of the arc",
                     "type": "Number"
                 },
                 {
                     "name": "b",
-                    "description": ": the end angle of the ard",
+                    "description": "End angle of the arc",
                     "type": "Number"
                 }
             ],
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 628,
+            "line": 700,
             "description": "Returns a point within the sector of a circle",
             "itemtype": "method",
-            "name": "randomPointCirclePerimeter",
+            "name": "randomPointCircle",
             "params": [
                 {
                     "name": "a",
-                    "description": ": the start angle of the sector",
+                    "description": "Start angle of the sector",
                     "type": "Number"
                 },
                 {
                     "name": "b",
-                    "description": ": the end angle of the sector",
+                    "description": "End angle of the sector",
                     "type": "Number"
                 }
             ],
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 642,
+            "line": 714,
             "description": "Returns a point within the unit square",
             "itemtype": "method",
             "name": "randomPointRect",
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 651,
+            "line": 723,
             "description": "Returns a point on the perimeter of the unit square",
             "itemtype": "method",
             "name": "randomPointRectPerimeter",
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 666,
-            "description": "Returns a point on a unit line based on a total number of points and an index.",
+            "line": 744,
+            "description": "Returns a point on a unit line based on\n\ta total number of points and an index.",
             "itemtype": "method",
             "name": "regularPointLine",
             "params": [
                 {
                     "name": "radians",
-                    "description": ": the angle of the line",
+                    "description": "Angle of the line",
                     "type": "Number"
                 },
                 {
                     "name": "index",
-                    "description": ": the point index",
+                    "description": "Point index",
                     "type": "Number"
                 },
                 {
                     "name": "total",
-                    "description": ": the total number of points",
+                    "description": "Total number of points",
                     "type": "Number"
                 }
             ],
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/gameobject.js",
-            "line": 681,
+            "line": 760,
             "description": "Returns a point on a unit line.",
             "itemtype": "method",
             "name": "regularPointLine",
@@ -639,7 +827,9 @@
             ],
             "access": "private",
             "tagname": "",
-            "class": "StatelessParticles"
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
         },
         {
             "file": "src/particles-gl.js",
@@ -648,7 +838,7 @@
             "itemtype": "property",
             "name": "name",
             "type": "String",
-            "default": "'MyPlugin'",
+            "default": "\"ParticlesGL\"",
             "access": "public",
             "tagname": "",
             "class": "Kiwi.Plugins.ParticlesGL",
@@ -672,7 +862,7 @@
         },
         {
             "file": "src/particles-gl.js",
-            "line": 36,
+            "line": 33,
             "description": "Registers this plugin with the Global Kiwi Plugins Manager if it is avaiable.",
             "class": "Kiwi.Plugins.ParticlesGL",
             "module": "Kiwi",
@@ -680,38 +870,446 @@
             "namespace": "Kiwi.Plugins"
         },
         {
+            "file": "src/renderer.js",
+            "line": 45,
+            "description": "Identification string",
+            "itemtype": "property",
+            "name": "RENDERER_ID",
+            "type": "string",
+            "default": "\"StatelessParticleRenderer\"",
+            "final": 1,
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 55,
+            "description": "Configures the shader to use the current configuration of the game object.",
+            "itemtype": "method",
+            "name": "setConfig",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "Configuration object set up in GameObject",
+                    "type": "Object"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 73,
+            "description": "Resets the timer, so that the particles begin from the start.",
+            "itemtype": "method",
+            "name": "resetTime",
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 82,
+            "description": "Resets the pause time. This will probably hold for some 4 decades,\nlonger than the physical lifetime of many devices.",
+            "itemtype": "method",
+            "name": "resetPauseTime",
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 93,
+            "description": "Enables the renderer in the rendering pipeline.",
+            "itemtype": "method",
+            "name": "enable",
+            "params": [
+                {
+                    "name": "gl",
+                    "description": "",
+                    "type": "WebGLRenderingContext"
+                },
+                {
+                    "name": "params",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "camMatrix",
+                            "description": "3*3 transformation matrix",
+                            "type": "Array"
+                        }
+                    ]
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 109,
+            "description": "Configures basic uniforms in the shader.",
+            "itemtype": "method",
+            "name": "_setStandardUniforms",
+            "params": [
+                {
+                    "name": "gl",
+                    "description": "",
+                    "type": "WebGLRenderingContext"
+                },
+                {
+                    "name": "stageResolution",
+                    "description": "",
+                    "type": "Float32Array"
+                },
+                {
+                    "name": "camMatrix",
+                    "description": "3*3 transformation matrix",
+                    "type": "Array"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 134,
+            "description": "Configures particle animation uniforms in the shader.",
+            "_setconfiguniforms": "",
+            "params": [
+                {
+                    "name": "gl",
+                    "description": "",
+                    "type": "WebGLRenderingContext"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 174,
+            "description": "Configures texture uniforms on the shader.",
+            "itemtype": "method",
+            "name": "setTextureUniforms",
+            "params": [
+                {
+                    "name": "gl",
+                    "description": "",
+                    "type": "WebGLRenderingContext"
+                },
+                {
+                    "name": "textureAtlas",
+                    "description": "",
+                    "type": "Kiwi.Textures.TextureAtlas"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 188,
+            "description": "Disables the renderer to make way for subsequent batches.",
+            "itemtype": "method",
+            "name": "disable",
+            "params": [
+                {
+                    "name": "gl",
+                    "description": "",
+                    "type": "WebGLRenderingContext"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 200,
+            "description": "Clears the renderer to make way for new data.",
+            "itemtype": "method",
+            "name": "clear",
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 209,
+            "description": "The current time, used to drive stateless animation",
+            "itemtype": "property",
+            "name": "time",
+            "type": "number",
+            "default": "0",
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 218,
+            "description": "The pause time",
+            "itemtype": "property",
+            "name": "pauseTime",
+            "type": "number",
+            "default": "999999999",
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 227,
+            "description": "Pauses the particle emission.",
+            "itemtype": "method",
+            "name": "pause",
+            "params": [
+                {
+                    "name": "gl",
+                    "description": "",
+                    "type": "WebGLRenderingContext"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 238,
+            "description": "Sets the \"world angle\"\nConfigures the shader to render correctly when the world has been rotated.",
+            "itemtype": "method",
+            "name": "setWorldAngle",
+            "params": [
+                {
+                    "name": "angle",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 252,
+            "description": "Renders the object using WebGL",
+            "itemtype": "method",
+            "name": "draw",
+            "params": [
+                {
+                    "name": "gl",
+                    "description": "",
+                    "type": "WebGLRenderingContext"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 287,
+            "description": "Updates the stage resolution so that the image renders at the correct size.",
+            "itemtype": "method",
+            "name": "updateStageResolution",
+            "params": [
+                {
+                    "name": "gl",
+                    "description": "",
+                    "type": "WebGLRenderingContext"
+                },
+                {
+                    "name": "res",
+                    "description": "",
+                    "type": "Float32Array"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 299,
+            "description": "Updates the texture information.",
+            "itemtype": "method",
+            "name": "updateTextureSize",
+            "params": [
+                {
+                    "name": "gl",
+                    "description": "",
+                    "type": "WebGLRenderingContext"
+                },
+                {
+                    "name": "size",
+                    "description": "",
+                    "type": "Float32Array"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 311,
+            "description": "Uploads the vertex buffer. Because these particles are stateless,\nthis can be done once and left alone, making particles very efficient.",
+            "itemtype": "method",
+            "name": "initBatch",
+            "params": [
+                {
+                    "name": "vertexItems",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 323,
+            "description": "Removes external references, allowing this to be destroyed without\nmemory leaks.",
+            "itemtype": "method",
+            "name": "destroy",
+            "params": [
+                {
+                    "name": "gl",
+                    "description": "",
+                    "type": "WebGLRenderingContext"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
             "file": "src/shader.js",
-            "line": 85,
+            "line": 16,
+            "description": "Records the attribute locations of this shader.",
+            "itemtype": "property",
+            "name": "attributes",
+            "type": "object",
+            "class": "StatelessParticleShader",
+            "module": "Kiwi",
+            "submodule": "Shaders"
+        },
+        {
+            "file": "src/shader.js",
+            "line": 29,
+            "description": "Initialises the shader wrapper with references to attributes and uniforms.",
+            "itemtype": "method",
+            "name": "init",
+            "params": [
+                {
+                    "name": "gl",
+                    "description": "",
+                    "type": "WebGLRenderingContext"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleShader",
+            "module": "Kiwi",
+            "submodule": "Shaders"
+        },
+        {
+            "file": "src/shader.js",
+            "line": 47,
+            "description": "List of uniforms and types",
+            "itemtype": "property",
+            "name": "uniforms",
+            "final": 1,
+            "type": "object",
+            "access": "public",
+            "tagname": "",
+            "class": "StatelessParticleShader",
+            "module": "Kiwi",
+            "submodule": "Shaders"
+        },
+        {
+            "file": "src/shader.js",
+            "line": 111,
+            "description": "Fragment shader source",
             "itemtype": "property",
             "name": "texture2DFrag",
             "type": "Array",
             "access": "public",
             "tagname": "",
-            "class": "",
+            "class": "StatelessParticleShader",
             "module": "Kiwi",
-            "namespace": "Kiwi.Plugins"
+            "submodule": "Shaders"
         },
         {
             "file": "src/shader.js",
-            "line": 107,
+            "line": 133,
+            "description": "Vertex shader source",
             "itemtype": "property",
             "name": "texture2DVert",
             "type": "Array",
             "access": "public",
             "tagname": "",
-            "class": "",
+            "class": "StatelessParticleShader",
             "module": "Kiwi",
-            "namespace": "Kiwi.Plugins"
+            "submodule": "Shaders"
         }
     ],
     "warnings": [
         {
-            "message": "Missing item type\n* @module Kiwi\n * @submodule GameObjects\n * @main StatelessParticles",
-            "line": " src/gameobject.js:2"
+            "message": "unknown tag: _setconfiguniforms",
+            "line": " src/renderer.js:134"
         },
         {
             "message": "Missing item type\nRegisters this plugin with the Global Kiwi Plugins Manager if it is avaiable.",
-            "line": " src/particles-gl.js:36"
+            "line": " src/particles-gl.js:33"
+        },
+        {
+            "message": "Missing item type\nConfigures particle animation uniforms in the shader.",
+            "line": " src/renderer.js:134"
         }
     ]
 }

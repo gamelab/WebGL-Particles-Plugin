@@ -43,15 +43,25 @@
             
                 <li><a href="../classes/Kiwi.Plugins.ParticlesGL.html">Kiwi.Plugins.ParticlesGL</a></li>
             
+                <li><a href="../classes/StatelessParticleRenderer.html">StatelessParticleRenderer</a></li>
+            
                 <li><a href="../classes/StatelessParticles.html">StatelessParticles</a></li>
+            
+                <li><a href="../classes/StatelessParticleShader.html">StatelessParticleShader</a></li>
             
             </ul>
 
             <ul id="api-modules" class="apis modules">
             
+                <li><a href="../modules/GameObjects.html">GameObjects</a></li>
+            
                 <li><a href="../modules/Kiwi.html">Kiwi</a></li>
             
                 <li><a href="../modules/Plugins.html">Plugins</a></li>
+            
+                <li><a href="../modules/Renderers.html">Renderers</a></li>
+            
+                <li><a href="../modules/Shaders.html">Shaders</a></li>
             
             </ul>
         </div>
@@ -100,13 +110,14 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_gameobject.js.html#l10"><code>src&#x2F;gameobject.js:10</code></a>
+            Defined in: <a href="../files/src_gameobject.js.html#l7"><code>src&#x2F;gameobject.js:7</code></a>
         </div>
     
 
     
         
-            Module: <a href="../modules/Kiwi.html">Kiwi</a>
+            Module: <a href="../modules/GameObjects.html">GameObjects</a><br>
+            Parent Module: <a href="../modules/Kiwi.html">Kiwi</a>
         
     
 
@@ -195,7 +206,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l10"><code>src&#x2F;gameobject.js:10</code></a>
+        <a href="../files/src_gameobject.js.html#l7"><code>src&#x2F;gameobject.js:7</code></a>
         
         </p>
 
@@ -224,7 +235,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the state to which the game object belongs</p>
+                        <p>State to which the game object belongs</p>
 
                     </div>
 
@@ -240,7 +251,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the texture for the particle object</p>
+                        <p>Texture for the particle object</p>
 
                     </div>
 
@@ -256,7 +267,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the x position of the game object</p>
+                        <p>X position of the game object</p>
 
                     </div>
 
@@ -272,7 +283,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the y position of the game object</p>
+                        <p>Y position of the game object</p>
 
                     </div>
 
@@ -288,7 +299,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the particle configuration object</p>
+                        <p>Particle configuration object</p>
 
                     </div>
 
@@ -393,7 +404,7 @@
                             </li>
                         
                             <li class="index-item method private">
-                                <a href="#method_randomPointCirclePerimeter">randomPointCirclePerimeter</a>
+                                <a href="#method_randomPointCircle">randomPointCircle</a>
 
                                 
                                 
@@ -611,7 +622,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l417"><code>src&#x2F;gameobject.js:417</code></a>
+        <a href="../files/src_gameobject.js.html#l453"><code>src&#x2F;gameobject.js:453</code></a>
         
         </p>
 
@@ -672,7 +683,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l83"><code>src&#x2F;gameobject.js:83</code></a>
+        <a href="../files/src_gameobject.js.html#l81"><code>src&#x2F;gameobject.js:81</code></a>
         
         </p>
 
@@ -716,13 +727,13 @@
             
                 <li class="arg">
                     
-                        <code>transform:</code>
+                        <code>transform</code>
                     
                 </li>
             
                 <li class="arg">
                     
-                        <code>camera:</code>
+                        <code>camera</code>
                     
                 </li>
             
@@ -757,7 +768,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l580"><code>src&#x2F;gameobject.js:580</code></a>
+        <a href="../files/src_gameobject.js.html#l646"><code>src&#x2F;gameobject.js:646</code></a>
         
         </p>
 
@@ -780,14 +791,14 @@
             
                 <li class="param">
                     
-                        <code class="param-name">transform:</code>
+                        <code class="param-name">transform</code>
                         <span class="type">Kiwi.Geom.Transform</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>the transform of the gameObject</p>
+                        <p>Transform of the gameObject</p>
 
                     </div>
 
@@ -796,14 +807,14 @@
             
                 <li class="param">
                     
-                        <code class="param-name">camera:</code>
+                        <code class="param-name">camera</code>
                         <span class="type">Kiwi.Camera</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>the camera being rendered</p>
+                        <p>Camera being rendered</p>
 
                     </div>
 
@@ -858,7 +869,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l406"><code>src&#x2F;gameobject.js:406</code></a>
+        <a href="../files/src_gameobject.js.html#l441"><code>src&#x2F;gameobject.js:441</code></a>
         
         </p>
 
@@ -869,7 +880,8 @@
     </div>
 
     <div class="description">
-        <p>Gets the configuration object. To change it, use setConfig or setConfigProp.</p>
+        <p>Gets the configuration object.
+    To change it, use setConfig or setConfigProp.</p>
 
     </div>
 
@@ -902,13 +914,13 @@
             
                 <li class="arg">
                     
-                        <code>config1:</code>
+                        <code>config1</code>
                     
                 </li>
             
                 <li class="arg">
                     
-                        <code>config2:</code>
+                        <code>config2</code>
                     
                 </li>
             
@@ -943,7 +955,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l173"><code>src&#x2F;gameobject.js:173</code></a>
+        <a href="../files/src_gameobject.js.html#l171"><code>src&#x2F;gameobject.js:171</code></a>
         
         </p>
 
@@ -954,7 +966,8 @@
     </div>
 
     <div class="description">
-        <p>Merges config objects, overwriting the first config with all definitions in the second while preserving non-revised terms.</p>
+        <p>Merges config objects, overwriting the first config with all
+definitions in the second while preserving non-revised terms.</p>
 
     </div>
 
@@ -966,14 +979,14 @@
             
                 <li class="param">
                     
-                        <code class="param-name">config1:</code>
+                        <code class="param-name">config1</code>
                         <span class="type">Object</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>The config object to modify</p>
+                        <p>Config object to modify</p>
 
                     </div>
 
@@ -982,14 +995,14 @@
             
                 <li class="param">
                     
-                        <code class="param-name">config2:</code>
+                        <code class="param-name">config2</code>
                         <span class="type">Object</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>The config object to copy in</p>
+                        <p>Config object to copy in</p>
 
                     </div>
 
@@ -1044,7 +1057,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l271"><code>src&#x2F;gameobject.js:271</code></a>
+        <a href="../files/src_gameobject.js.html#l282"><code>src&#x2F;gameobject.js:282</code></a>
         
         </p>
 
@@ -1055,7 +1068,8 @@
     </div>
 
     <div class="description">
-        <p>Get the next random number from the randoms list. Used by the particle editor.</p>
+        <p>Get the next random number from the randoms list.
+Used by the particle editor.</p>
 
     </div>
 
@@ -1117,7 +1131,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l197"><code>src&#x2F;gameobject.js:197</code></a>
+        <a href="../files/src_gameobject.js.html#l199"><code>src&#x2F;gameobject.js:199</code></a>
         
         </p>
 
@@ -1152,8 +1166,8 @@
 </div>
 
                 
-                    <div id="method_randomPointCirclePerimeter" class="method item private">
-    <h3 class="name"><code>randomPointCirclePerimeter</code></h3>
+                    <div id="method_randomPointCircle" class="method item private">
+    <h3 class="name"><code>randomPointCircle</code></h3>
 
     
         <div class="args">
@@ -1202,7 +1216,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l628"><code>src&#x2F;gameobject.js:628</code></a>
+        <a href="../files/src_gameobject.js.html#l700"><code>src&#x2F;gameobject.js:700</code></a>
         
         </p>
 
@@ -1232,7 +1246,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the start angle of the sector</p>
+                        <p>Start angle of the sector</p>
 
                     </div>
 
@@ -1248,7 +1262,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the end angle of the sector</p>
+                        <p>End angle of the sector</p>
 
                     </div>
 
@@ -1315,7 +1329,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l616"><code>src&#x2F;gameobject.js:616</code></a>
+        <a href="../files/src_gameobject.js.html#l688"><code>src&#x2F;gameobject.js:688</code></a>
         
         </p>
 
@@ -1345,7 +1359,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the start angle of the arc</p>
+                        <p>Start angle of the arc</p>
 
                     </div>
 
@@ -1361,7 +1375,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the end angle of the ard</p>
+                        <p>End angle of the arc</p>
 
                     </div>
 
@@ -1412,7 +1426,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l642"><code>src&#x2F;gameobject.js:642</code></a>
+        <a href="../files/src_gameobject.js.html#l714"><code>src&#x2F;gameobject.js:714</code></a>
         
         </p>
 
@@ -1469,7 +1483,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l651"><code>src&#x2F;gameobject.js:651</code></a>
+        <a href="../files/src_gameobject.js.html#l723"><code>src&#x2F;gameobject.js:723</code></a>
         
         </p>
 
@@ -1554,7 +1568,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l602"><code>src&#x2F;gameobject.js:602</code></a>
+        <a href="../files/src_gameobject.js.html#l673"><code>src&#x2F;gameobject.js:673</code></a>
         
         </p>
 
@@ -1565,7 +1579,8 @@
     </div>
 
     <div class="description">
-        <p>Returns a point on a unit arc based on a total number of points and an index</p>
+        <p>Returns a point on a unit arc based on a total number of points
+    and an index</p>
 
     </div>
 
@@ -1584,7 +1599,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the start angle of the arc</p>
+                        <p>Start angle of the arc</p>
 
                     </div>
 
@@ -1600,7 +1615,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the end angle of the ard</p>
+                        <p>End angle of the arc</p>
 
                     </div>
 
@@ -1616,7 +1631,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the point index</p>
+                        <p>Point index</p>
 
                     </div>
 
@@ -1632,7 +1647,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the total number of points</p>
+                        <p>Total number of points</p>
 
                     </div>
 
@@ -1705,7 +1720,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l666"><code>src&#x2F;gameobject.js:666</code></a>
+        <a href="../files/src_gameobject.js.html#l744"><code>src&#x2F;gameobject.js:744</code></a>
         
         </p>
 
@@ -1716,7 +1731,8 @@
     </div>
 
     <div class="description">
-        <p>Returns a point on a unit line based on a total number of points and an index.</p>
+        <p>Returns a point on a unit line based on
+    a total number of points and an index.</p>
 
     </div>
 
@@ -1735,7 +1751,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the angle of the line</p>
+                        <p>Angle of the line</p>
 
                     </div>
 
@@ -1751,7 +1767,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the point index</p>
+                        <p>Point index</p>
 
                     </div>
 
@@ -1767,7 +1783,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the total number of points</p>
+                        <p>Total number of points</p>
 
                     </div>
 
@@ -1828,7 +1844,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l681"><code>src&#x2F;gameobject.js:681</code></a>
+        <a href="../files/src_gameobject.js.html#l760"><code>src&#x2F;gameobject.js:760</code></a>
         
         </p>
 
@@ -1909,7 +1925,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l364"><code>src&#x2F;gameobject.js:364</code></a>
+        <a href="../files/src_gameobject.js.html#l395"><code>src&#x2F;gameobject.js:395</code></a>
         
         </p>
 
@@ -1966,7 +1982,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l563"><code>src&#x2F;gameobject.js:563</code></a>
+        <a href="../files/src_gameobject.js.html#l629"><code>src&#x2F;gameobject.js:629</code></a>
         
         </p>
 
@@ -2039,7 +2055,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l344"><code>src&#x2F;gameobject.js:344</code></a>
+        <a href="../files/src_gameobject.js.html#l372"><code>src&#x2F;gameobject.js:372</code></a>
         
         </p>
 
@@ -2050,7 +2066,8 @@
     </div>
 
     <div class="description">
-        <p>Schedules the particle effect to stop (discontinue rendering), and optionally marks the gameobject for removal.</p>
+        <p>Schedules the particle effect to stop (discontinue rendering),
+    and optionally marks the gameobject for removal.</p>
 
     </div>
 
@@ -2069,7 +2086,8 @@
                     
 
                     <div class="param-description">
-                        <p>: the delay time in milliseconds before being marked for removal.</p>
+                        <p>Delay time in milliseconds
+    before being marked for removal.</p>
 
                     </div>
 
@@ -2085,7 +2103,7 @@
                     
 
                     <div class="param-description">
-                        <p>: mark the gameobject for removal.</p>
+                        <p>Mark the gameobject for removal.</p>
 
                     </div>
 
@@ -2158,7 +2176,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l375"><code>src&#x2F;gameobject.js:375</code></a>
+        <a href="../files/src_gameobject.js.html#l405"><code>src&#x2F;gameobject.js:405</code></a>
         
         </p>
 
@@ -2169,7 +2187,8 @@
     </div>
 
     <div class="description">
-        <p>Sets the configuration object and optionally regenerates particles and sets runtime properties.</p>
+        <p>Sets the configuration object and optionally regenerates particles
+    and sets runtime properties.</p>
 
     </div>
 
@@ -2221,7 +2240,7 @@
 
                     <div class="param-description">
                         <p>Apply runtime properties.
-    Deprecated: the shader will apply runtime properties before rendering,
+    Deprecated: would apply runtime properties before rendering,
     and this parameter only served to create errors.</p>
 
                     </div>
@@ -2254,7 +2273,7 @@
             
                 <li class="arg">
                     
-                        <code>val:</code>
+                        <code>val</code>
                     
                 </li>
             
@@ -2301,7 +2320,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l391"><code>src&#x2F;gameobject.js:391</code></a>
+        <a href="../files/src_gameobject.js.html#l424"><code>src&#x2F;gameobject.js:424</code></a>
         
         </p>
 
@@ -2312,7 +2331,8 @@
     </div>
 
     <div class="description">
-        <p>Sets a property on the configuration object and optionally regenerates particles and sets runtime properties.</p>
+        <p>Sets a property on the configuration object and optionally
+regenerates particles and sets runtime properties.</p>
 
     </div>
 
@@ -2331,7 +2351,7 @@
                     
 
                     <div class="param-description">
-                        <p>: the name of the property to set</p>
+                        <p>Name of the property to set</p>
 
                     </div>
 
@@ -2340,14 +2360,14 @@
             
                 <li class="param">
                     
-                        <code class="param-name">val:</code>
+                        <code class="param-name">val</code>
                         <span class="type">Any</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>the value of the property to set</p>
+                        <p>Value of the property to set</p>
 
                     </div>
 
@@ -2363,7 +2383,7 @@
                     
 
                     <div class="param-description">
-                        <p>: immediately regenerate particles</p>
+                        <p>Immediately regenerate particles</p>
 
                     </div>
 
@@ -2379,7 +2399,9 @@
                     
 
                     <div class="param-description">
-                        <p>: apply runtime properties</p>
+                        <p>Apply runtime properties.
+    Deprecated: would apply runtime properties before rendering,
+    and this parameter only served to create errors.</p>
 
                     </div>
 
@@ -2452,7 +2474,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l283"><code>src&#x2F;gameobject.js:283</code></a>
+        <a href="../files/src_gameobject.js.html#l297"><code>src&#x2F;gameobject.js:297</code></a>
         
         </p>
 
@@ -2463,7 +2485,8 @@
     </div>
 
     <div class="description">
-        <p>Starts the system emitting particles. Particles will be regenerated each time.</p>
+        <p>Starts the system emitting particles.
+Particles will be regenerated each time.</p>
 
     </div>
 
@@ -2482,7 +2505,8 @@
                     
 
                     <div class="param-description">
-                        <p>: Set to true for continuous looping. Overrides and updates the config loop setting.</p>
+                        <p>Set to true for continuous looping.
+    Overrides and updates the config loop setting.</p>
 
                     </div>
 
@@ -2498,7 +2522,8 @@
                     
 
                     <div class="param-description">
-                        <p>: if not looping, then the gameobject will destroy itself after one full emission cycle.</p>
+                        <p>If not looping, then
+    the gameobject will destroy itself after one full emission cycle.</p>
 
                     </div>
 
@@ -2514,7 +2539,9 @@
                     
 
                     <div class="param-description">
-                        <p>: the number of particles to generate, set on the config object - if not provided the current config value will be used</p>
+                        <p>Number of particles to generate,
+    set on the config object - if not provided
+    the current config value will be used</p>
 
                     </div>
 
@@ -2581,7 +2608,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l314"><code>src&#x2F;gameobject.js:314</code></a>
+        <a href="../files/src_gameobject.js.html#l338"><code>src&#x2F;gameobject.js:338</code></a>
         
         </p>
 
@@ -2611,7 +2638,8 @@
                     
 
                     <div class="param-description">
-                        <p>: stops the emitter and removes any existing particles.</p>
+                        <p>Stops the emitter
+    and removes any existing particles.</p>
 
                     </div>
 
@@ -2627,7 +2655,8 @@
                     
 
                     <div class="param-description">
-                        <p>: if true the gameobject will mark itself for removal either immediately, or after a completed cycle.</p>
+                        <p>If true the gameobject will mark itself
+    for removal either immediately, or after a completed cycle.</p>
 
                     </div>
 
@@ -2677,7 +2706,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l207"><code>src&#x2F;gameobject.js:207</code></a>
+        <a href="../files/src_gameobject.js.html#l209"><code>src&#x2F;gameobject.js:209</code></a>
         
         </p>
 
@@ -2687,7 +2716,8 @@
     </div>
 
     <div class="description">
-        <p>An array of vectors that conatains generated velocities if useDrawingVectors is true. Used by the particle editor.</p>
+        <p>An array of vectors that conatains generated velocities
+if useDrawingVectors is true. Used by the particle editor.</p>
 
     </div>
 
@@ -2724,7 +2754,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l255"><code>src&#x2F;gameobject.js:255</code></a>
+        <a href="../files/src_gameobject.js.html#l262"><code>src&#x2F;gameobject.js:262</code></a>
         
         </p>
 
@@ -2734,7 +2764,8 @@
     </div>
 
     <div class="description">
-        <p>The index of the next random number in useRandoms. Used by the particle editor.</p>
+        <p>The index of the next random number in useRandoms.
+Used by the particle editor.</p>
 
     </div>
 
@@ -2771,7 +2802,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l247"><code>src&#x2F;gameobject.js:247</code></a>
+        <a href="../files/src_gameobject.js.html#l254"><code>src&#x2F;gameobject.js:254</code></a>
         
         </p>
 
@@ -2818,7 +2849,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l231"><code>src&#x2F;gameobject.js:231</code></a>
+        <a href="../files/src_gameobject.js.html#l236"><code>src&#x2F;gameobject.js:236</code></a>
         
         </p>
 
@@ -2828,7 +2859,9 @@
     </div>
 
     <div class="description">
-        <p>If useRandoms is true, This array will contain pregenerate random numbers which will be used every new generation refresh. Used by the particle editor.</p>
+        <p>If useRandoms is true, This array will contain pregenerate random
+numbers which will be used every new generation refresh.
+Used by the particle editor.</p>
 
     </div>
 
@@ -2865,7 +2898,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l223"><code>src&#x2F;gameobject.js:223</code></a>
+        <a href="../files/src_gameobject.js.html#l227"><code>src&#x2F;gameobject.js:227</code></a>
         
         </p>
 
@@ -2875,7 +2908,8 @@
     </div>
 
     <div class="description">
-        <p>A function delegated to return a random number. Used by the particle editor.</p>
+        <p>A function delegated to return a random number.
+Used by the particle editor.</p>
 
     </div>
 
@@ -2912,7 +2946,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l187"><code>src&#x2F;gameobject.js:187</code></a>
+        <a href="../files/src_gameobject.js.html#l188"><code>src&#x2F;gameobject.js:188</code></a>
         
         </p>
 
@@ -2922,7 +2956,8 @@
     </div>
 
     <div class="description">
-        <p>Returns the state of the particle effect. Either &quot;stopped&quot;,&quot;started&quot; or &quot;stopping&quot;</p>
+        <p>Returns the state of the particle effect.
+Either &quot;stopped&quot;,&quot;started&quot; or &quot;stopping&quot;</p>
 
     </div>
 
@@ -2959,7 +2994,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l263"><code>src&#x2F;gameobject.js:263</code></a>
+        <a href="../files/src_gameobject.js.html#l271"><code>src&#x2F;gameobject.js:271</code></a>
         
         </p>
 
@@ -2969,7 +3004,10 @@
     </div>
 
     <div class="description">
-        <p>The maximum loop length of the system. Used for calculating the timeout when stopping emission. This is calculated when the particles are generated. It can be overridden once the emission has started.</p>
+        <p>The maximum loop length of the system. Used for calculating
+the timeout when stopping emission. This is calculated when
+the particles are generated. It can be overridden once
+the emission has started.</p>
 
     </div>
 
@@ -3006,7 +3044,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l215"><code>src&#x2F;gameobject.js:215</code></a>
+        <a href="../files/src_gameobject.js.html#l218"><code>src&#x2F;gameobject.js:218</code></a>
         
         </p>
 
@@ -3016,7 +3054,8 @@
     </div>
 
     <div class="description">
-        <p>If true, velocity vectors will be stored on particle generation. Used by the particle editor.</p>
+        <p>If true, velocity vectors will be stored on particle generation.
+Used by the particle editor.</p>
 
     </div>
 
@@ -3053,7 +3092,7 @@
             
         
         
-        <a href="../files/src_gameobject.js.html#l239"><code>src&#x2F;gameobject.js:239</code></a>
+        <a href="../files/src_gameobject.js.html#l246"><code>src&#x2F;gameobject.js:246</code></a>
         
         </p>
 

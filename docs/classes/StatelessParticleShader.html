@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Kiwi.Plugins.ParticlesGL - ParticlesGL</title>
+    <title>StatelessParticleShader - ParticlesGL</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -98,7 +98,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Kiwi.Plugins.ParticlesGL Class</h1>
+                        <h1>StatelessParticleShader Class</h1>
 <div class="box meta">
     
 
@@ -106,13 +106,13 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_particles-gl.js.html#l1"><code>src&#x2F;particles-gl.js:1</code></a>
+            Defined in: <a href="../files/src_shader.js.html#l7"><code>src&#x2F;shader.js:7</code></a>
         </div>
     
 
     
         
-            Module: <a href="../modules/Plugins.html">Plugins</a><br>
+            Module: <a href="../modules/Shaders.html">Shaders</a><br>
             Parent Module: <a href="../modules/Kiwi.html">Kiwi</a>
         
     
@@ -123,16 +123,77 @@
 
 
 <div class="box intro">
-    <p>The particles plugin creates a new gameobject &quot;StatelessParticles&quot;.</p>
+    <p>Shader for stateless particles</p>
 
 </div>
 
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+        <div id="method_StatelessParticleShader" class="method item public">
+    <h3 class="name"><code>StatelessParticleShader</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_shader.js.html#l7"><code>src&#x2F;shader.js:7</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+    </div>
 
 
 <div id="classdocs" class="tabview">
     <ul class="api-class-tabs">
         <li class="api-class-tab index"><a href="#index">Index</a></li>
 
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
         
         
             <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
@@ -146,6 +207,21 @@
             <h2 class="off-left">Item Index</h2>
 
             
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method public">
+                                <a href="#method_init">init</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
 
             
                 <div class="index-section properties">
@@ -153,15 +229,29 @@
 
                     <ul class="index-list properties">
                         
-                            <li class="index-item property public">
-                                <a href="#property_name">name</a>
+                            <li class="index-item property">
+                                <a href="#property_attributes">attributes</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item property public">
-                                <a href="#property_version">version</a>
+                                <a href="#property_texture2DFrag">texture2DFrag</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property public">
+                                <a href="#property_texture2DVert">texture2DVert</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property public">
+                                <a href="#property_uniforms">uniforms</a>
 
                                 
                                 
@@ -177,20 +267,37 @@
         </div>
 
         
-
-        
-            <div id="properties" class="api-class-tabpanel">
-                <h2 class="off-left">Properties</h2>
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="property_name" class="property item public">
-    <h3 class="name"><code>name</code></h3>
-    <span class="type">String</span>
+                    <div id="method_init" class="method item public">
+    <h3 class="name"><code>init</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>gl</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
 
     
 
     
         <span class="flag public">public</span>
+    
+
+    
+
     
 
     
@@ -208,9 +315,10 @@
             
         
         
-        <a href="../files/src_particles-gl.js.html#l11"><code>src&#x2F;particles-gl.js:11</code></a>
+        <a href="../files/src_shader.js.html#l29"><code>src&#x2F;shader.js:29</code></a>
         
         </p>
+
 
         
 
@@ -218,12 +326,33 @@
     </div>
 
     <div class="description">
-        <p>The name of this plugin.</p>
+        <p>Initialises the shader wrapper with references to attributes and uniforms.</p>
 
     </div>
 
     
-        <p><strong>Default:</strong> &quot;ParticlesGL&quot;</p>
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">gl</code>
+                        <span class="type">WebGLRenderingContext</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
     
 
     
@@ -232,9 +361,62 @@
 </div>
 
                 
-                    <div id="property_version" class="property item public">
-    <h3 class="name"><code>version</code></h3>
-    <span class="type">String</span>
+            </div>
+        
+
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property_attributes" class="property item">
+    <h3 class="name"><code>attributes</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_shader.js.html#l16"><code>src&#x2F;shader.js:16</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Records the attribute locations of this shader.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_texture2DFrag" class="property item public">
+    <h3 class="name"><code>texture2DFrag</code></h3>
+    <span class="type">Array</span>
 
     
 
@@ -257,7 +439,7 @@
             
         
         
-        <a href="../files/src_particles-gl.js.html#l20"><code>src&#x2F;particles-gl.js:20</code></a>
+        <a href="../files/src_shader.js.html#l111"><code>src&#x2F;shader.js:111</code></a>
         
         </p>
 
@@ -267,7 +449,103 @@
     </div>
 
     <div class="description">
-        <p>The version of this plugin.</p>
+        <p>Fragment shader source</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_texture2DVert" class="property item public">
+    <h3 class="name"><code>texture2DVert</code></h3>
+    <span class="type">Array</span>
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_shader.js.html#l133"><code>src&#x2F;shader.js:133</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Vertex shader source</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_uniforms" class="property item public">
+    <h3 class="name"><code>uniforms</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_shader.js.html#l47"><code>src&#x2F;shader.js:47</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>List of uniforms and types</p>
 
     </div>
 

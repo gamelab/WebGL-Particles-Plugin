@@ -43,15 +43,25 @@
             
                 <li><a href="../classes/Kiwi.Plugins.ParticlesGL.html">Kiwi.Plugins.ParticlesGL</a></li>
             
+                <li><a href="../classes/StatelessParticleRenderer.html">StatelessParticleRenderer</a></li>
+            
                 <li><a href="../classes/StatelessParticles.html">StatelessParticles</a></li>
+            
+                <li><a href="../classes/StatelessParticleShader.html">StatelessParticleShader</a></li>
             
             </ul>
 
             <ul id="api-modules" class="apis modules">
             
+                <li><a href="../modules/GameObjects.html">GameObjects</a></li>
+            
                 <li><a href="../modules/Kiwi.html">Kiwi</a></li>
             
                 <li><a href="../modules/Plugins.html">Plugins</a></li>
+            
+                <li><a href="../modules/Renderers.html">Renderers</a></li>
+            
+                <li><a href="../modules/Shaders.html">Shaders</a></li>
             
             </ul>
         </div>
@@ -92,225 +102,260 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-
-Kiwi.Shaders.StatelessParticleShader = function (){
-    
-    Kiwi.Shaders.ShaderPair.call(this);
-   
-};
-Kiwi.extend(Kiwi.Shaders.StatelessParticleShader,Kiwi.Shaders.ShaderPair);
-
-
-Kiwi.Shaders.StatelessParticleShader.prototype.init = function(gl) {
-    Kiwi.Shaders.ShaderPair.prototype.init.call(this,gl);
-    //attributes
-    this.attributes.aXYVxVy = gl.getAttribLocation(this.shaderProgram, &quot;aXYVxVy&quot;);
-    this.attributes.aBirthLifespanAngle = gl.getAttribLocation(this.shaderProgram, &quot;aBirthLifespanAngle&quot;);
-    this.attributes.aCellXYWH = gl.getAttribLocation(this.shaderProgram, &quot;aCellXYWH&quot;);
-    this.initUniforms(gl);
-}
-
-
-
-Kiwi.Shaders.StatelessParticleShader.prototype.attributes = {
-    aXYVxVy: null,
-    aBirthLifespanAngle: null,
-    aCellXYWH: null
-};
-
-                 
-Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
-   	    uCamMatrix: {
-            type: &quot;mat3&quot;
-        },
-        uTextureSize: {
-        	type: &quot;2fv&quot;
-        },
-        uResolution: {
-            type: &quot;2fv&quot;
-        },
-        uSampler: {
-            type: &quot;1i&quot;,
-        },
-        uT: {
-            type: &quot;1f&quot;
-        },
-        uPauseTime: {
-            type: &quot;1f&quot;
-        },
-        uGravity: {
-            type: &quot;2fv&quot;
-        },
-        uPointSizeRange: {
-            type: &quot;2fv&quot;
-        },
-        uColEnv0: {
-            type: &quot;3fv&quot;
-        },
-        uColEnv1: {
-            type: &quot;3fv&quot;
-        },
-        uColEnv2: {
-            type: &quot;3fv&quot;
-        },
-        uColEnv3: {
-            type: &quot;3fv&quot;
-        },
-        uColEnvKeyframes: {
-            type: &quot;2fv&quot;
-        },
-        uAlpha: {
-            type: &quot;1f&quot;
-        },
-        uAlphaGradient: {
-            type: &quot;4fv&quot;
-        },
-        uAlphaStops: {
-            type: &quot;2fv&quot;
-        },
-        uLoop: {
-            type: &quot;1i&quot;
-        },
-        uWorldAngle: {
-            type: &quot;1f&quot;
-        }  
-    }
+/**
+* @module Kiwi
+* @submodule Shaders
+* @main StatelessParticleShader
+*/
 
 /**
- *
- * @property texture2DFrag
- * @type Array
- * @public
- */
+* Shader for stateless particles
+* @class StatelessParticleShader
+* @constructor
+* @public
+*/
+Kiwi.Shaders.StatelessParticleShader = function(){
+	Kiwi.Shaders.ShaderPair.call( this );
+
+	/**
+	* Records the attribute locations of this shader.
+	* @property attributes
+	* @type object
+	*/
+	this.attributes = {
+		aXYVxVy: null,
+		aBirthLifespanAngle: null,
+		aCellXYWH: null
+	};
+};
+Kiwi.extend( Kiwi.Shaders.StatelessParticleShader, Kiwi.Shaders.ShaderPair );
+
+/**
+* Initialises the shader wrapper with references to attributes and uniforms.
+* @method init
+* @param gl {WebGLRenderingContext}
+* @public
+*/
+Kiwi.Shaders.StatelessParticleShader.prototype.init = function( gl ) {
+	Kiwi.Shaders.ShaderPair.prototype.init.call(this,gl);
+
+	this.attributes.aXYVxVy = gl.getAttribLocation(
+		this.shaderProgram, &quot;aXYVxVy&quot; );
+	this.attributes.aBirthLifespanAngle = gl.getAttribLocation(
+		this.shaderProgram, &quot;aBirthLifespanAngle&quot; );
+	this.attributes.aCellXYWH = gl.getAttribLocation(
+		this.shaderProgram, &quot;aCellXYWH&quot; );
+	this.initUniforms(gl);
+};
+
+/**
+* List of uniforms and types
+* @property uniforms
+* @final
+* @type object
+* @public
+*/
+Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
+	uCamMatrix: {
+		type: &quot;mat3&quot;
+	},
+	uTextureSize: {
+		type: &quot;2fv&quot;
+	},
+	uResolution: {
+		type: &quot;2fv&quot;
+	},
+	uSampler: {
+		type: &quot;1i&quot;,
+	},
+	uT: {
+		type: &quot;1f&quot;
+	},
+	uPauseTime: {
+		type: &quot;1f&quot;
+	},
+	uGravity: {
+		type: &quot;2fv&quot;
+	},
+	uPointSizeRange: {
+		type: &quot;2fv&quot;
+	},
+	uColEnv0: {
+		type: &quot;3fv&quot;
+	},
+	uColEnv1: {
+		type: &quot;3fv&quot;
+	},
+	uColEnv2: {
+		type: &quot;3fv&quot;
+	},
+	uColEnv3: {
+		type: &quot;3fv&quot;
+	},
+	uColEnvKeyframes: {
+		type: &quot;2fv&quot;
+	},
+	uAlpha: {
+		type: &quot;1f&quot;
+	},
+	uAlphaGradient: {
+		type: &quot;4fv&quot;
+	},
+	uAlphaStops: {
+		type: &quot;2fv&quot;
+	},
+	uLoop: {
+		type: &quot;1i&quot;
+	},
+	uWorldAngle: {
+		type: &quot;1f&quot;
+	}
+};
+
+/**
+* Fragment shader source
+* @property texture2DFrag
+* @type Array
+* @public
+*/
 Kiwi.Shaders.StatelessParticleShader.prototype.fragSource = [
-    &quot;precision mediump float;&quot;,
-    &quot;uniform sampler2D uSampler;&quot;,
-    &quot;varying vec4 vCol;&quot;,
-    &quot;varying mat4 vRotationMatrix;&quot;,
-    &quot;varying vec4 vCell;&quot;,
-    &quot;void main(void) {&quot;,
-       &quot;vec2 cellCoord = vCell.xy + vCell.zw * gl_PointCoord;&quot;,
-       &quot;vec2 texCoord = (vRotationMatrix * vec4(cellCoord, 0, 1)).xy;&quot;,
-       &quot;vec4 sampleCol = texture2D(uSampler, texCoord);&quot;,
-       &quot;gl_FragColor.rgb = vCol.rgb * sampleCol.rgb;&quot;,
-       &quot;gl_FragColor.a = sampleCol.a * vCol.a;&quot;,
-    &quot;}&quot;
+	&quot;precision mediump float;&quot;,
+	&quot;uniform sampler2D uSampler;&quot;,
+	&quot;varying vec4 vCol;&quot;,
+	&quot;varying mat4 vRotationMatrix;&quot;,
+	&quot;varying vec4 vCell;&quot;,
+	&quot;void main( void ) {&quot;,
+	&quot;	vec2 cellCoord = vCell.xy + vCell.zw * gl_PointCoord;&quot;,
+	&quot;	vec2 texCoord = ( vRotationMatrix * vec4( cellCoord, 0, 1 ) ).xy;&quot;,
+	&quot;	vec4 sampleCol = texture2D( uSampler, texCoord );&quot;,
+	&quot;	gl_FragColor.rgb = vCol.rgb * sampleCol.rgb;&quot;,
+	&quot;	gl_FragColor.a = sampleCol.a * vCol.a;&quot;,
+	&quot;}&quot;
 ];
 
 
 /**
- *
- * @property texture2DVert
- * @type Array
- * @public
- */
-
+* Vertex shader source
+* @property texture2DVert
+* @type Array
+* @public
+*/
 Kiwi.Shaders.StatelessParticleShader.prototype.vertSource = [
-    &quot;precision mediump float;&quot;,
-    &quot;attribute vec4 aXYVxVy;&quot;,
-    &quot;attribute vec4 aBirthLifespanAngle;&quot;,
-  	&quot;attribute vec4 aCellXYWH;&quot;,
+	&quot;precision mediump float;&quot;,
+	&quot;attribute vec4 aXYVxVy;&quot;,
+	&quot;attribute vec4 aBirthLifespanAngle;&quot;,
+	&quot;attribute vec4 aCellXYWH;&quot;,
 
-    &quot;uniform mat3 uCamMatrix;&quot;,
-    &quot;uniform vec2 uTextureSize;&quot;,
-    &quot;uniform vec2 uResolution;&quot;,
-    &quot;uniform float uT;&quot;,
-    &quot;uniform float uPauseTime;&quot;,
-    &quot;uniform vec2 uGravity;&quot;,
-    
-    &quot;uniform vec2 uPointSizeRange;&quot;,
-    &quot;uniform vec3 uColEnv0;&quot;,
-    &quot;uniform vec3 uColEnv1;&quot;,
-    &quot;uniform vec3 uColEnv2;&quot;,
-    &quot;uniform vec3 uColEnv3;&quot;,
-    &quot;uniform vec2 uColEnvKeyframes;&quot;,
-    &quot;uniform vec4 uAlphaGradient;&quot;,
-    &quot;uniform vec2 uAlphaStops;&quot;,
-    &quot;uniform float uWorldAngle;&quot;,
-    
-    &quot;uniform float uAlpha;&quot;,
-    &quot;uniform bool uLoop;&quot;,
+	&quot;uniform mat3 uCamMatrix;&quot;,
+	&quot;uniform vec2 uTextureSize;&quot;,
+	&quot;uniform vec2 uResolution;&quot;,
+	&quot;uniform float uT;&quot;,
+	&quot;uniform float uPauseTime;&quot;,
+	&quot;uniform vec2 uGravity;&quot;,
+	
+	&quot;uniform vec2 uPointSizeRange;&quot;,
+	&quot;uniform vec3 uColEnv0;&quot;,
+	&quot;uniform vec3 uColEnv1;&quot;,
+	&quot;uniform vec3 uColEnv2;&quot;,
+	&quot;uniform vec3 uColEnv3;&quot;,
+	&quot;uniform vec2 uColEnvKeyframes;&quot;,
+	&quot;uniform vec4 uAlphaGradient;&quot;,
+	&quot;uniform vec2 uAlphaStops;&quot;,
+	&quot;uniform float uWorldAngle;&quot;,
+	
+	&quot;uniform float uAlpha;&quot;,
+	&quot;uniform bool uLoop;&quot;,
 
-    &quot;varying vec4 vCol;&quot;,
-    &quot;varying mat4 vRotationMatrix;&quot;,
-    &quot;varying vec4 vCell;&quot;,
+	&quot;varying vec4 vCol;&quot;,
+	&quot;varying mat4 vRotationMatrix;&quot;,
+	&quot;varying vec4 vCell;&quot;,
 
-    &quot;vec3 deadPos = vec3(-0.02, -0.02, 0.01);&quot;,
+	&quot;vec3 deadPos = vec3( -0.02, -0.02, 0.01 );&quot;,
 
-   &quot;void main(void) {&quot;,
-   
-  		
-        &quot;float lerp;&quot;,
-        &quot;float birthTime = aBirthLifespanAngle.x;&quot;,
-        &quot;float lifespan = aBirthLifespanAngle.y;&quot;,
-        &quot;float angularVelocity = aBirthLifespanAngle.z;&quot;,
-        &quot;float angleStart = aBirthLifespanAngle.w;&quot;,
-        &quot;float deathTime = birthTime + lifespan;&quot;,
-        &quot;float age = mod(uT-birthTime,lifespan);&quot;,
-        &quot;float pauseTimeAge = mod(uPauseTime-birthTime,lifespan);&quot;,
+	&quot;void main(void) {&quot;,
+	&quot;	float lerp;&quot;,
+	&quot;	float birthTime = aBirthLifespanAngle.x;&quot;,
+	&quot;	float lifespan = aBirthLifespanAngle.y;&quot;,
+	&quot;	float angularVelocity = aBirthLifespanAngle.z;&quot;,
+	&quot;	float angleStart = aBirthLifespanAngle.w;&quot;,
+	&quot;	float deathTime = birthTime + lifespan;&quot;,
+	&quot;	float age = mod(uT-birthTime,lifespan);&quot;,
+	&quot;	float pauseTimeAge = mod(uPauseTime-birthTime,lifespan);&quot;,
 
-        &quot;float loopBirthTime = (uT - birthTime) / lifespan;&quot;,
-        &quot;if (uT &lt; birthTime || (uT &gt;= deathTime &amp;&amp; !uLoop ) || (uT &gt;= uPauseTime - pauseTimeAge + lifespan)) {&quot;,
-            &quot;gl_Position = vec4(deadPos.x,deadPos.y,0,0);&quot;,
-            &quot;gl_PointSize = deadPos.z;&quot;,
-        &quot;} else {&quot;, 
-            &quot;lerp =  age / lifespan;&quot;,
-            &quot;gl_PointSize = mix(uPointSizeRange.x,uPointSizeRange.y,lerp);&quot;,
-            &quot;vec2 pos = aXYVxVy.xy; &quot;,
-            &quot;vec2 vel = aXYVxVy.zw;&quot;,
-            &quot;pos += age * vel;&quot;,
-            &quot;pos += 0.5 * uGravity * age * age;&quot;,
-            &quot;pos = (uCamMatrix * vec3(pos,1.0)).xy;&quot;,
-            &quot;pos = (pos / uResolution) * 2.0 - 1.0;&quot;,
-            &quot;gl_Position = vec4(pos * vec2(1, -1), 0, 1);&quot;,
-           
-            &quot;float colLerp = 1.0;&quot;,
-            &quot;if (lerp &lt;= uColEnvKeyframes.x) {&quot;,
-                &quot;float cLerp = lerp / uColEnvKeyframes.x; &quot;,
-                &quot;vCol = vec4(mix(uColEnv0,uColEnv1,cLerp),1.0);&quot;,
-            &quot;} else if (lerp &gt; uColEnvKeyframes.x &amp;&amp; lerp &lt;= uColEnvKeyframes.y) {&quot;,
-                &quot;float cLerp = (lerp - uColEnvKeyframes.x) / (uColEnvKeyframes.y - uColEnvKeyframes.x); &quot;,
-                &quot;vCol = vec4(mix(uColEnv1,uColEnv2,cLerp),1.0);&quot;,
-            &quot;} else {&quot;,
-                &quot;float cLerp = (lerp - uColEnvKeyframes.y) / (1.0 - uColEnvKeyframes.y); &quot;,
-                &quot;vCol = vec4(mix(uColEnv2,uColEnv3,cLerp),1.0);&quot;,
-             &quot;}&quot;,
-	        &quot;if (lerp &lt;= uAlphaStops.x) {&quot;,
-	           &quot;vCol.a = mix(uAlphaGradient.x,uAlphaGradient.y,lerp/uAlphaStops.x);&quot;, 
-	        &quot;} else if (lerp &gt;uAlphaStops.x &amp;&amp; lerp &lt;= uAlphaStops.y) {&quot;,
-	            &quot;vCol.a = mix(uAlphaGradient.y,uAlphaGradient.z,(lerp - uAlphaStops.x) / (uAlphaStops.y - uAlphaStops.x));&quot;,
-	        &quot;} else {&quot;,
-	            &quot;vCol.a = mix(uAlphaGradient.z,uAlphaGradient.w,(lerp - uAlphaStops.y) / (1.0 - uAlphaStops.y));&quot;,
-	        &quot;}&quot;,   
+	&quot;	float loopBirthTime = (uT - birthTime) / lifespan;&quot;,
+	&quot;	if ( uT &lt; birthTime || (uT &gt;= deathTime &amp;&amp; !uLoop ) ||&quot;,
+	&quot;			(uT &gt;= uPauseTime - pauseTimeAge + lifespan)) {&quot;,
+	&quot;		gl_Position = vec4(deadPos.x,deadPos.y,0,0);&quot;,
+	&quot;		gl_PointSize = deadPos.z;&quot;,
+	&quot;	} else {&quot;,
+	&quot;		lerp =  age / lifespan;&quot;,
+	&quot;		gl_PointSize = mix( uPointSizeRange.x, uPointSizeRange.y, lerp );&quot;,
+	&quot;		vec2 pos = aXYVxVy.xy;&quot;,
+	&quot;		vec2 vel = aXYVxVy.zw;&quot;,
+	&quot;		pos += age * vel;&quot;,
+	&quot;		pos += 0.5 * uGravity * age * age;&quot;,
+	&quot;		pos = ( uCamMatrix * vec3( pos, 1.0 ) ).xy;&quot;,
+	&quot;		pos = ( pos / uResolution ) * 2.0 - 1.0;&quot;,
+	&quot;		gl_Position = vec4( pos * vec2( 1, -1 ), 0, 1 );&quot;,
 
-	        &quot;vCol.a *= uAlpha;&quot;,
-            &quot;float ang = age * angularVelocity + angleStart + uWorldAngle;&quot;,
-	        &quot;vec2 ratio = vec2(1.0 / uTextureSize.x,1.0 / uTextureSize.y);&quot;,
-	        &quot;vec4 normCell = aCellXYWH;&quot;,
-	        &quot;normCell.xz *= ratio;&quot;,
-	        &quot;normCell.yw *= ratio;&quot;,
-	        &quot;vec2 cellCenter = vec2(normCell.x + normCell.z / 2.0,normCell.y + normCell.w / 2.0);&quot;,
-	        &quot;float c = cos(ang);&quot;,
-	        &quot;float s = sin(ang);&quot;,
-	        &quot;mat4 transInMat = mat4(1.0, 0.0, 0.0, 0.0,&quot;,
-	                   &quot;0.0, 1.0, 0.0, 0.0,&quot;,
-	                   &quot;0.0, 0.0, 1.0, 0.0,&quot;,
-	                   &quot;cellCenter.x,cellCenter.y, 0.0, 1.0);&quot;,
-	        &quot;mat4 rotMat = mat4(c, -s, 0.0, 0.0,&quot;,
-	               &quot;s, c, 0.0, 0.0,&quot;,
-	               &quot;0.0, 0.0, 1.0, 0.0,&quot;,
-	               &quot;0.0, 0.0, 0.0, 1.0);&quot;,
-	        &quot;mat4 resultMat = transInMat * rotMat;&quot;,
-	        &quot;resultMat[3][0] = resultMat[3][0] + resultMat[0][0] * -cellCenter.x + resultMat[1][0] * -cellCenter.y;&quot;,
-	        &quot;resultMat[3][1] = resultMat[3][1] + resultMat[0][1] * -cellCenter.x + resultMat[1][1] * -cellCenter.y;&quot;,
-	        &quot;resultMat[3][2] = resultMat[3][2] + resultMat[0][2] * -cellCenter.x + resultMat[1][2] * -cellCenter.y;&quot;,
-	     
-	        &quot;vRotationMatrix = resultMat;&quot;,
-	        &quot;vCell = normCell;&quot;,
-        &quot;} &quot;,
-        //&quot;vCol = vec4(0.0,1.0,0.0,1.0);&quot;,
-    &quot;}&quot;
+	&quot;		float colLerp = 1.0;&quot;,
+	&quot;		if ( lerp &lt;= uColEnvKeyframes.x ) {&quot;,
+	&quot;			float cLerp = lerp / uColEnvKeyframes.x;&quot;,
+	&quot;			vCol = vec4( mix( uColEnv0, uColEnv1, cLerp ), 1.0 );&quot;,
+	&quot;		} else if ( lerp &gt; uColEnvKeyframes.x &amp;&amp;&quot;,
+	&quot;				lerp &lt;= uColEnvKeyframes.y ) {&quot;,
+	&quot;			float cLerp = ( lerp - uColEnvKeyframes.x ) /&quot;,
+	&quot;				( uColEnvKeyframes.y - uColEnvKeyframes.x );&quot;,
+	&quot;			vCol = vec4( mix( uColEnv1, uColEnv2, cLerp ), 1.0 );&quot;,
+	&quot;		} else {&quot;,
+	&quot;			float cLerp = ( lerp - uColEnvKeyframes.y ) /&quot;,
+	&quot;				( 1.0 - uColEnvKeyframes.y );&quot;,
+	&quot;			vCol = vec4( mix( uColEnv2, uColEnv3, cLerp ), 1.0 );&quot;,
+	&quot;		}&quot;,
+	&quot;		if (lerp &lt;= uAlphaStops.x) {&quot;,
+	&quot;			vCol.a = mix( uAlphaGradient.x, uAlphaGradient.y,&quot;,
+	&quot;				lerp / uAlphaStops.x );&quot;,
+	&quot;		} else if ( lerp &gt; uAlphaStops.x &amp;&amp; lerp &lt;= uAlphaStops.y ) {&quot;,
+	&quot;			vCol.a = mix( uAlphaGradient.y, uAlphaGradient.z,&quot;,
+	&quot;				( lerp - uAlphaStops.x ) /&quot;,
+	&quot;				( uAlphaStops.y - uAlphaStops.x ) );&quot;,
+	&quot;		} else {&quot;,
+	&quot;			vCol.a = mix( uAlphaGradient.z, uAlphaGradient.w,&quot;,
+	&quot;				( lerp - uAlphaStops.y ) / ( 1.0 - uAlphaStops.y ) );&quot;,
+	&quot;		}&quot;,
 
+	&quot;		vCol.a *= uAlpha;&quot;,
+	&quot;		float ang = age * angularVelocity + angleStart + uWorldAngle;&quot;,
+	&quot;		vec2 ratio = vec2( 1.0 / uTextureSize.x, 1.0 / uTextureSize.y );&quot;,
+	&quot;		vec4 normCell = aCellXYWH;&quot;,
+	&quot;		normCell.xz *= ratio;&quot;,
+	&quot;		normCell.yw *= ratio;&quot;,
+	&quot;		vec2 cellCenter = vec2( normCell.x + normCell.z / 2.0,&quot;,
+	&quot;			normCell.y + normCell.w / 2.0 );&quot;,
+	&quot;		float c = cos( ang );&quot;,
+	&quot;		float s = sin( ang );&quot;,
+	&quot;		mat4 transInMat = mat4(&quot;,
+	&quot;			1.0, 0.0, 0.0, 0.0,&quot;,
+	&quot;			0.0, 1.0, 0.0, 0.0,&quot;,
+	&quot;			0.0, 0.0, 1.0, 0.0,&quot;,
+	&quot;			cellCenter.x, cellCenter.y, 0.0, 1.0 );&quot;,
+	&quot;		mat4 rotMat = mat4(&quot;,
+	&quot;			c, -s, 0.0, 0.0,&quot;,
+	&quot;			s, c, 0.0, 0.0,&quot;,
+	&quot;			0.0, 0.0, 1.0, 0.0,&quot;,
+	&quot;			0.0, 0.0, 0.0, 1.0 );&quot;,
+	&quot;		mat4 resultMat = transInMat * rotMat;&quot;,
+	&quot;		resultMat[ 3 ][ 0 ] = resultMat[ 3 ][ 0 ] + resultMat[ 0 ][ 0 ] *&quot;,
+	&quot;			-cellCenter.x + resultMat[ 1 ][ 0 ] * -cellCenter.y;&quot;,
+	&quot;		resultMat[ 3 ][ 1 ] = resultMat[ 3 ][ 1 ] + resultMat[ 0 ][ 1 ] *&quot;,
+	&quot;			-cellCenter.x + resultMat[ 1 ][ 1 ] * -cellCenter.y;&quot;,
+	&quot;		resultMat[ 3 ][ 2 ] = resultMat[ 3 ][ 2 ] + resultMat[ 0 ][ 2 ] *&quot;,
+	&quot;			-cellCenter.x + resultMat[ 1 ][ 2 ] * -cellCenter.y;&quot;,
+
+	&quot;		vRotationMatrix = resultMat;&quot;,
+	&quot;		vCell = normCell;&quot;,
+	&quot;	} &quot;,
+	&quot;}&quot;
 ];
 
     </pre>

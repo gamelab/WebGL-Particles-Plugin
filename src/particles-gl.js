@@ -1,5 +1,5 @@
 /**
-* The particles plugin creates a new gameobject "StatelessParticles" to the Kiwi.GameObject object 
+* The particles plugin creates a new gameobject "StatelessParticles".
 *
 * @module Kiwi
 * @submodule Plugins
@@ -7,30 +7,27 @@
 * @class ParticlesGL
 */
 Kiwi.Plugins.ParticlesGL = {
-  
-  /**
-  * The name of this plugin.
-  * @property name
-  * @type String
-  * @default 'MyPlugin'
-  * @public
-  */
-  name:'ParticlesGL',
 
-  /**
-  * The version of this plugin.
-  * @property version
-  * @type String
-  * @public
-  */
-  version:'1.1.1',
+	/**
+	* The name of this plugin.
+	* @property name
+	* @type String
+	* @default "ParticlesGL"
+	* @public
+	*/
+	name:"ParticlesGL",
 
-  minimumKiwiVersion:'1.1.1',
+	/**
+	* The version of this plugin.
+	* @property version
+	* @type String
+	* @public
+	*/
+	version:"1.1.1",
 
-  pluginDependencies: [
-    
-  ]
+	minimumKiwiVersion:"1.1.1",
 
+	pluginDependencies: []
 };
 
 /**
@@ -38,8 +35,3 @@ Kiwi.Plugins.ParticlesGL = {
 * 
 */
 Kiwi.PluginManager.register(Kiwi.Plugins.ParticlesGL);
-
-
- 
-
- 
