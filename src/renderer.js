@@ -30,7 +30,6 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.RENDERER_ID = "StatelessParti
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.setConfig = function (config) {
     this._config = config;
-    this._setConfigUniforms(this.gl);
     // Set desired blend mode
     if(config.additive)
         this.blendMode.setMode("ADDITIVE");
@@ -49,9 +48,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.resetPauseTime = function () 
 
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.enable = function (gl, params) {
-    
     this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
-    var cfg = this._config;
     this._setStandardUniforms(gl,params.stageResolution,params.camMatrix)
     this._setConfigUniforms(gl);
 }
@@ -64,6 +61,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setStandardUniforms = functi
     //Standard uniforms
     gl.uniform2fv(this.shaderPair.uniforms.uResolution.location, stageResolution);
     gl.uniformMatrix3fv(this.shaderPair.uniforms.uCamMatrix.location, false, camMatrix);
+    gl.uniform1f(this.shaderPair.uniforms.uPauseTime.location, this.pauseTime);
    
     this.camMatrix = new Float32Array(camMatrix.buffer);
 }
@@ -111,7 +109,6 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.pauseTime = 999999999;
 Kiwi.Renderers.StatelessParticleRenderer.prototype.pause = function (gl) {
     gl = gl || this.gl;
     this.pauseTime = this.time / 1000;
-    gl.uniform1f(this.shaderPair.uniforms.uPauseTime.location, this.pauseTime);
 }
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.setWorldAngle = function(angle) {

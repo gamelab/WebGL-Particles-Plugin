@@ -75,6 +75,8 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             this.transform.rotPointY = this.height / 2;
             this.box = this.components.add(new Kiwi.Components.Box(this, x, y, this.width, this.height));
 
+            // Hide object until it is fully initialised by startEmitting
+            this.visible = false;
         },
 
 
@@ -373,16 +375,17 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         /**
         * Sets the configuration object and optionally regenerates particles and sets runtime properties.
         * @method setConfig
-        * @param {object} config : the new configuration object
-        * @param {boolean} doGenerate : immediately regenerate particles
-        * @param {boolean} doUniforms : apply runtime properties
+        * @param config {object} New configuration object
+        * @param doGenerate {boolean} Immediately regenerate particles
+        * @param doUniforms {boolean} Apply runtime properties.
+        *	Deprecated: the shader will apply runtime properties before rendering,
+        *	and this parameter only served to create errors.
         * @public
         */
         setConfig : function (config,doGenerate,doUniforms) {
             this.config = config;
             this.glRenderer.setConfig(config);
             if (doGenerate) this._generateParticles();
-            if (doUniforms) this.glRenderer._setConfigUniforms();
         },
 
         /**
@@ -731,9 +734,9 @@ Kiwi.Plugins.ParticlesGL = {
   * @type String
   * @public
   */
-  version:'1.1.0',
+  version:'1.1.1',
 
-  minimumKiwiVersion:'1.1.0',
+  minimumKiwiVersion:'1.1.1',
 
   pluginDependencies: [
     
@@ -784,7 +787,6 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.RENDERER_ID = "StatelessParti
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.setConfig = function (config) {
     this._config = config;
-    this._setConfigUniforms(this.gl);
     // Set desired blend mode
     if(config.additive)
         this.blendMode.setMode("ADDITIVE");
@@ -803,9 +805,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.resetPauseTime = function () 
 
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.enable = function (gl, params) {
-    
     this.shaderPair = this.shaderManager.requestShader(gl, "StatelessParticleShader");
-    var cfg = this._config;
     this._setStandardUniforms(gl,params.stageResolution,params.camMatrix)
     this._setConfigUniforms(gl);
 }
@@ -818,6 +818,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setStandardUniforms = functi
     //Standard uniforms
     gl.uniform2fv(this.shaderPair.uniforms.uResolution.location, stageResolution);
     gl.uniformMatrix3fv(this.shaderPair.uniforms.uCamMatrix.location, false, camMatrix);
+    gl.uniform1f(this.shaderPair.uniforms.uPauseTime.location, this.pauseTime);
    
     this.camMatrix = new Float32Array(camMatrix.buffer);
 }
@@ -865,7 +866,6 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.pauseTime = 999999999;
 Kiwi.Renderers.StatelessParticleRenderer.prototype.pause = function (gl) {
     gl = gl || this.gl;
     this.pauseTime = this.time / 1000;
-    gl.uniform1f(this.shaderPair.uniforms.uPauseTime.location, this.pauseTime);
 }
 
 Kiwi.Renderers.StatelessParticleRenderer.prototype.setWorldAngle = function(angle) {

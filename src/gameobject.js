@@ -75,6 +75,8 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
             this.transform.rotPointY = this.height / 2;
             this.box = this.components.add(new Kiwi.Components.Box(this, x, y, this.width, this.height));
 
+            // Hide object until it is fully initialised by startEmitting
+            this.visible = false;
         },
 
 
@@ -373,16 +375,17 @@ Kiwi.extend(Kiwi.GameObjects.StatelessParticles,Kiwi.Entity);
         /**
         * Sets the configuration object and optionally regenerates particles and sets runtime properties.
         * @method setConfig
-        * @param {object} config : the new configuration object
-        * @param {boolean} doGenerate : immediately regenerate particles
-        * @param {boolean} doUniforms : apply runtime properties
+        * @param config {object} New configuration object
+        * @param doGenerate {boolean} Immediately regenerate particles
+        * @param doUniforms {boolean} Apply runtime properties.
+        *	Deprecated: the shader will apply runtime properties before rendering,
+        *	and this parameter only served to create errors.
         * @public
         */
         setConfig : function (config,doGenerate,doUniforms) {
             this.config = config;
             this.glRenderer.setConfig(config);
             if (doGenerate) this._generateParticles();
-            if (doUniforms) this.glRenderer._setConfigUniforms();
         },
 
         /**

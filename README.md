@@ -3,7 +3,7 @@ WebGL Particles
 
 Name: ParticlesGL
 
-Version: 1.1.0
+Version: 1.1.1
 
 Type: GameObject Plugin
 
@@ -11,7 +11,7 @@ Author: Kiwi.js Team
 
 Website: www.kiwijs.org
 
-KiwiJS last version tested: 1.1.0
+KiwiJS last version tested: 1.1.1
 
 Tutorials for this plugin can be found on the Kiwi.JS website here:
 
@@ -19,21 +19,27 @@ Tutorials for this plugin can be found on the Kiwi.JS website here:
 
 
 ##Version Release Notes
+1.1.1
+* Updated examples to KiwiJS 1.1.1.
+* Added instructions to `examples/keyboard.html`.
+* Fixed non-lethal WebGL errors when particle object was created but did not start emitting immediately.
+* Fixed non-lethal WebGL errors when particle object started or stopped emitting while other entities were in the scene.
+
 1.1.0
- - Added angStartMin, angStartMax, and angVelocityConform config fields, allowing the particle to spawn with extant rotation.
- - Complied rotation to parent, state, and camera rotation for flawless particle-to-world continuity.
- - Much more forgiving config; specify only those parameters you wish to differ from default. Other parameters will be filled in automatically.
- - Default config tweaked to a more pleasing effect.
- - Deprecated config parameter "startAngle" because it didn't do anything and we have better alternatives.
- - Fully integrated particle renderer with new rendering pipeline in core Kiwi.js library version 1.1.0.
+* Added angStartMin, angStartMax, and angVelocityConform config fields, allowing the particle to spawn with extant rotation.
+* Complied rotation to parent, state, and camera rotation for flawless particle-to-world continuity.
+* Much more forgiving config; specify only those parameters you wish to differ from default. Other parameters will be filled in automatically.
+* Default config tweaked to a more pleasing effect.
+* Deprecated config parameter "startAngle" because it didn't do anything and we have better alternatives.
+* Fully integrated particle renderer with new rendering pipeline in core Kiwi.js library version 1.1.0.
 
 1.0.3
-  - removeOnComplete method functions properly.
-  - Compatibility fixes for Kiwi.js v1.0.1
-  - Dependency updated to Kiwi.js v1.0.1
+* removeOnComplete method functions properly.
+* Compatibility fixes for Kiwi.js v1.0.1
+* Dependency updated to Kiwi.js v1.0.1
 
 1.0.2
-  - Updated link to website tutorials.
+* Updated link to website tutorials.
 
 ##Description:
 The ParticlesGL plugin lets you create particle effects game objects in your Kiwi.js games.
