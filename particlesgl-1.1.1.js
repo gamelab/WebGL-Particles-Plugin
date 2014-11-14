@@ -825,7 +825,7 @@ Kiwi.PluginManager.register(Kiwi.Plugins.ParticlesGL);
 * Renderer used by the Kiwi.GameObjects.StatelessParticle
 * @class StatelessParticleRenderer
 * @constructor
-* @param gl {WebGLRenderingContext} 
+* @param gl {WebGLRenderingContext}
 * @param shaderManager {Kiwi.Shaders.ShaderManager}
 * @param params {object} Parameter object
 * @param [params.config] {object} Configuration definitions
@@ -846,8 +846,7 @@ Kiwi.Renderers.StatelessParticleRenderer =
 	this.vertexBuffer = new Kiwi.Renderers.GLArrayBuffer( gl, 12 );
 
 	this.shaderPair = this.shaderManager.requestShader(
-		gl, "StatelessParticleShader" );
-	this.resetTime();
+		gl, "StatelessParticleShader", false );
 
 	this.worldAngle = 0;
 	this.modelMatrix = new Float32Array( [
@@ -944,6 +943,8 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setStandardUniforms =
 		false, camMatrix );
 	gl.uniform1f( this.shaderPair.uniforms.uPauseTime.location,
 		this.pauseTime );
+	this.gl.uniform1f( this.shaderPair.uniforms.uWorldAngle.location,
+		this.worldAngle );
 
 	this.camMatrix = new Float32Array( camMatrix.buffer );
 };
@@ -1062,8 +1063,6 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.pause = function( gl ) {
 Kiwi.Renderers.StatelessParticleRenderer.prototype.setWorldAngle =
 		function( angle ) {
 	this.worldAngle = angle;
-	this.gl.uniform1f( this.shaderPair.uniforms.uWorldAngle.location,
-		this.worldAngle );
 };
 
 /**

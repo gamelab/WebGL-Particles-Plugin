@@ -22,8 +22,7 @@ Tutorials for this plugin can be found on the Kiwi.JS website here:
 1.1.1
 * Updated examples to KiwiJS 1.1.1.
 * Added instructions to `examples/keyboard.html`.
-* Fixed non-lethal WebGL errors when particle object was created but did not start emitting immediately.
-* Fixed non-lethal WebGL errors when particle object started or stopped emitting while other entities were in the scene.
+* Fixed WebGL errors when particle object is created.
 
 1.1.0
 * Added angStartMin, angStartMax, and angVelocityConform config fields, allowing the particle to spawn with extant rotation.
@@ -169,3 +168,5 @@ Runtime properties are set up to one time per frame for the entire emitter
  * "alphaGradient" (array of 4 numbers 0 < n < 1): the alpha value at each color stop in the color envelope
  * "alphaStops" ((array of 2 numbers 0 < n < 1): determines the second and third alpha stop. The first and fourth are locked to 0 and 1 respectively
  * "additive" (boolean) : Use additive blending for compositing particles when true.
+
+## Thanks for using the WebGL Particles Plugin!
