@@ -871,7 +871,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 44,
+            "line": 43,
             "description": "Identification string",
             "itemtype": "property",
             "name": "RENDERER_ID",
@@ -884,7 +884,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 54,
+            "line": 53,
             "description": "Configures the shader to use the current configuration of the game object.",
             "itemtype": "method",
             "name": "setConfig",
@@ -903,7 +903,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 72,
+            "line": 71,
             "description": "Resets the timer, so that the particles begin from the start.",
             "itemtype": "method",
             "name": "resetTime",
@@ -915,7 +915,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 81,
+            "line": 80,
             "description": "Resets the pause time. This will probably hold for some 4 decades,\nlonger than the physical lifetime of many devices.",
             "itemtype": "method",
             "name": "resetPauseTime",
@@ -927,7 +927,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 92,
+            "line": 91,
             "description": "Enables the renderer in the rendering pipeline.",
             "itemtype": "method",
             "name": "enable",
@@ -958,7 +958,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 108,
+            "line": 107,
             "description": "Configures basic uniforms in the shader.",
             "itemtype": "method",
             "name": "_setStandardUniforms",
@@ -987,7 +987,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 135,
+            "line": 134,
             "description": "Configures particle animation uniforms in the shader.",
             "_setconfiguniforms": "",
             "params": [
@@ -1005,7 +1005,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 175,
+            "line": 170,
             "description": "Configures texture uniforms on the shader.",
             "itemtype": "method",
             "name": "setTextureUniforms",
@@ -1029,7 +1029,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 189,
+            "line": 184,
             "description": "Disables the renderer to make way for subsequent batches.",
             "itemtype": "method",
             "name": "disable",
@@ -1048,7 +1048,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 201,
+            "line": 199,
             "description": "Clears the renderer to make way for new data.",
             "itemtype": "method",
             "name": "clear",
@@ -1060,7 +1060,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 210,
+            "line": 208,
             "description": "The current time, used to drive stateless animation",
             "itemtype": "property",
             "name": "time",
@@ -1074,7 +1074,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 219,
+            "line": 217,
             "description": "The pause time",
             "itemtype": "property",
             "name": "pauseTime",
@@ -1088,7 +1088,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 228,
+            "line": 226,
             "description": "Pauses the particle emission.",
             "itemtype": "method",
             "name": "pause",
@@ -1107,7 +1107,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 239,
+            "line": 237,
             "description": "Sets the \"world angle\"\nConfigures the shader to render correctly when the world has been rotated.",
             "itemtype": "method",
             "name": "setWorldAngle",
@@ -1126,7 +1126,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 251,
+            "line": 249,
             "description": "Renders the object using WebGL",
             "itemtype": "method",
             "name": "draw",
@@ -1145,7 +1145,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 286,
+            "line": 284,
             "description": "Updates the stage resolution so that the image renders at the correct size.",
             "itemtype": "method",
             "name": "updateStageResolution",
@@ -1169,7 +1169,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 298,
+            "line": 296,
             "description": "Updates the texture information.",
             "itemtype": "method",
             "name": "updateTextureSize",
@@ -1193,7 +1193,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 310,
+            "line": 308,
             "description": "Uploads the vertex buffer. Because these particles are stateless,\nthis can be done once and left alone, making particles very efficient.",
             "itemtype": "method",
             "name": "initBatch",
@@ -1210,7 +1210,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 322,
+            "line": 320,
             "description": "Removes external references, allowing this to be destroyed without\nmemory leaks.",
             "itemtype": "method",
             "name": "destroy",
@@ -1301,7 +1301,7 @@
     "warnings": [
         {
             "message": "unknown tag: _setconfiguniforms",
-            "line": " src/renderer.js:135"
+            "line": " src/renderer.js:134"
         },
         {
             "message": "Missing item type\nRegisters this plugin with the Global Kiwi Plugins Manager if it is avaiable.",
@@ -1309,7 +1309,7 @@
         },
         {
             "message": "Missing item type\nConfigures particle animation uniforms in the shader.",
-            "line": " src/renderer.js:135"
+            "line": " src/renderer.js:134"
         }
     ]
 }

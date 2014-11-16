@@ -139,12 +139,12 @@ Kiwi.extend( Kiwi.Shaders.StatelessParticleShader, Kiwi.Shaders.ShaderPair );
 Kiwi.Shaders.StatelessParticleShader.prototype.init = function( gl ) {
 	Kiwi.Shaders.ShaderPair.prototype.init.call(this,gl);
 
-	this.attributes.aXYVxVy = gl.getAttribLocation(
-		this.shaderProgram, &quot;aXYVxVy&quot; );
 	this.attributes.aBirthLifespanAngle = gl.getAttribLocation(
 		this.shaderProgram, &quot;aBirthLifespanAngle&quot; );
 	this.attributes.aCellXYWH = gl.getAttribLocation(
 		this.shaderProgram, &quot;aCellXYWH&quot; );
+	this.attributes.aXYVxVy = gl.getAttribLocation(
+		this.shaderProgram, &quot;aXYVxVy&quot; );
 	this.initUniforms(gl);
 };
 
@@ -156,29 +156,17 @@ Kiwi.Shaders.StatelessParticleShader.prototype.init = function( gl ) {
 * @public
 */
 Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
+	uAlpha: {
+		type: &quot;1f&quot;
+	},
+	uAlphaGradient: {
+		type: &quot;4fv&quot;
+	},
+	uAlphaStops: {
+		type: &quot;2fv&quot;
+	},
 	uCamMatrix: {
 		type: &quot;mat3&quot;
-	},
-	uTextureSize: {
-		type: &quot;2fv&quot;
-	},
-	uResolution: {
-		type: &quot;2fv&quot;
-	},
-	uSampler: {
-		type: &quot;1i&quot;,
-	},
-	uT: {
-		type: &quot;1f&quot;
-	},
-	uPauseTime: {
-		type: &quot;1f&quot;
-	},
-	uGravity: {
-		type: &quot;2fv&quot;
-	},
-	uPointSizeRange: {
-		type: &quot;2fv&quot;
 	},
 	uColEnv0: {
 		type: &quot;3fv&quot;
@@ -195,17 +183,29 @@ Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
 	uColEnvKeyframes: {
 		type: &quot;2fv&quot;
 	},
-	uAlpha: {
-		type: &quot;1f&quot;
-	},
-	uAlphaGradient: {
-		type: &quot;4fv&quot;
-	},
-	uAlphaStops: {
+	uGravity: {
 		type: &quot;2fv&quot;
 	},
 	uLoop: {
 		type: &quot;1i&quot;
+	},
+	uPauseTime: {
+		type: &quot;1f&quot;
+	},
+	uPointSizeRange: {
+		type: &quot;2fv&quot;
+	},
+	uResolution: {
+		type: &quot;2fv&quot;
+	},
+	uSampler: {
+		type: &quot;1i&quot;,
+	},
+	uT: {
+		type: &quot;1f&quot;
+	},
+	uTextureSize: {
+		type: &quot;2fv&quot;
 	},
 	uWorldAngle: {
 		type: &quot;1f&quot;

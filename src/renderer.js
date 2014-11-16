@@ -18,7 +18,6 @@ Kiwi.Renderers.StatelessParticleRenderer =
 		function( gl, shaderManager, params ) {
 	Kiwi.Renderers.Renderer.call( this, gl, shaderManager, false, params );
 
-	this._maxItems = 2000;
 	this.gl = gl;
 	this._config = params.config;
 	
@@ -35,7 +34,7 @@ Kiwi.Renderers.StatelessParticleRenderer =
 	this.modelMatrix = new Float32Array( [
 	1, 0, 0,
 	0, 1, 0,
-	0, 0, 1] );
+	0, 0, 1 ] );
 
 };
 Kiwi.extend( Kiwi.Renderers.StatelessParticleRenderer,
@@ -63,9 +62,9 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.setConfig =
 
 	// Set desired blend mode
 	if ( config.additive ) {
-		this.blendMode.setMode("ADDITIVE");
+		this.blendMode.setMode( "ADDITIVE" );
 	} else {
-		this.blendMode.setMode("NORMAL");
+		this.blendMode.setMode( "NORMAL" );
 	}
 };
 
@@ -120,12 +119,12 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setStandardUniforms =
 	gl.uniform1i( this.shaderPair.uniforms.uSampler.location, 0 );
 
 	// Standard uniforms
-	gl.uniform2fv( this.shaderPair.uniforms.uResolution.location,
-		stageResolution );
 	gl.uniformMatrix3fv( this.shaderPair.uniforms.uCamMatrix.location,
 		false, camMatrix );
 	gl.uniform1f( this.shaderPair.uniforms.uPauseTime.location,
 		this.pauseTime );
+	gl.uniform2fv( this.shaderPair.uniforms.uResolution.location,
+		stageResolution );
 	this.gl.uniform1f( this.shaderPair.uniforms.uWorldAngle.location,
 		this.worldAngle );
 
@@ -142,14 +141,13 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms =
 		function( gl ) {
 	var cfg = this._config;
 	gl = gl || this.gl;
+
 	//Particle uniforms
-	gl.uniform1f( this.shaderPair.uniforms.uT.location, 0 );
-	gl.uniform1f( this.shaderPair.uniforms.uPauseTime.location,
-		this.pauseTime );
-	gl.uniform2fv( this.shaderPair.uniforms.uGravity.location,
-		new Float32Array( [ cfg.gravityX, cfg.gravityY ] ) );
-	gl.uniform2fv( this.shaderPair.uniforms.uPointSizeRange.location,
-		new Float32Array( [ cfg.startSize, cfg.endSize ] ) );
+	gl.uniform1f( this.shaderPair.uniforms.uAlpha.location, cfg.alpha );
+	gl.uniform4fv( this.shaderPair.uniforms.uAlphaGradient.location,
+		new Float32Array( cfg.alphaGradient ) );
+	gl.uniform2fv( this.shaderPair.uniforms.uAlphaStops.location,
+		new Float32Array( cfg.alphaStops ) );
 	gl.uniform3fv( this.shaderPair.uniforms.uColEnv0.location,
 		new Float32Array( cfg.colEnv0 ) );
 	gl.uniform3fv( this.shaderPair.uniforms.uColEnv1.location,
@@ -160,16 +158,13 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms =
 		new Float32Array( cfg.colEnv3 ) );
 	gl.uniform2fv( this.shaderPair.uniforms.uColEnvKeyframes.location,
 		new Float32Array( cfg.colEnvKeyframes ) );
-
-	gl.uniform1f( this.shaderPair.uniforms.uAlpha.location, cfg.alpha);
-	gl.uniform4fv( this.shaderPair.uniforms.uAlphaGradient.location,
-		new Float32Array( cfg.alphaGradient ) );
-	gl.uniform2fv( this.shaderPair.uniforms.uAlphaStops.location,
-		new Float32Array( cfg.alphaStops ) );
-	gl.uniform1f( this.shaderPair.uniforms.uWorldAngle.location,
-		this.worldAngle );
+	gl.uniform2fv( this.shaderPair.uniforms.uGravity.location,
+		new Float32Array( [ cfg.gravityX, cfg.gravityY ] ) );
 	gl.uniform1i( this.shaderPair.uniforms.uLoop.location,
 		cfg.loop ? 1 : 0 );
+	gl.uniform2fv( this.shaderPair.uniforms.uPointSizeRange.location,
+		new Float32Array( [ cfg.startSize, cfg.endSize ] ) );
+	gl.uniform1f( this.shaderPair.uniforms.uT.location, 0 );
 };
 
 /**
@@ -193,9 +188,12 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.setTextureUniforms =
 * @public
 */
 Kiwi.Renderers.StatelessParticleRenderer.prototype.disable = function( gl ) {
-	gl.disableVertexAttribArray(this.shaderPair.attributes.aXYVxVy);
-	gl.disableVertexAttribArray(this.shaderPair.attributes.aBirthLifespanAngle);
-	gl.disableVertexAttribArray(this.shaderPair.attributes.aCellXYWH);
+	gl.disableVertexAttribArray(
+		this.shaderPair.attributes.aXYVxVy );
+	gl.disableVertexAttribArray(
+		this.shaderPair.attributes.aBirthLifespanAngle );
+	gl.disableVertexAttribArray(
+		this.shaderPair.attributes.aCellXYWH );
 };
 
 /**

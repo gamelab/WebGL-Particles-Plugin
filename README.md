@@ -23,6 +23,7 @@ Tutorials for this plugin can be found on the Kiwi.JS website here:
 * Updated examples to KiwiJS 1.1.1.
 * Added instructions to `examples/keyboard.html`.
 * Fixed WebGL errors when particle object is created.
+* Fixed default config.alpha being a string instead of a number. Most browsers caught this, but it caused particles to have 0 alpha in CocoonJS on iOS, and really the other browsers should have been more strict.
 
 1.1.0
 * Added angStartMin, angStartMax, and angVelocityConform config fields, allowing the particle to spawn with extant rotation.

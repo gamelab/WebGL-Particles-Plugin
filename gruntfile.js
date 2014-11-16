@@ -42,6 +42,18 @@ module.exports = function(grunt) {
 					base: "./"
 				}
 			}
+		},
+
+		jshint: {
+			src: "src/**/*.js",
+			options: {
+				camelcase: true,
+				curly: true,
+				eqeqeq: true,
+				eqnull: true,
+				newcap: true,
+				quotmark: "double"
+			}
 		}
  });
 
@@ -49,13 +61,16 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-yuidoc");
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-connect");
+	grunt.loadNpmTasks("grunt-contrib-jshint");
 	
 	grunt.registerTask("default", [
+		"jshint",
 		"uglify:build",
 		"concat:build"
 		]);
 	
 	grunt.registerTask("full", [
+		"jshint",
 		"concat:build",
 		"uglify:build",
 		"yuidoc:compile"

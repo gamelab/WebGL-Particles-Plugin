@@ -88,52 +88,21 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 		{
 			return {
 				"additive": false,
-				"numParts": 20,
-				"posOffsetX": 0,
-				"posOffsetY": 0,
-				"posRadius": 50,
-				"posRadialStart": 4.363323129985823,
-				"posRadialEnd": 5.061454830783556,
-				"posWidth": 100,
-				"posHeight": 100,
-				"posAngle": 0,
-				"posLength": 100,
-				"posConstrainRect": true,
-				"posConstrainRadial": true,
-				"posShape": "radial",
-				"maxVel": 100,
-				"minVel": 70,
-				"velConstrainRect": false,
-				"velConstrainRadial": false,
-				"velShape": "line",
-				"velOffsetX": 0,
-				"velOffsetY": 0,
-				"velAngMin": -2,
-				"velAngMax": +2,
-				"velRadius": 100,
-				"velRadialStart": 0,
-				"velRadialEnd": 6.283185307179586,
-				"velWidth": 100,
-				"velHeight": 100,
-				"velAngle": 0,
-				"velLength": 30,
+				"alpha": 1,
+				"alphaGradient": [
+					1,
+					1,
+					1,
+					0
+				],
+				"alphaStops": [
+					0.3,
+					0.7
+				],
 				"angStartMin": 0,
 				"angStartMax": 0,
 				"angVelocityConform": false,
-				"minStartTime": 1,
-				"maxStartTime": 6,
-				"minLifespan": 3,
-				"maxLifespan": 5,
-				"gravityX": 0,
-				"gravityY": -50,
-				"startSize": 4,
-				"endSize": 150,
-				"loop": true,
-				"colEnvKeyframes": [
-					0.5,
-					0.6
-				],
-				"alpha": "1",
+				"numParts": 20,
 				"colEnv0": [
 					1,
 					0,
@@ -154,16 +123,47 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 					0,
 					0
 				],
-				"alphaGradient": [
-					1,
-					1,
-					1,
-					0
+				"colEnvKeyframes": [
+					0.5,
+					0.6
 				],
-				"alphaStops": [
-					0.3,
-					0.7
-				]
+				"endSize": 150,
+				"gravityX": 0,
+				"gravityY": -50,
+				"loop": true,
+				"maxLifespan": 5,
+				"maxStartTime": 6,
+				"maxVel": 100,
+				"minLifespan": 3,
+				"minStartTime": 1,
+				"minVel": 70,
+				"posAngle": 0,
+				"posConstrainRadial": true,
+				"posConstrainRect": true,
+				"posHeight": 100,
+				"posLength": 100,
+				"posOffsetX": 0,
+				"posOffsetY": 0,
+				"posRadialStart": 4.363323129985823,
+				"posRadialEnd": 5.061454830783556,
+				"posRadius": 50,
+				"posShape": "radial",
+				"posWidth": 100,
+				"startSize": 4,
+				"velAngle": 0,
+				"velAngMin": -2,
+				"velAngMax": +2,
+				"velConstrainRadial": false,
+				"velConstrainRect": false,
+				"velHeight": 100,
+				"velLength": 30,
+				"velOffsetX": 0,
+				"velOffsetY": 0,
+				"velRadialStart": 0,
+				"velRadialEnd": 6.283185307179586,
+				"velRadius": 100,
+				"velShape": "line",
+				"velWidth": 100
 			};
 		},
 
@@ -835,7 +835,6 @@ Kiwi.Renderers.StatelessParticleRenderer =
 		function( gl, shaderManager, params ) {
 	Kiwi.Renderers.Renderer.call( this, gl, shaderManager, false, params );
 
-	this._maxItems = 2000;
 	this.gl = gl;
 	this._config = params.config;
 	
@@ -852,7 +851,7 @@ Kiwi.Renderers.StatelessParticleRenderer =
 	this.modelMatrix = new Float32Array( [
 	1, 0, 0,
 	0, 1, 0,
-	0, 0, 1] );
+	0, 0, 1 ] );
 
 };
 Kiwi.extend( Kiwi.Renderers.StatelessParticleRenderer,
@@ -880,9 +879,9 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.setConfig =
 
 	// Set desired blend mode
 	if ( config.additive ) {
-		this.blendMode.setMode("ADDITIVE");
+		this.blendMode.setMode( "ADDITIVE" );
 	} else {
-		this.blendMode.setMode("NORMAL");
+		this.blendMode.setMode( "NORMAL" );
 	}
 };
 
@@ -937,12 +936,12 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setStandardUniforms =
 	gl.uniform1i( this.shaderPair.uniforms.uSampler.location, 0 );
 
 	// Standard uniforms
-	gl.uniform2fv( this.shaderPair.uniforms.uResolution.location,
-		stageResolution );
 	gl.uniformMatrix3fv( this.shaderPair.uniforms.uCamMatrix.location,
 		false, camMatrix );
 	gl.uniform1f( this.shaderPair.uniforms.uPauseTime.location,
 		this.pauseTime );
+	gl.uniform2fv( this.shaderPair.uniforms.uResolution.location,
+		stageResolution );
 	this.gl.uniform1f( this.shaderPair.uniforms.uWorldAngle.location,
 		this.worldAngle );
 
@@ -959,14 +958,13 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms =
 		function( gl ) {
 	var cfg = this._config;
 	gl = gl || this.gl;
+
 	//Particle uniforms
-	gl.uniform1f( this.shaderPair.uniforms.uT.location, 0 );
-	gl.uniform1f( this.shaderPair.uniforms.uPauseTime.location,
-		this.pauseTime );
-	gl.uniform2fv( this.shaderPair.uniforms.uGravity.location,
-		new Float32Array( [ cfg.gravityX, cfg.gravityY ] ) );
-	gl.uniform2fv( this.shaderPair.uniforms.uPointSizeRange.location,
-		new Float32Array( [ cfg.startSize, cfg.endSize ] ) );
+	gl.uniform1f( this.shaderPair.uniforms.uAlpha.location, cfg.alpha );
+	gl.uniform4fv( this.shaderPair.uniforms.uAlphaGradient.location,
+		new Float32Array( cfg.alphaGradient ) );
+	gl.uniform2fv( this.shaderPair.uniforms.uAlphaStops.location,
+		new Float32Array( cfg.alphaStops ) );
 	gl.uniform3fv( this.shaderPair.uniforms.uColEnv0.location,
 		new Float32Array( cfg.colEnv0 ) );
 	gl.uniform3fv( this.shaderPair.uniforms.uColEnv1.location,
@@ -977,16 +975,13 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms =
 		new Float32Array( cfg.colEnv3 ) );
 	gl.uniform2fv( this.shaderPair.uniforms.uColEnvKeyframes.location,
 		new Float32Array( cfg.colEnvKeyframes ) );
-
-	gl.uniform1f( this.shaderPair.uniforms.uAlpha.location, cfg.alpha);
-	gl.uniform4fv( this.shaderPair.uniforms.uAlphaGradient.location,
-		new Float32Array( cfg.alphaGradient ) );
-	gl.uniform2fv( this.shaderPair.uniforms.uAlphaStops.location,
-		new Float32Array( cfg.alphaStops ) );
-	gl.uniform1f( this.shaderPair.uniforms.uWorldAngle.location,
-		this.worldAngle );
+	gl.uniform2fv( this.shaderPair.uniforms.uGravity.location,
+		new Float32Array( [ cfg.gravityX, cfg.gravityY ] ) );
 	gl.uniform1i( this.shaderPair.uniforms.uLoop.location,
 		cfg.loop ? 1 : 0 );
+	gl.uniform2fv( this.shaderPair.uniforms.uPointSizeRange.location,
+		new Float32Array( [ cfg.startSize, cfg.endSize ] ) );
+	gl.uniform1f( this.shaderPair.uniforms.uT.location, 0 );
 };
 
 /**
@@ -1010,9 +1005,12 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.setTextureUniforms =
 * @public
 */
 Kiwi.Renderers.StatelessParticleRenderer.prototype.disable = function( gl ) {
-	gl.disableVertexAttribArray(this.shaderPair.attributes.aXYVxVy);
-	gl.disableVertexAttribArray(this.shaderPair.attributes.aBirthLifespanAngle);
-	gl.disableVertexAttribArray(this.shaderPair.attributes.aCellXYWH);
+	gl.disableVertexAttribArray(
+		this.shaderPair.attributes.aXYVxVy );
+	gl.disableVertexAttribArray(
+		this.shaderPair.attributes.aBirthLifespanAngle );
+	gl.disableVertexAttribArray(
+		this.shaderPair.attributes.aCellXYWH );
 };
 
 /**
@@ -1185,12 +1183,12 @@ Kiwi.extend( Kiwi.Shaders.StatelessParticleShader, Kiwi.Shaders.ShaderPair );
 Kiwi.Shaders.StatelessParticleShader.prototype.init = function( gl ) {
 	Kiwi.Shaders.ShaderPair.prototype.init.call(this,gl);
 
-	this.attributes.aXYVxVy = gl.getAttribLocation(
-		this.shaderProgram, "aXYVxVy" );
 	this.attributes.aBirthLifespanAngle = gl.getAttribLocation(
 		this.shaderProgram, "aBirthLifespanAngle" );
 	this.attributes.aCellXYWH = gl.getAttribLocation(
 		this.shaderProgram, "aCellXYWH" );
+	this.attributes.aXYVxVy = gl.getAttribLocation(
+		this.shaderProgram, "aXYVxVy" );
 	this.initUniforms(gl);
 };
 
@@ -1202,29 +1200,17 @@ Kiwi.Shaders.StatelessParticleShader.prototype.init = function( gl ) {
 * @public
 */
 Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
+	uAlpha: {
+		type: "1f"
+	},
+	uAlphaGradient: {
+		type: "4fv"
+	},
+	uAlphaStops: {
+		type: "2fv"
+	},
 	uCamMatrix: {
 		type: "mat3"
-	},
-	uTextureSize: {
-		type: "2fv"
-	},
-	uResolution: {
-		type: "2fv"
-	},
-	uSampler: {
-		type: "1i",
-	},
-	uT: {
-		type: "1f"
-	},
-	uPauseTime: {
-		type: "1f"
-	},
-	uGravity: {
-		type: "2fv"
-	},
-	uPointSizeRange: {
-		type: "2fv"
 	},
 	uColEnv0: {
 		type: "3fv"
@@ -1241,17 +1227,29 @@ Kiwi.Shaders.StatelessParticleShader.prototype.uniforms = {
 	uColEnvKeyframes: {
 		type: "2fv"
 	},
-	uAlpha: {
-		type: "1f"
-	},
-	uAlphaGradient: {
-		type: "4fv"
-	},
-	uAlphaStops: {
+	uGravity: {
 		type: "2fv"
 	},
 	uLoop: {
 		type: "1i"
+	},
+	uPauseTime: {
+		type: "1f"
+	},
+	uPointSizeRange: {
+		type: "2fv"
+	},
+	uResolution: {
+		type: "2fv"
+	},
+	uSampler: {
+		type: "1i",
+	},
+	uT: {
+		type: "1f"
+	},
+	uTextureSize: {
+		type: "2fv"
 	},
 	uWorldAngle: {
 		type: "1f"
