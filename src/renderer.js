@@ -20,6 +20,16 @@ Kiwi.Renderers.StatelessParticleRenderer =
 
 	this.gl = gl;
 	this._config = params.config;
+
+	/**
+	* Contains information on stage scaling.
+	* @property _stageScale
+	* @type Kiwi.Geom.Point
+	* @default ( 1, 1 )
+	* @private
+	* @since 1.1.1
+	*/
+	this._stageScale = new Kiwi.Geom.Point( 1, 1 );
 	
 	if ( !this._config ) {
 		console.log( "no particle configuration supplied" );
@@ -49,6 +59,25 @@ Kiwi.extend( Kiwi.Renderers.StatelessParticleRenderer,
 */
 Kiwi.Renderers.StatelessParticleRenderer.prototype.RENDERER_ID =
 	"StatelessParticleRenderer";
+
+/**
+* Contains information on stage scaling, received from the rendered entity.
+* @property stageScale
+* @type Kiwi.Geom.Point
+* @default ( 1, 1 )
+* @public
+* @since 1.1.1
+*/
+Object.defineProperty( Kiwi.Renderers.StatelessParticleRenderer.prototype,
+		"stageScale", {
+	get: function() {
+		return this._stageScale;
+	},
+	set: function( value ) {
+		this._stageScale = value;
+	}
+} );
+
 
 /**
 * Configures the shader to use the current configuration of the game object.
@@ -139,10 +168,18 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setStandardUniforms =
 */
 Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms =
 		function( gl ) {
-	var cfg = this._config;
+	var pointSizeRange,
+		cfg = this._config;
+	
 	gl = gl || this.gl;
 
-	//Particle uniforms
+	// Scale point size
+	pointSizeRange = new Float32Array( [
+		cfg.startSize * this._stageScale.x,
+		cfg.endSize * this._stageScale.y
+		] );
+
+	// Particle uniforms
 	gl.uniform1f( this.shaderPair.uniforms.uAlpha.location, cfg.alpha );
 	gl.uniform4fv( this.shaderPair.uniforms.uAlphaGradient.location,
 		new Float32Array( cfg.alphaGradient ) );
@@ -163,7 +200,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms =
 	gl.uniform1i( this.shaderPair.uniforms.uLoop.location,
 		cfg.loop ? 1 : 0 );
 	gl.uniform2fv( this.shaderPair.uniforms.uPointSizeRange.location,
-		new Float32Array( [ cfg.startSize, cfg.endSize ] ) );
+		pointSizeRange );
 	gl.uniform1f( this.shaderPair.uniforms.uT.location, 0 );
 };
 

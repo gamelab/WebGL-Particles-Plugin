@@ -117,7 +117,8 @@
 * @param atlas {Kiwi.Textures.TextureAtlas} Texture for the particle object
 * @param x {number} X position of the game object
 * @param y {number} Y position of the game object
-* @param config {object} Particle configuration object
+* @param config {object} Particle configuration object;
+*	see properties for more information.
 * @public
 * @return {Kiwi.GameObjects.StatelessParticles}
 */
@@ -137,7 +138,151 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 		constructor : function( state, atlas, x, y, config ) {
 			var i;
 
+			/**
+			* Config object. This allows you to alter any or all of the default
+			*	properties of a particle object. You do not need to specify
+			*	any config values; they all have default values.
+			*	A complete listing is as follows:
+			* &lt;ul&gt;
+			* &lt;li&gt;additive: Whether to draw in additive mode. Boolean.
+			*	Default false.&lt;/li&gt;
+			* &lt;li&gt;alpha: Overall object transparency. Number, range 0-1.
+			*	More sophisticated alpha control is available via
+			*	alphaGradient and alphaStops.
+			*	Default 1.&lt;/li&gt;
+			* &lt;li&gt;alphaGradient: Alpha value at four points throughout the
+			*	lifetime of each particle. Array of numbers, range 0-1.
+			*	Default [ 1, 1, 1, 0 ].&lt;/li&gt;
+			* &lt;li&gt;alphaStops: Coordinates for alpha gradient stops.
+			*	The beginning and end are always 0 and 1 respectively;
+			*	this specifies the middle two stops.
+			*	Array of numbers, range 0-1. Default [ 0.3, 0.7 ].&lt;/li&gt;
+			* &lt;li&gt;angStartMin: 0,&lt;/li&gt;
+			* &lt;li&gt;angStartMax: 0,&lt;/li&gt;
+			* &lt;li&gt;angVelocityConform: false,&lt;/li&gt;
+			* &lt;li&gt;colEnv0: Initial color value in the particle&#x27;s lifespan.
+			*	Array of three numbers, range 0-1. Default [ 1, 0, 0 ].&lt;/li&gt;
+			* &lt;li&gt;colEnv1: Second color value in the particle&#x27;s lifespan.
+			*	Array of three numbers, range 0-1. Default [ 1, 1, 0 ].&lt;/li&gt;
+			* &lt;li&gt;colEnv2: Third color value in the particle&#x27;s lifespan.
+			*	Array of three numbers, range 0-1. Default [ 1, 1, 1 ].&lt;/li&gt;
+			* &lt;li&gt;colEnv3: Final color value in the particle&#x27;s lifespan.
+			*	Array of three numbers, range 0-1. Default [ 0, 0, 0 ].&lt;/li&gt;
+			* &lt;li&gt;colEnvKeyframes: Coordinates for color gradient stops.
+			*	The beginning and end are always 0 and 1 respectively;
+			*	this specifies the middle two stops.
+			*	Array of numbers, range 0-1. Default [ 0.5, 0.6 ].&lt;/li&gt;
+			* &lt;li&gt;endSize: Size of particle at end of lifespan in pixels.
+			*	Number, default 150.&lt;/li&gt;
+			* &lt;li&gt;gravityX: Acceleration along X axis. Number, default 0.&lt;/li&gt;
+			* &lt;li&gt;gravityY: Acceleration along Y axis. Number, default -50.
+			* &lt;li&gt;loop: Whether the particles repeat, or play once.
+			*	Boolean, default true.&lt;/li&gt;
+			* &lt;li&gt;maxLifespan: Maximum random lifespan. Number, default 5.&lt;/li&gt;
+			* &lt;li&gt;maxStartTime: Maximum random start time.
+			*	Number, default 6.&lt;/li&gt;
+			* &lt;li&gt;maxVel: Maximum random start velocity.
+			*	Number, default 100.&lt;/li&gt;
+			* &lt;li&gt;minLifespan: Minimum random lifespan. Number, default 3.&lt;/li&gt;
+			* &lt;li&gt;minStartTime: Minimum random start time.
+			*	Number, default 1.&lt;/li&gt;
+			* &lt;li&gt;minVel: Minimum random start velocity.
+			*	Number, default 70.&lt;/li&gt;
+			* &lt;li&gt;numParts: Number of particles to emit, default 20.&lt;/li&gt;
+			* &lt;li&gt;posAngle: Angle of &quot;line&quot; emitter. Number, default 0.
+			* &lt;li&gt;posConstrainRadial: Whether to emit from the edge of a
+			*	&quot;radial&quot; emitter. Boolean, default true.&lt;/li&gt;
+			* &lt;li&gt;posConstrainRect: Whether to emit from the edge of a
+			*	&quot;rectangle&quot; emitter. Boolean, default true.&lt;/li&gt;
+			* &lt;li&gt;posHeight: Height of &quot;rectangle&quot; emitter.
+			*	Number, default 100.&lt;/li&gt;
+			* &lt;li&gt;posLength: Length of &quot;line&quot; emitter.
+			*	Number, default 100.&lt;/li&gt;
+			* &lt;li&gt;posOffsetX: Position offset of emitter.
+			*	Number, default 0.&lt;/li&gt;
+			* &lt;li&gt;posOffsetY: Position offset of emitter.
+			*	Number, default 0.&lt;/li&gt;
+			* &lt;li&gt;posRadialStart: Beginning angle of arc of &quot;radial&quot;
+			*	emitter. Number, default 4.363323129985823.&lt;/li&gt;
+			* &lt;li&gt;posRadialEnd: End angle of arc of &quot;radial&quot; emitter.
+			*	Number, default 5.061454830783556.&lt;/li&gt;
+			* &lt;li&gt;posRadius: Radius of &quot;radial&quot; emitter.
+			*	Number, default 50.&lt;/li&gt;
+			* &lt;li&gt;posShape: Shape of emitter. String, default &quot;radial&quot;.
+			*	Choose one of:
+			* &lt;ul&gt;
+			* &lt;li&gt;&quot;radial&quot;&lt;/li&gt;
+			* &lt;li&gt;&quot;rectangle&quot;&lt;/li&gt;
+			* &lt;li&gt;&quot;line&quot;&lt;/li&gt;
+			* &lt;/ul&gt;&lt;/li&gt;
+			* &lt;li&gt;posWidth: Width of &quot;rectangle&quot; emitter.
+			*	Number, default 100.&lt;/li&gt;
+			* &lt;li&gt;startSize: Size of particle at start of lifespan in
+			*	pixels. Number, default 4.&lt;/li&gt;
+			* &lt;li&gt;velAngle: Angle of &quot;line&quot; emission velocity type.
+			*	Number, default 0.&lt;/li&gt;
+			* &lt;li&gt;velAngMin: Minimum angular velocity of emitted particles.
+			*	Number, default -2.&lt;/li&gt;
+			* &lt;li&gt;velAngMax: Maximum angular velocity of emitted particles.
+			*	Number, default 2.&lt;/li&gt;
+			* &lt;li&gt;velConstrainRadial: Whether to constrain velocities
+			*	of particles emitted using &quot;radial&quot; velocity to the edge
+			*	of a circle, ensuring they all have the same magnitude.
+			*	Number, default false.&lt;/li&gt;
+			* &lt;li&gt;velConstrainRect: Whether to constrain velocities
+			*	of particles emitted using &quot;rectangle&quot; velocity to the edge
+			*	of the rectangle. Number, default false.&lt;/li&gt;
+			* &lt;li&gt;velHeight: Height of velocity vectors created by
+			*	&quot;rectangle&quot; type emitter. Number, default 100.&lt;/li&gt;
+			* &lt;li&gt;velLength: Range of lengths of velocity vectors
+			*	created by &quot;line&quot; type emitter. Number, default 30.&lt;/li&gt;
+			* &lt;li&gt;velOffsetX: Offset applied to all velocity vectors.
+			*	Number, default 0.&lt;/li&gt;
+			* &lt;li&gt;velOffsetY: Offset applied to all velocity vectors.
+			*	Number, default 0.&lt;/li&gt;
+			* &lt;li&gt;velRadialStart: Low angle of arc describing
+			*	velocity vectors created with &quot;radial&quot; type velocity.
+			*	Number, default 0.&lt;/li&gt;
+			* &lt;li&gt;velRadialEnd: High angle of arc describing
+			*	velocity vectors created with &quot;radial&quot; type velocity.
+			*	Number, default 6.283185307179586.&lt;/li&gt;
+			* &lt;li&gt;velRadius: Radius of velocity vectors created
+			*	using &quot;radial&quot; type velocity. Number, default 100.&lt;/li&gt;
+			* &lt;li&gt;velShape: Shape of velocity vector creator.
+			*	String, default &quot;line&quot;.
+			* &lt;ul&gt;
+			* &lt;li&gt;&quot;center&quot;&lt;/li&gt;
+			* &lt;li&gt;&quot;radial&quot;&lt;/li&gt;
+			* &lt;li&gt;&quot;rectangle&quot;&lt;/li&gt;
+			* &lt;li&gt;&quot;line&quot;&lt;/li&gt;
+			* &lt;/ul&gt;&lt;/li&gt;
+			* &lt;li&gt;velWidth: Width of velocity vectors created by
+			*	&quot;rectangle&quot; type emitter. Number, default 100.&lt;/li&gt;
+			* &lt;/ul&gt;
+			* @property config
+			* @type Object
+			* @public
+			*/
 			this.config = this.buildDefaultConfig();
+
+			/**
+			* Used to determine how to scale particles when the stage changes.
+			* @property _stageScale
+			* @type Kiwi.Geom.Point
+			* @default ( 1, 1 )
+			* @private
+			* @since 1.1.1
+			*/
+			this._stageScale = new Kiwi.Geom.Point( 1, 1 );
+
+			this.randoms = function() {
+				var arr = [];
+				for ( i =0; i &lt; 5000; i++ ) {
+					arr.push( Math.random() );
+				}
+				return arr;
+			}();
+
 			if ( typeof x === &quot;undefined&quot; ) {
 				x = 0;
 			}
@@ -146,14 +291,6 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 			if( typeof config !== &quot;undefined&quot; ) {
 				this.mergeConfig( this.config, config );
 			}
-			
-			this.randoms = function() {
-				var arr = [];
-				for ( i =0; i &lt; 5000; i++ ) {
-					arr.push( Math.random() );
-				}
-				return arr;
-			}();
 
 			if ( this.game.renderOption === Kiwi.RENDERER_WEBGL ) {
 				this.glRenderer = this.game.renderer.requestRendererInstance(
@@ -736,7 +873,9 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 		* @private
 		*/
 		renderGL : function( gl, camera ) {
-			var m = this.transform.getConcatenatedMatrix();
+			var aspectRatioCanvas, aspectRatioWindow, scaleFactor,
+				m = this.transform.getConcatenatedMatrix();
+
 			this.glRenderer.modelMatrix = new Float32Array( [
 				m.a, m.b, 0,
 				m.c, m.d, 0,
@@ -745,6 +884,40 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 			this.glRenderer.setWorldAngle(
 				this.deriveWorldAngle( this.transform, camera ) );
 			this.glRenderer.setTextureUniforms( gl, this.atlas );
+
+			// Set the stage scale factor when using CocoonJS
+			// Because this is a WebGL-only plugin, we can safely assume
+			// that we must use WebGL-specific scaling techniques,
+			// as CocoonJS does not scale WebGL contexts using CSS techniques.
+			if ( this.state.game.deviceTargetOption === Kiwi.TARGET_COCOON ) {
+				if ( this.state.game.stage.scaleType ===
+						Kiwi.Stage.SCALE_NONE ) {
+					this._stageScale.setTo( 1, 1 );
+				} else if ( this.state.game.stage.scaleType ===
+						Kiwi.Stage.SCALE_FIT ) {
+					aspectRatioCanvas = this.state.game.stage.width /
+						this.state.game.stage.height;
+					aspectRatioWindow = window.innerWidth /
+						window.innerHeight;
+					if ( aspectRatioWindow &gt; aspectRatioCanvas ) {
+						scaleFactor = window.innerHeight /
+							this.state.game.stage.height;
+						this._stageScale.setTo( scaleFactor, scaleFactor );
+					} else {
+						scaleFactor = window.innerWidth /
+							this.state.game.stage.width;
+						this._stageScale.setTo( scaleFactor, scaleFactor );
+					}
+				} else if ( this.state.game.stage.scaleType ===
+						Kiwi.Stage.SCALE_STRETCH ) {
+					this._stageScale.x = window.innerWidth /
+						this.state.game.stage.width;
+					this._stageScale.y = window.innerHeight /
+						this.state.game.stage.height;
+				}
+			}
+			this.glRenderer.stageScale.setTo(
+				this._stageScale.x, this._stageScale.y );
 		},
 
 		/**
