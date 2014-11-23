@@ -90,6 +90,8 @@ To start the particle effect
 ### Using Transforms
 Particles can move and rotate freely. However, their scaling behaviour is limited. Scaling a particle object will scale the path along which the particles move, causing them to appear to move slower or faster. However, it will not change the size or orientation of the particles. For example, if you have a particle effect which shoots a rocket to the right, you can scale the game object by -1 to shoot to the left. However, the rocket will still face right, and appear to be facing backwards. If you want to change the direction of a particle effect, either use rotation or create a duplicate particle effect pointing in the other direction.
 
+Particles emit from the anchor point. If you move the anchor point of a particle object, the particles will follow. The anchor point is set to ( 0, 0 ) by default and should not need to change; you can use either `transform.x, y` or `config.offsetX, offsetY` to change the position of the particles.
+
 ### Textures
 Determines which image/spritesheet/textureatlas will be used as bitmap textures. If a textureAtlas or a spritesheet is used then individual cells can be selected. You can also use a canvas and draw in real time.
 

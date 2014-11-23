@@ -171,6 +171,16 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 			*/
 			this._stageScale = new Kiwi.Geom.Point( 1, 1 );
 
+			/**
+			* Indicates whether the object has been altered
+			*	and is in need of update.
+			* @property dirty
+			* @type Boolean
+			* @public
+			* @since 1.1.2
+			*/
+			this.dirty = false;
+
 			this.randoms = function() {
 				var arr = [];
 				for ( i =0; i < 5000; i++ ) {
@@ -556,6 +566,7 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 			if ( doGenerate ) {
 				this._generateParticles();
 			}
+			this.dirty = true;
 		},
 
 		/**
@@ -771,6 +782,11 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 		renderGL : function( gl, camera ) {
 			var aspectRatioCanvas, aspectRatioWindow, scaleFactor,
 				m = this.transform.getConcatenatedMatrix();
+
+			if ( this.dirty ) {
+				this.dirty = false;
+				this.glRenderer.enableUniforms();
+			}
 
 			this.glRenderer.modelMatrix = new Float32Array( [
 				m.a, m.b, 0,
@@ -1124,6 +1140,17 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.enable =
 };
 
 /**
+* Sets key uniforms.
+* @method enableUniforms
+* @param gl {WebGLRenderingContext}
+* @public
+*/
+Kiwi.Renderers.StatelessParticleRenderer.prototype.enableUniforms =
+		function( gl ) {
+	this._setConfigUniforms( gl );
+};
+
+/**
 * Configures basic uniforms in the shader.
 * @method _setStandardUniforms
 * @param gl {WebGLRenderingContext}
@@ -1140,12 +1167,8 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setStandardUniforms =
 	// Standard uniforms
 	gl.uniformMatrix3fv( this.shaderPair.uniforms.uCamMatrix.location,
 		false, camMatrix );
-	gl.uniform1f( this.shaderPair.uniforms.uPauseTime.location,
-		this.pauseTime );
 	gl.uniform2fv( this.shaderPair.uniforms.uResolution.location,
 		stageResolution );
-	this.gl.uniform1f( this.shaderPair.uniforms.uWorldAngle.location,
-		this.worldAngle );
 
 	this.camMatrix = new Float32Array( camMatrix.buffer );
 };
@@ -1189,9 +1212,13 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms =
 		new Float32Array( [ cfg.gravityX, cfg.gravityY ] ) );
 	gl.uniform1i( this.shaderPair.uniforms.uLoop.location,
 		cfg.loop ? 1 : 0 );
+	gl.uniform1f( this.shaderPair.uniforms.uPauseTime.location,
+		this.pauseTime );
 	gl.uniform2fv( this.shaderPair.uniforms.uPointSizeRange.location,
 		pointSizeRange );
 	gl.uniform1f( this.shaderPair.uniforms.uT.location, 0 );
+	this.gl.uniform1f( this.shaderPair.uniforms.uWorldAngle.location,
+		this.worldAngle );
 };
 
 /**

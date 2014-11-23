@@ -134,6 +134,17 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.enable =
 };
 
 /**
+* Sets key uniforms.
+* @method enableUniforms
+* @param gl {WebGLRenderingContext}
+* @public
+*/
+Kiwi.Renderers.StatelessParticleRenderer.prototype.enableUniforms =
+		function( gl ) {
+	this._setConfigUniforms( gl );
+};
+
+/**
 * Configures basic uniforms in the shader.
 * @method _setStandardUniforms
 * @param gl {WebGLRenderingContext}
@@ -150,12 +161,8 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setStandardUniforms =
 	// Standard uniforms
 	gl.uniformMatrix3fv( this.shaderPair.uniforms.uCamMatrix.location,
 		false, camMatrix );
-	gl.uniform1f( this.shaderPair.uniforms.uPauseTime.location,
-		this.pauseTime );
 	gl.uniform2fv( this.shaderPair.uniforms.uResolution.location,
 		stageResolution );
-	this.gl.uniform1f( this.shaderPair.uniforms.uWorldAngle.location,
-		this.worldAngle );
 
 	this.camMatrix = new Float32Array( camMatrix.buffer );
 };
@@ -199,9 +206,13 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms =
 		new Float32Array( [ cfg.gravityX, cfg.gravityY ] ) );
 	gl.uniform1i( this.shaderPair.uniforms.uLoop.location,
 		cfg.loop ? 1 : 0 );
+	gl.uniform1f( this.shaderPair.uniforms.uPauseTime.location,
+		this.pauseTime );
 	gl.uniform2fv( this.shaderPair.uniforms.uPointSizeRange.location,
 		pointSizeRange );
 	gl.uniform1f( this.shaderPair.uniforms.uT.location, 0 );
+	this.gl.uniform1f( this.shaderPair.uniforms.uWorldAngle.location,
+		this.worldAngle );
 };
 
 /**

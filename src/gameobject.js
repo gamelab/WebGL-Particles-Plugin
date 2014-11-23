@@ -171,6 +171,16 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 			*/
 			this._stageScale = new Kiwi.Geom.Point( 1, 1 );
 
+			/**
+			* Indicates whether the object has been altered
+			*	and is in need of update.
+			* @property dirty
+			* @type Boolean
+			* @public
+			* @since 1.1.2
+			*/
+			this.dirty = false;
+
 			this.randoms = function() {
 				var arr = [];
 				for ( i =0; i < 5000; i++ ) {
@@ -556,6 +566,7 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 			if ( doGenerate ) {
 				this._generateParticles();
 			}
+			this.dirty = true;
 		},
 
 		/**
@@ -771,6 +782,11 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 		renderGL : function( gl, camera ) {
 			var aspectRatioCanvas, aspectRatioWindow, scaleFactor,
 				m = this.transform.getConcatenatedMatrix();
+
+			if ( this.dirty ) {
+				this.dirty = false;
+				this.glRenderer.enableUniforms();
+			}
 
 			this.glRenderer.modelMatrix = new Float32Array( [
 				m.a, m.b, 0,
