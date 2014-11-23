@@ -206,8 +206,8 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 			this.cellIndex = this.atlas.cellIndex;
 			this.width = atlas.cells[ 0 ].w;
 			this.height = atlas.cells[ 0 ].h;
-			this.transform.rotPointX = this.width / 2;
-			this.transform.rotPointY = this.height / 2;
+			this.transform.rotPointX = 0;
+			this.transform.rotPointY = 0;
 			this.box = this.components.add(
 				new Kiwi.Components.Box( this, x, y, this.width, this.height) );
 
@@ -975,7 +975,7 @@ Kiwi.Plugins.ParticlesGL = {
 	* @type String
 	* @public
 	*/
-	version:"1.1.1",
+	version:"1.1.2",
 
 	minimumKiwiVersion:"1.1.1",
 

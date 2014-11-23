@@ -1,9 +1,13 @@
+# DEVELOPMENT IN PROGRESS
+# THIS VERSION OF THE PLUGIN SHOULD NOT BE CONSIDERED STABLE
+# REMOVE THIS NOTE WHEN PLUGIN IS READY TO RELEASE
+
 WebGL Particles
 =======================================
 
 Name: ParticlesGL
 
-Version: 1.1.1
+Version: 1.1.2
 
 Type: GameObject Plugin
 
@@ -19,6 +23,9 @@ Tutorials for this plugin can be found on the Kiwi.JS website here:
 
 
 ##Version Release Notes
+1.1.2
+* Fixed anchor point set to non-zero values, causing particles to appear offset from the emitter.
+
 1.1.1
 * Updated examples to KiwiJS 1.1.1.
 * Added instructions to `examples/keyboard.html`.
