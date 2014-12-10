@@ -1,10 +1,10 @@
-module.exports = function(grunt) {
+module.exports = function( grunt ) {
 
-	// Project configuration.
-	grunt.initConfig({
-		pkg: grunt.file.readJSON("package.json"),
+	// Project configuration
+	grunt.initConfig( {
 
-		
+		pkg: grunt.file.readJSON( "package.json" ),
+
 		yuidoc: {
 			compile: {
 				name: "<%= pkg.name %>",
@@ -27,14 +27,14 @@ module.exports = function(grunt) {
 				}
 			}
 		},
- 
+
 		concat: {
 			build: {
-				src:["src/*"],
+				src: ["src/*"],
 				dest: "<%= pkg.filenameBase %>-<%= pkg.version %>.js"
 			}
 		},
-		
+
 		connect: {
 			server: {
 				options: {
@@ -55,28 +55,28 @@ module.exports = function(grunt) {
 				quotmark: "double"
 			}
 		}
- });
+	});
 
-	grunt.loadNpmTasks("grunt-contrib-uglify");
-	grunt.loadNpmTasks("grunt-contrib-yuidoc");
-	grunt.loadNpmTasks("grunt-contrib-concat");
-	grunt.loadNpmTasks("grunt-contrib-connect");
-	grunt.loadNpmTasks("grunt-contrib-jshint");
-	
-	grunt.registerTask("default", [
+	grunt.loadNpmTasks( "grunt-contrib-uglify" );
+	grunt.loadNpmTasks( "grunt-contrib-yuidoc" );
+	grunt.loadNpmTasks( "grunt-contrib-concat" );
+	grunt.loadNpmTasks( "grunt-contrib-connect" );
+	grunt.loadNpmTasks( "grunt-contrib-jshint" );
+
+	grunt.registerTask( "default", [
 		"jshint",
 		"uglify:build",
 		"concat:build"
 		]);
-	
-	grunt.registerTask("full", [
+
+	grunt.registerTask( "full", [
 		"jshint",
 		"concat:build",
 		"uglify:build",
 		"yuidoc:compile"
 		]);
 
-	grunt.registerTask("serve", [
+	grunt.registerTask( "serve", [
 		"connect:server:keepalive"
 		]);
 };
