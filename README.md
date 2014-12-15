@@ -1,21 +1,14 @@
 WebGL Particles
 ===============
 
-Name: ParticlesGL
+	Name: ParticlesGL
+	Version: 1.1.2
+	Type: GameObject Plugin
+	Author: Kiwi.js Team
+	Website: www.kiwijs.org
+	KiwiJS last version tested: 1.1.1
 
-Version: 1.1.2
-
-Type: GameObject Plugin
-
-Author: Kiwi.js Team
-
-Website: www.kiwijs.org
-
-KiwiJS last version tested: 1.1.1
-
-Tutorials for this plugin can be found on the Kiwi.JS website here:
-
-[Using the ParticlesGL Plugin](http://www.kiwijs.org/using-the-particle-effects-plugin)
+Tutorials for this plugin can be found on the Kiwi.JS website here: [Using the ParticlesGL Plugin](http://www.kiwijs.org/using-the-particle-effects-plugin)
 
 
 ## Version Release Notes
@@ -89,15 +82,16 @@ To create a particle gameobject, do the following:
 ```javascript
 var particles = new Kiwi.GameObjects.StatelessParticles(
 	this, this.textures.particle, 400, 300, config );
-```
 
-The last parameter in the above code contains the config object for the effect. If you leave it out a default config will be used. The config object has many properties which are described below along with some terminology.
-
-To start the particle effect:
-
-```javascript
+// Begin emitting - if you don't do this,
+// the particles will exist but have nothing to display
 particles.startEmitting();
+
+// Don't forget to add it to the state
+this.addChild( particles );
 ```
+
+The `config` parameter in the above code contains the config object for the effect. If you leave it out a default config will be used. The config object has many properties which are described below along with some terminology.
 
 ### Using Transforms
 
@@ -138,7 +132,7 @@ Determines the spawn position of each particle
 		* `posConstrainRect` (boolean) : Toggle whether to generate particles within the rectangle, or only on its edge
 	* posShape = `radial` :
 		* `posRadius` (number) : Radius in pixels of the circle within which particles will be generated
-		* `posRadialStart` (number) : Starting angle in radians of the radial distribution	
+		* `posRadialStart` (number) : Starting angle in radians of the radial distribution
 		* `posRadialEnd` (number) : Ending angle in radians of the radial distribution
 		* `posConstrainRadial` (boolean) : Toggle whether to generate particles within the radial field, or only on its edge
 		* `posRandomRadial` (boolean) : Toggle random or regular distribution along the edge of the radial distribution
@@ -166,7 +160,7 @@ Determines the velocity vector (a pair of numbers representeing direction and sp
 		* `velConstrainRect` (boolean): Toggle whether to generate velocity vectors within the rectangle, or only on its edge
 	 * velShape = `radial` :
 		* `velRadius` (number) : Radius in pixels of the circle within which velocity vectors will be generated
-		* `velRadialStart` (number) : Starting angle in radians of the radial distribution  
+		* `velRadialStart` (number) : Starting angle in radians of the radial distribution
 		* `velRadialEnd` (number) : Ending angle in radians of the radial distribution
 		* `velConstrainRadial` (boolean) : Toggle whether to generate velocity vectors within the radial field, or only on its edge
 		* `velRandomRadial` (boolean : Toggle random or regular distribution along the edge of the radial distribution
