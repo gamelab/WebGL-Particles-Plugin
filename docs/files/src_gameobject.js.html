@@ -452,8 +452,36 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 			var i;
 
 			for ( i in config2 ) {
-				config1[ i ] = config2[ i ];
+				config1[ i ] = this.forceNumeric( config2[ i ] );
 			}
+		},
+
+		/**
+		* Recursively forces anything that can be a number
+		* to be a number, including array members.
+		* @method forceNumeric
+		* @param value {any} A value to force
+		* @return {any} The value
+		* @public
+		* @since 1.2.0
+		*/
+		forceNumeric: function( value ) {
+			var i, num;
+
+			if ( typeof value === &quot;string&quot; ) {
+				num = +value;
+				if ( !isNaN( num ) ) {
+					return num;
+				}
+			}
+
+			if ( Kiwi.Utils.Common.isArray( value ) ) {
+				for ( i in value ) {
+					value[ i ] = this.forceNumeric( value[ i ] );
+				}
+			}
+
+			return value;
 		},
 
 
@@ -1085,12 +1113,13 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 			var y = r * Math.sin( radians );
 			return { x: x, y: y };
 		},
-};
+	};
 
-for ( var prop in protoProps ) {
-	Kiwi.GameObjects.StatelessParticles.prototype[ prop ] = protoProps[ prop ];
+	for ( var prop in protoProps ) {
+		Kiwi.GameObjects.StatelessParticles.prototype[ prop ] =
+			protoProps[ prop ];
 
-}
+	}
 }());
 
     </pre>
