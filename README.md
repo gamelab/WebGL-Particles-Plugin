@@ -15,7 +15,9 @@ Tutorials for this plugin can be found on the Kiwi.JS website here: [Using the P
 
 ### 1.2.0
 * Upgrade to KiwiJS v1.2.0
+* Add `setColor` and `getColor` methods, allowing you to use Kiwi.Utils.Color style color values.
 * Add `clock` property to drive particle animation based on in-game rather than game-independent time
+* Config parser is stricter with numbers expressed as strings. It can find and correct most of these errors. This is not an issue in many browsers, but it has caused problems in CocoonJS.
 
 ### 1.1.2
 * Fixed anchor point set to non-zero values, causing particles to appear offset from the emitter.

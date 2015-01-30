@@ -293,6 +293,42 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 			this.dirty = false;
 
 			/**
+			* Color at stop 0 (start)
+			* @property color0
+			* @type Kiwi.Utils.Color
+			* @private
+			* @since 1.2.0
+			*/
+			this._color0 = new Kiwi.Utils.Color();
+
+			/**
+			* Color at stop 1
+			* @property color1
+			* @type Kiwi.Utils.Color
+			* @private
+			* @since 1.2.0
+			*/
+			this._color1 = new Kiwi.Utils.Color();
+
+			/**
+			* Color at stop 2
+			* @property color2
+			* @type Kiwi.Utils.Color
+			* @private
+			* @since 1.2.0
+			*/
+			this._color2 = new Kiwi.Utils.Color();
+
+			/**
+			* Color at stop 3 (end)
+			* @property color3
+			* @type Kiwi.Utils.Color
+			* @private
+			* @since 1.2.0
+			*/
+			this._color3 = new Kiwi.Utils.Color();
+
+			/**
 			* Timer used to schedule particle cessation
 			* @property _timer
 			* @type Kiwi.Time.Timer
@@ -348,6 +384,119 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 
 			// Hide object until it is fully initialised by startEmitting
 			this.visible = false;
+		},
+
+		/**
+		* Sets a color stop using Kiwi.Utils.Color terminology.
+		* Specify any valid Color arguments after the index.
+		* You may set alpha in this way.
+		* @method setColor
+		* @param index {number} Index of the color stop: 0-3.
+		* @public
+		* @since 1.2.0
+		*/
+		setColor: function( index ) {
+			// var args = arguments;//.slice( 1 );
+			// Kiwi.Log.log( &quot;Arguments&quot;, &quot;#debug&quot;, arguments);
+			var i,
+				args = [];
+			for ( i in arguments ) {
+				args[ i ] = arguments[ i ];
+			}
+			args = args.slice( 1 );
+
+			switch( index ) {
+				case 0:
+					this._color0.set.apply( this._color0, args );
+					this.setConfigProp( &quot;colEnv0&quot;,
+						[ this._color0.r, this._color0.g, this._color0.b ],
+						true );
+					this.setConfigProp( &quot;alphaGradient&quot;,
+						[ this._color0.a,
+						this.config.alphaGradient[1],
+						this.config.alphaGradient[2],
+						this.config.alphaGradient[3] ],
+						true );
+					break;
+				case 1:
+					this._color1.set.apply( this._color1, args );
+					this.setConfigProp( &quot;colEnv1&quot;,
+						[ this._color1.r, this._color1.g, this._color1.b ],
+						true );
+					this.setConfigProp( &quot;alphaGradient&quot;,
+						[ this.configalphaGradient[0],
+						this._color1.a,
+						this.config.alphaGradient[2],
+						this.config.alphaGradient[3] ],
+						true );
+					break;
+				case 2:
+					this._color2.set.apply( this._color2, args );
+					this.setConfigProp( &quot;colEnv2&quot;,
+						[ this._color2.r, this._color2.g, this._color2.b ],
+						true );
+					this.setConfigProp( &quot;alphaGradient&quot;,
+						[ this.config.alphaGradient[0],
+						this.config.alphaGradient[1],
+						this._color2.a,
+						this.config.alphaGradient[3] ],
+						true );
+					break;
+				case 3:
+					this._color3.set.apply( this._color3, args );
+					this.setConfigProp( &quot;colEnv3&quot;,
+						[ this._color3.r, this._color3.g, this._color3.b ],
+						true );
+					this.setConfigProp( &quot;alphaGradient&quot;,
+						[ this.config.alphaGradient[0],
+						this.config.alphaGradient[1],
+						this.config.alphaGradient[2],
+						this._color3.a ],
+						true );
+					break;
+			}
+		},
+
+		/**
+		* Returns a color from this object. Note that this color will not
+		* update the particles if you change it; you must use &quot;setColor&quot;.
+		* @method getColor
+		* @param index {number} Position of color stop, 0-3
+		* @return Kiwi.Utils.Color
+		* @public
+		* @since 1.2.0
+		*/
+		getColor: function( index ) {
+			switch( index ) {
+				case 1:
+					this._color1.set(
+						this.config.colEnv1[0],
+						this.config.colEnv1[1],
+						this.config.colEnv1[2],
+						this.config.alphaGradient[1] );
+					return this._color1;
+				case 2:
+					this._color2.set(
+						this.config.colEnv2[0],
+						this.config.colEnv2[1],
+						this.config.colEnv2[2],
+						this.config.alphaGradient[2] );
+					return this._color2;
+				case 3:
+					this._color3.set(
+						this.config.colEnv3[0],
+						this.config.colEnv3[1],
+						this.config.colEnv3[2],
+						this.config.alphaGradient[3] );
+					return this._color3;
+				default:
+					this._color0.set(
+						this.config.colEnv0[0],
+						this.config.colEnv0[1],
+						this.config.colEnv0[2],
+						this.config.alphaGradient[0] );
+					return this._color0;
+			}
 		},
 
 		/**

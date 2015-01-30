@@ -324,6 +324,62 @@
         {
             "file": "src/gameobject.js",
             "line": 191,
+            "description": "Color at stop 0 (start)",
+            "itemtype": "property",
+            "name": "color0",
+            "type": "Kiwi.Utils.Color",
+            "access": "private",
+            "tagname": "",
+            "since": "1.2.0",
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
+        },
+        {
+            "file": "src/gameobject.js",
+            "line": 200,
+            "description": "Color at stop 1",
+            "itemtype": "property",
+            "name": "color1",
+            "type": "Kiwi.Utils.Color",
+            "access": "private",
+            "tagname": "",
+            "since": "1.2.0",
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
+        },
+        {
+            "file": "src/gameobject.js",
+            "line": 209,
+            "description": "Color at stop 2",
+            "itemtype": "property",
+            "name": "color2",
+            "type": "Kiwi.Utils.Color",
+            "access": "private",
+            "tagname": "",
+            "since": "1.2.0",
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
+        },
+        {
+            "file": "src/gameobject.js",
+            "line": 218,
+            "description": "Color at stop 3 (end)",
+            "itemtype": "property",
+            "name": "color3",
+            "type": "Kiwi.Utils.Color",
+            "access": "private",
+            "tagname": "",
+            "since": "1.2.0",
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
+        },
+        {
+            "file": "src/gameobject.js",
+            "line": 227,
             "description": "Timer used to schedule particle cessation",
             "itemtype": "property",
             "name": "_timer",
@@ -336,7 +392,50 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 249,
+            "line": 285,
+            "description": "Sets a color stop using Kiwi.Utils.Color terminology.\nSpecify any valid Color arguments after the index.\nYou may set alpha in this way.",
+            "itemtype": "method",
+            "name": "setColor",
+            "params": [
+                {
+                    "name": "index",
+                    "description": "Index of the color stop: 0-3.",
+                    "type": "Number"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "since": "1.2.0",
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
+        },
+        {
+            "file": "src/gameobject.js",
+            "line": 356,
+            "description": "Returns a color from this object. Note that this color will not\nupdate the particles if you change it; you must use \"setColor\".",
+            "itemtype": "method",
+            "name": "getColor",
+            "params": [
+                {
+                    "name": "index",
+                    "description": "Position of color stop, 0-3",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "Kiwi.Utils.Color"
+            },
+            "access": "public",
+            "tagname": "",
+            "since": "1.2.0",
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
+        },
+        {
+            "file": "src/gameobject.js",
+            "line": 398,
             "description": "Populates a new object with default config parameters",
             "itemtype": "method",
             "name": "buildDefaultConfig",
@@ -352,7 +451,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 339,
+            "line": 488,
             "description": "Merges config objects, overwriting the first config with all\ndefinitions in the second while preserving non-revised terms.",
             "itemtype": "method",
             "name": "mergeConfig",
@@ -376,7 +475,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 355,
+            "line": 504,
             "description": "Recursively forces anything that can be a number\nto be a number, including array members.",
             "itemtype": "method",
             "name": "forceNumeric",
@@ -400,7 +499,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 384,
+            "line": 533,
             "description": "Returns the state of the particle effect.\nEither \"stopped\",\"started\" or \"stopping\"",
             "itemtype": "property",
             "name": "state",
@@ -414,7 +513,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 395,
+            "line": 544,
             "description": "The type of object that this is.",
             "itemtype": "method",
             "name": "objType",
@@ -429,7 +528,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 405,
+            "line": 554,
             "description": "An array of vectors that conatains generated velocities\nif useDrawingVectors is true. Used by the particle editor.",
             "itemtype": "property",
             "name": "drawingVectors",
@@ -442,7 +541,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 414,
+            "line": 563,
             "description": "If true, velocity vectors will be stored on particle generation.\nUsed by the particle editor.",
             "itemtype": "property",
             "name": "useDrawingVectors",
@@ -455,7 +554,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 423,
+            "line": 572,
             "description": "A function delegated to return a random number.\nUsed by the particle editor.",
             "itemtype": "property",
             "name": "rnd",
@@ -468,7 +567,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 432,
+            "line": 581,
             "description": "If useRandoms is true, This array will contain pregenerate random\nnumbers which will be used every new generation refresh.\nUsed by the particle editor.",
             "itemtype": "property",
             "name": "randoms",
@@ -481,7 +580,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 442,
+            "line": 591,
             "description": "If true, pregenerate random numbers. Used by the particle editor.",
             "itemtype": "property",
             "name": "useRandoms",
@@ -494,7 +593,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 450,
+            "line": 599,
             "description": "The number of random numbers to generate if useRandoms is true.",
             "itemtype": "property",
             "name": "numRandoms",
@@ -507,7 +606,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 458,
+            "line": 607,
             "description": "The index of the next random number in useRandoms.\nUsed by the particle editor.",
             "itemtype": "property",
             "name": "nextRandomIndex",
@@ -520,7 +619,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 467,
+            "line": 616,
             "description": "The maximum loop length of the system. Used for calculating\nthe timeout when stopping emission. This is calculated when\nthe particles are generated. It can be overridden once\nthe emission has started.",
             "itemtype": "property",
             "name": "timeoutLength",
@@ -533,7 +632,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 478,
+            "line": 627,
             "description": "Get the next random number from the randoms list.\nUsed by the particle editor.",
             "itemtype": "method",
             "name": "nextRandom",
@@ -548,7 +647,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 493,
+            "line": 642,
             "description": "Starts the system emitting particles.\nParticles will be regenerated each time.",
             "itemtype": "method",
             "name": "startEmitting",
@@ -577,7 +676,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 534,
+            "line": 683,
             "description": "Stops the system from emitting particles.",
             "itemtype": "method",
             "name": "stopEmitting",
@@ -601,7 +700,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 568,
+            "line": 717,
             "description": "Schedules the particle effect to stop (discontinue rendering),\n\tand optionally marks the gameobject for removal.",
             "itemtype": "method",
             "name": "scheduleStop",
@@ -625,7 +724,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 589,
+            "line": 738,
             "description": "Immediately marks the gameobject for removal.",
             "itemtype": "method",
             "name": "remove",
@@ -637,7 +736,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 599,
+            "line": 748,
             "description": "Sets the configuration object and optionally regenerates particles\n\tand sets runtime properties.",
             "itemtype": "method",
             "name": "setConfig",
@@ -666,7 +765,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 619,
+            "line": 768,
             "description": "Sets a property on the configuration object and optionally\nregenerates particles and sets runtime properties.",
             "itemtype": "method",
             "name": "setConfigProp",
@@ -700,7 +799,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 636,
+            "line": 785,
             "description": "Gets the configuration object.\n\tTo change it, use setConfig or setConfigProp.",
             "itemtype": "method",
             "name": "getConfig",
@@ -716,7 +815,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 648,
+            "line": 797,
             "description": "Generates particles based on configuration object.",
             "itemtype": "method",
             "name": "_generateParticles",
@@ -728,7 +827,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 828,
+            "line": 977,
             "description": "Instructs the renderer to draw the particles.",
             "itemtype": "method",
             "name": "renderGL",
@@ -740,7 +839,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 886,
+            "line": 1035,
             "description": "Computes a collapsed world rotation for the renderer.",
             "itemtype": "method",
             "name": "deriveWorldAngle",
@@ -764,7 +863,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 913,
+            "line": 1062,
             "description": "Returns a point on a unit arc based on a total number of points\n\tand an index",
             "itemtype": "method",
             "name": "regularPointCirclePerimeter",
@@ -798,7 +897,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 928,
+            "line": 1077,
             "description": "Returns a point on a unit arc",
             "itemtype": "method",
             "name": "randomPointCirclePerimeter",
@@ -822,7 +921,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 940,
+            "line": 1089,
             "description": "Returns a point within the sector of a circle",
             "itemtype": "method",
             "name": "randomPointCircle",
@@ -846,7 +945,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 954,
+            "line": 1103,
             "description": "Returns a point within the unit square",
             "itemtype": "method",
             "name": "randomPointRect",
@@ -858,7 +957,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 963,
+            "line": 1112,
             "description": "Returns a point on the perimeter of the unit square",
             "itemtype": "method",
             "name": "randomPointRectPerimeter",
@@ -870,7 +969,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 984,
+            "line": 1133,
             "description": "Returns a point on a unit line based on\n\ta total number of points and an index.",
             "itemtype": "method",
             "name": "regularPointLine",
@@ -899,7 +998,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 1000,
+            "line": 1149,
             "description": "Returns a point on a unit line.",
             "itemtype": "method",
             "name": "regularPointLine",
