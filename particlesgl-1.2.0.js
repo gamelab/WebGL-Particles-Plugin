@@ -15,14 +15,21 @@
 * @param y {number} Y position of the game object
 * @param config {object} Particle configuration object;
 *	see properties for more information.
+* @param [clock] {Kiwi.Time.Clock} Clock to govern animation.
+*	If omitted, will use state.game.time.clock.
 * @public
 * @return {Kiwi.GameObjects.StatelessParticles}
 */
 
-Kiwi.GameObjects.StatelessParticles = function( state, atlas, x, y, config ) {
-	Kiwi.Entity.call( this,state, x, y );
+Kiwi.GameObjects.StatelessParticles =
+		function( state, atlas, x, y, config, clock ) {
+	Kiwi.Entity.call( this, state, x, y );
 
-	return this.constructor( state, atlas, x, y, config );
+	if ( !clock || clock.objType !== "Clock" ) {
+		clock = state.game.time.clock;
+	}
+
+	return this.constructor( state, atlas, x, y, config, clock );
 
 };
 Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
@@ -31,7 +38,7 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 (function() {
 	var protoProps = {
 
-		constructor : function( state, atlas, x, y, config ) {
+		constructor : function( state, atlas, x, y, config, clock ) {
 			var i;
 
 			/**
@@ -181,6 +188,16 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 			*/
 			this.dirty = false;
 
+			/**
+			* Timer used to schedule particle cessation
+			* @property _timer
+			* @type Kiwi.Time.Timer
+			* @private
+			*/
+			this._timer = null;
+
+			this.clock = clock;
+
 			this.randoms = function() {
 				var arr = [];
 				for ( i =0; i < 5000; i++ ) {
@@ -200,7 +217,11 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 
 			if ( this.game.renderOption === Kiwi.RENDERER_WEBGL ) {
 				this.glRenderer = this.game.renderer.requestRendererInstance(
-					"StatelessParticleRenderer", { config: this.config } );
+					"StatelessParticleRenderer",
+					{
+						config: this.config,
+						gameObject: this
+					} );
 			}
 
 			if ( typeof atlas === "undefined" ) {
@@ -341,8 +362,8 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 		* @public
 		*/
 		effectState : "stopped",
-		
-		
+
+
 		/**
 		* The type of object that this is.
 		* @method objType
@@ -405,7 +426,7 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 		* @private
 		*/
 		numRandoms: 5000,
-		
+
 		/**
 		* The index of the next random number in useRandoms.
 		* Used by the particle editor.
@@ -414,7 +435,7 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 		* @private
 		*/
 		nextRandomIndex : -1,
-	
+
 		/**
 		* The maximum loop length of the system. Used for calculating
 		* the timeout when stopping emission. This is calculated when
@@ -479,7 +500,7 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 
 			this.effectState = "started";
 			this.visible = true;
-			clearTimeout( this._timer );
+			this.clock.removeTimer( this._timer );
 		},
 
 		/**
@@ -527,17 +548,15 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 		*/
 		scheduleStop: function( milliseconds, remove ) {
 			var that = this;
-			clearTimeout( this._timer );
-			this._timer = setTimeout( function() {
+			this.clock.removeTimer( this._timer );
+			this._timer = this.clock.setTimeout( function() {
 				that.effectState = "stopped";
 				that.visible = false;
 				if ( remove ) {
-					that.remove.call(that);
+					that.remove.call( that );
 				}
-			}, milliseconds);
+			}, milliseconds );
 		},
-
-		_timer: null,
 
 		/**
 		* Immediately marks the gameobject for removal.
@@ -766,7 +785,11 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 					}
 				}
 
-				vertexItems.push( startTime, lifespan, velAng, startAng );
+				vertexItems.push(
+					startTime,
+					lifespan,
+					velAng,
+					startAng );
 				cell = this.atlas.cells[ cellIndex ];
 				vertexItems.push( cell.x, cell.y, cell.w, cell.h );
 			}
@@ -991,9 +1014,9 @@ Kiwi.Plugins.ParticlesGL = {
 	* @type String
 	* @public
 	*/
-	version:"1.1.2",
+	version:"1.2.0",
 
-	minimumKiwiVersion:"1.1.1",
+	minimumKiwiVersion:"1.2.0",
 
 	pluginDependencies: []
 };
@@ -1026,6 +1049,7 @@ Kiwi.Renderers.StatelessParticleRenderer =
 
 	this.gl = gl;
 	this._config = params.config;
+	this._gameObject = params.gameObject;
 
 	/**
 	* Contains information on stage scaling.
@@ -1109,7 +1133,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.setConfig =
 * @public
 */
 Kiwi.Renderers.StatelessParticleRenderer.prototype.resetTime = function() {
-	this.startTime = Date.now();
+	this.startTime = this._now();
 };
 
 /**
@@ -1285,7 +1309,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.pauseTime = 999999999;
 */
 Kiwi.Renderers.StatelessParticleRenderer.prototype.pause = function( gl ) {
 	gl = gl || this.gl;
-	this.pauseTime = this.time / 1000;
+	this.pauseTime = this.time;
 };
 
 /**
@@ -1313,9 +1337,9 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function( gl ) {
 		false, modelViewMatrix );
 
 	// calculate time
-	this.time = Date.now() - this.startTime;
+	this.time = this._now() - this.startTime;
 
-	gl.uniform1f( this.shaderPair.uniforms.uT.location, this.time / 1000 );
+	gl.uniform1f( this.shaderPair.uniforms.uT.location, this.time );
 
 	gl.bindBuffer( gl.ARRAY_BUFFER, this.vertexBuffer.buffer );
 
@@ -1370,6 +1394,18 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.initBatch =
 	this.vertexBuffer.items = vertexItems;
 	this.vertexBuffer.uploadBuffer( this.gl, this.vertexBuffer.items );
 };
+
+/**
+* Returns the current time
+* @method _now
+* @return number
+* @private
+* @since 1.2.0
+*/
+Kiwi.Renderers.StatelessParticleRenderer.prototype._now = function() {
+	return this._gameObject.clock.elapsed();
+};
+
 
 /**
 * Removes external references, allowing this to be destroyed without

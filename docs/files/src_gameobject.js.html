@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.2</em>
+            <em>API Docs for: 1.2.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -119,14 +119,21 @@
 * @param y {number} Y position of the game object
 * @param config {object} Particle configuration object;
 *	see properties for more information.
+* @param [clock] {Kiwi.Time.Clock} Clock to govern animation.
+*	If omitted, will use state.game.time.clock.
 * @public
 * @return {Kiwi.GameObjects.StatelessParticles}
 */
 
-Kiwi.GameObjects.StatelessParticles = function( state, atlas, x, y, config ) {
-	Kiwi.Entity.call( this,state, x, y );
+Kiwi.GameObjects.StatelessParticles =
+		function( state, atlas, x, y, config, clock ) {
+	Kiwi.Entity.call( this, state, x, y );
 
-	return this.constructor( state, atlas, x, y, config );
+	if ( !clock || clock.objType !== &quot;Clock&quot; ) {
+		clock = state.game.time.clock;
+	}
+
+	return this.constructor( state, atlas, x, y, config, clock );
 
 };
 Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
@@ -135,7 +142,7 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 (function() {
 	var protoProps = {
 
-		constructor : function( state, atlas, x, y, config ) {
+		constructor : function( state, atlas, x, y, config, clock ) {
 			var i;
 
 			/**
@@ -285,6 +292,16 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 			*/
 			this.dirty = false;
 
+			/**
+			* Timer used to schedule particle cessation
+			* @property _timer
+			* @type Kiwi.Time.Timer
+			* @private
+			*/
+			this._timer = null;
+
+			this.clock = clock;
+
 			this.randoms = function() {
 				var arr = [];
 				for ( i =0; i &lt; 5000; i++ ) {
@@ -304,7 +321,11 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 
 			if ( this.game.renderOption === Kiwi.RENDERER_WEBGL ) {
 				this.glRenderer = this.game.renderer.requestRendererInstance(
-					&quot;StatelessParticleRenderer&quot;, { config: this.config } );
+					&quot;StatelessParticleRenderer&quot;,
+					{
+						config: this.config,
+						gameObject: this
+					} );
 			}
 
 			if ( typeof atlas === &quot;undefined&quot; ) {
@@ -445,8 +466,8 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 		* @public
 		*/
 		effectState : &quot;stopped&quot;,
-		
-		
+
+
 		/**
 		* The type of object that this is.
 		* @method objType
@@ -509,7 +530,7 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 		* @private
 		*/
 		numRandoms: 5000,
-		
+
 		/**
 		* The index of the next random number in useRandoms.
 		* Used by the particle editor.
@@ -518,7 +539,7 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 		* @private
 		*/
 		nextRandomIndex : -1,
-	
+
 		/**
 		* The maximum loop length of the system. Used for calculating
 		* the timeout when stopping emission. This is calculated when
@@ -583,7 +604,7 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 
 			this.effectState = &quot;started&quot;;
 			this.visible = true;
-			clearTimeout( this._timer );
+			this.clock.removeTimer( this._timer );
 		},
 
 		/**
@@ -631,17 +652,15 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 		*/
 		scheduleStop: function( milliseconds, remove ) {
 			var that = this;
-			clearTimeout( this._timer );
-			this._timer = setTimeout( function() {
+			this.clock.removeTimer( this._timer );
+			this._timer = this.clock.setTimeout( function() {
 				that.effectState = &quot;stopped&quot;;
 				that.visible = false;
 				if ( remove ) {
-					that.remove.call(that);
+					that.remove.call( that );
 				}
-			}, milliseconds);
+			}, milliseconds );
 		},
-
-		_timer: null,
 
 		/**
 		* Immediately marks the gameobject for removal.
@@ -870,7 +889,11 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 					}
 				}
 
-				vertexItems.push( startTime, lifespan, velAng, startAng );
+				vertexItems.push(
+					startTime,
+					lifespan,
+					velAng,
+					startAng );
 				cell = this.atlas.cells[ cellIndex ];
 				vertexItems.push( cell.x, cell.y, cell.w, cell.h );
 			}

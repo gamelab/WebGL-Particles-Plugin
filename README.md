@@ -2,16 +2,20 @@ WebGL Particles
 ===============
 
 	Name: ParticlesGL
-	Version: 1.1.2
+	Version: 1.2.0
 	Type: GameObject Plugin
 	Author: Kiwi.js Team
 	Website: www.kiwijs.org
-	KiwiJS last version tested: 1.1.1
+	KiwiJS last version tested: 1.2.1
 
 Tutorials for this plugin can be found on the Kiwi.JS website here: [Using the ParticlesGL Plugin](http://www.kiwijs.org/using-the-particle-effects-plugin)
 
 
 ## Version Release Notes
+
+### 1.2.0
+* Upgrade to KiwiJS v1.2.0
+* Add `clock` property to drive particle animation based on in-game rather than game-independent time
 
 ### 1.1.2
 * Fixed anchor point set to non-zero values, causing particles to appear offset from the emitter.

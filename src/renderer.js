@@ -20,6 +20,7 @@ Kiwi.Renderers.StatelessParticleRenderer =
 
 	this.gl = gl;
 	this._config = params.config;
+	this._gameObject = params.gameObject;
 
 	/**
 	* Contains information on stage scaling.
@@ -103,7 +104,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.setConfig =
 * @public
 */
 Kiwi.Renderers.StatelessParticleRenderer.prototype.resetTime = function() {
-	this.startTime = Date.now();
+	this.startTime = this._now();
 };
 
 /**
@@ -279,7 +280,7 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.pauseTime = 999999999;
 */
 Kiwi.Renderers.StatelessParticleRenderer.prototype.pause = function( gl ) {
 	gl = gl || this.gl;
-	this.pauseTime = this.time / 1000;
+	this.pauseTime = this.time;
 };
 
 /**
@@ -307,9 +308,9 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function( gl ) {
 		false, modelViewMatrix );
 
 	// calculate time
-	this.time = Date.now() - this.startTime;
+	this.time = this._now() - this.startTime;
 
-	gl.uniform1f( this.shaderPair.uniforms.uT.location, this.time / 1000 );
+	gl.uniform1f( this.shaderPair.uniforms.uT.location, this.time );
 
 	gl.bindBuffer( gl.ARRAY_BUFFER, this.vertexBuffer.buffer );
 
@@ -364,6 +365,18 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.initBatch =
 	this.vertexBuffer.items = vertexItems;
 	this.vertexBuffer.uploadBuffer( this.gl, this.vertexBuffer.items );
 };
+
+/**
+* Returns the current time
+* @method _now
+* @return number
+* @private
+* @since 1.2.0
+*/
+Kiwi.Renderers.StatelessParticleRenderer.prototype._now = function() {
+	return this._gameObject.clock.elapsed();
+};
+
 
 /**
 * Removes external references, allowing this to be destroyed without
