@@ -232,6 +232,26 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 			*/
 			this._timer = null;
 
+			/**
+			* Matrix used to compute angles during rendering.
+			* This is a scratch value and has no other meaning.
+			*
+			* @property _deriveAngleTransformMatrix
+			* @type Kiwi.Geom.Matrix
+			* @private
+			*/
+			this._deriveAngleTransformMatrix = new Kiwi.Geom.Matrix();
+
+			/**
+			* Matrix used to compute angles during rendering.
+			* This is a scratch value and has no other meaning.
+			*
+			* @property _deriveAngleOffsetMatrix
+			* @type Kiwi.Geom.Matrix
+			* @private
+			*/
+			this._deriveAngleOffsetMatrix = new Kiwi.Geom.Matrix();
+
 			this.clock = clock;
 
 			this.randoms = function() {
@@ -988,11 +1008,7 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 				this.glRenderer.enableUniforms();
 			}
 
-			this.glRenderer.modelMatrix = new Float32Array( [
-				m.a, m.b, 0,
-				m.c, m.d, 0,
-				m.tx, m.ty, 1
-			] );
+			this.glRenderer.modelMatrix = m;
 			this.glRenderer.setWorldAngle(
 				this.deriveWorldAngle( this.transform, camera ) );
 			this.glRenderer.setTextureUniforms( gl, this.atlas );
@@ -1040,13 +1056,16 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 		* @private
 		*/
 		deriveWorldAngle: function( transform, camera ) {
-			var worldAngle,
-				divisor = transform.scaleX * camera.transform.scaleX,
-				m = transform.getConcatenatedMatrix();
+			var m, worldAngle,
+				divisor = transform.scaleX * camera.transform.scaleX;
+
+			this._deriveAngleTransformMatrix.copyFrom(
+				transform.getConcatenatedMatrix() );
+			m = this._deriveAngleTransformMatrix;
 
 			// Apply camera perspective
 			m.prependMatrix( camera.transform.getConcatenatedMatrix() );
-			m.prependMatrix( new Kiwi.Geom.Matrix( 1, 0, 0, 1,
+			m.prependMatrix( this._deriveAngleOffsetMatrix.setTo( 1, 0, 0, 1,
 				-camera.transform.rotPointX, -camera.transform.rotPointY ) );
 			worldAngle = Math.acos( m.a / divisor );
 

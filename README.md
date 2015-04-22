@@ -1,17 +1,24 @@
+DEVELOPMENT BRANCH WARNING
+REMOVE THIS WARNING FOR FINAL RELEASE
+
 WebGL Particles
 ===============
 
 	Name: ParticlesGL
-	Version: 1.2.0
+	Version: 1.2.1
 	Type: GameObject Plugin
 	Author: Kiwi.js Team
 	Website: www.kiwijs.org
-	KiwiJS last version tested: 1.2.1
+	KiwiJS last version tested: 1.3.1
 
 Tutorials for this plugin can be found on the Kiwi.JS website here: [Using the ParticlesGL Plugin](http://www.kiwijs.org/using-the-particle-effects-plugin)
 
 
 ## Version Release Notes
+
+### 1.2.1
+* Upgrade to KiwiJS v1.3.1 development version
+* Recycle assets during rendering to improve performance.
 
 ### 1.2.0
 * Upgrade to KiwiJS v1.2.0

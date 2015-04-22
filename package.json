@@ -1,6 +1,6 @@
 {
 	"name": "ParticlesGL",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"filenameBase": "particlesgl",
 	"description": "A WebGL particle plugin.",
 	"author": {

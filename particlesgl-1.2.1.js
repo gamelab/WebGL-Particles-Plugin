@@ -232,6 +232,26 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 			*/
 			this._timer = null;
 
+			/**
+			* Matrix used to compute angles during rendering.
+			* This is a scratch value and has no other meaning.
+			*
+			* @property _deriveAngleTransformMatrix
+			* @type Kiwi.Geom.Matrix
+			* @private
+			*/
+			this._deriveAngleTransformMatrix = new Kiwi.Geom.Matrix();
+
+			/**
+			* Matrix used to compute angles during rendering.
+			* This is a scratch value and has no other meaning.
+			*
+			* @property _deriveAngleOffsetMatrix
+			* @type Kiwi.Geom.Matrix
+			* @private
+			*/
+			this._deriveAngleOffsetMatrix = new Kiwi.Geom.Matrix();
+
 			this.clock = clock;
 
 			this.randoms = function() {
@@ -988,11 +1008,7 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 				this.glRenderer.enableUniforms();
 			}
 
-			this.glRenderer.modelMatrix = new Float32Array( [
-				m.a, m.b, 0,
-				m.c, m.d, 0,
-				m.tx, m.ty, 1
-			] );
+			this.glRenderer.modelMatrix = m;
 			this.glRenderer.setWorldAngle(
 				this.deriveWorldAngle( this.transform, camera ) );
 			this.glRenderer.setTextureUniforms( gl, this.atlas );
@@ -1040,13 +1056,16 @@ Kiwi.extend( Kiwi.GameObjects.StatelessParticles, Kiwi.Entity );
 		* @private
 		*/
 		deriveWorldAngle: function( transform, camera ) {
-			var worldAngle,
-				divisor = transform.scaleX * camera.transform.scaleX,
-				m = transform.getConcatenatedMatrix();
+			var m, worldAngle,
+				divisor = transform.scaleX * camera.transform.scaleX;
+
+			this._deriveAngleTransformMatrix.copyFrom(
+				transform.getConcatenatedMatrix() );
+			m = this._deriveAngleTransformMatrix;
 
 			// Apply camera perspective
 			m.prependMatrix( camera.transform.getConcatenatedMatrix() );
-			m.prependMatrix( new Kiwi.Geom.Matrix( 1, 0, 0, 1,
+			m.prependMatrix( this._deriveAngleOffsetMatrix.setTo( 1, 0, 0, 1,
 				-camera.transform.rotPointX, -camera.transform.rotPointY ) );
 			worldAngle = Math.acos( m.a / divisor );
 
@@ -1192,9 +1211,9 @@ Kiwi.Plugins.ParticlesGL = {
 	* @type String
 	* @public
 	*/
-	version:"1.2.0",
+	version:"1.2.1",
 
-	minimumKiwiVersion:"1.2.0",
+	minimumKiwiVersion:"1.2.1",
 
 	pluginDependencies: []
 };
@@ -1249,10 +1268,24 @@ Kiwi.Renderers.StatelessParticleRenderer =
 		gl, "StatelessParticleShader", false );
 
 	this.worldAngle = 0;
-	this.modelMatrix = new Float32Array( [
-	1, 0, 0,
-	0, 1, 0,
-	0, 0, 1 ] );
+
+	/**
+	* Concatenated transformation matrix of the particle object
+	* currently being rendered
+	*
+	* @property modelMatrix
+	* @type Kiwi.Geom.Matrix
+	*/
+	this.modelMatrix = new Kiwi.Geom.Matrix();
+
+	/**
+	* Camera matrix derived from render manager camera data.
+	* Used to compute final matrix for shader.
+	*
+	* @property _camMatrix
+	* @type Kiwi.Geom.Matrix
+	*/
+	this._camMatrix = new Kiwi.Geom.Matrix();
 
 };
 Kiwi.extend( Kiwi.Renderers.StatelessParticleRenderer,
@@ -1419,8 +1452,6 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype._setConfigUniforms =
 	gl.uniform2fv( this.shaderPair.uniforms.uPointSizeRange.location,
 		pointSizeRange );
 	gl.uniform1f( this.shaderPair.uniforms.uT.location, 0 );
-	this.gl.uniform1f( this.shaderPair.uniforms.uWorldAngle.location,
-		this.worldAngle );
 };
 
 /**
@@ -1509,15 +1540,24 @@ Kiwi.Renderers.StatelessParticleRenderer.prototype.setWorldAngle =
 * @public
 */
 Kiwi.Renderers.StatelessParticleRenderer.prototype.draw = function( gl ) {
-	var modelViewMatrix = mat3.create();
-	mat3.mul( modelViewMatrix,this.camMatrix, this.modelMatrix );
+	this._camMatrix.setTo(
+		this.camMatrix[ 0 ], this.camMatrix[ 1 ],
+		this.camMatrix[ 3 ], this.camMatrix[ 4 ],
+		this.camMatrix[ 6 ], this.camMatrix[ 7 ] );
+	this._camMatrix.appendMatrix( this.modelMatrix );
 	gl.uniformMatrix3fv( this.shaderPair.uniforms.uCamMatrix.location,
-		false, modelViewMatrix );
+		false, new Float32Array( [
+			this._camMatrix.a, this._camMatrix.b, 0,
+			this._camMatrix.c, this._camMatrix.d, 0,
+			this._camMatrix.tx, this._camMatrix.ty, 1 ] ) );
 
 	// calculate time
 	this.time = this._now() - this.startTime;
-
 	gl.uniform1f( this.shaderPair.uniforms.uT.location, this.time );
+
+	// World angle including current camera perspective
+	gl.uniform1f( this.shaderPair.uniforms.uWorldAngle.location,
+		this.worldAngle );
 
 	gl.bindBuffer( gl.ARRAY_BUFFER, this.vertexBuffer.buffer );
 

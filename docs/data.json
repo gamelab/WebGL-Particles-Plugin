@@ -2,7 +2,7 @@
     "project": {
         "name": "ParticlesGL",
         "description": "A WebGL particle plugin.",
-        "version": "1.2.0",
+        "version": "1.2.1",
         "url": "http://kiwijs.org/"
     },
     "files": {
@@ -392,7 +392,33 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 285,
+            "line": 235,
+            "description": "Matrix used to compute angles during rendering.\nThis is a scratch value and has no other meaning.",
+            "itemtype": "property",
+            "name": "_deriveAngleTransformMatrix",
+            "type": "Kiwi.Geom.Matrix",
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
+        },
+        {
+            "file": "src/gameobject.js",
+            "line": 245,
+            "description": "Matrix used to compute angles during rendering.\nThis is a scratch value and has no other meaning.",
+            "itemtype": "property",
+            "name": "_deriveAngleOffsetMatrix",
+            "type": "Kiwi.Geom.Matrix",
+            "access": "private",
+            "tagname": "",
+            "class": "StatelessParticles",
+            "module": "Kiwi",
+            "submodule": "GameObjects"
+        },
+        {
+            "file": "src/gameobject.js",
+            "line": 305,
             "description": "Sets a color stop using Kiwi.Utils.Color terminology.\nSpecify any valid Color arguments after the index.\nYou may set alpha in this way.",
             "itemtype": "method",
             "name": "setColor",
@@ -412,7 +438,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 356,
+            "line": 376,
             "description": "Returns a color from this object. Note that this color will not\nupdate the particles if you change it; you must use \"setColor\".",
             "itemtype": "method",
             "name": "getColor",
@@ -435,7 +461,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 398,
+            "line": 418,
             "description": "Populates a new object with default config parameters",
             "itemtype": "method",
             "name": "buildDefaultConfig",
@@ -451,7 +477,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 488,
+            "line": 508,
             "description": "Merges config objects, overwriting the first config with all\ndefinitions in the second while preserving non-revised terms.",
             "itemtype": "method",
             "name": "mergeConfig",
@@ -475,7 +501,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 504,
+            "line": 524,
             "description": "Recursively forces anything that can be a number\nto be a number, including array members.",
             "itemtype": "method",
             "name": "forceNumeric",
@@ -499,7 +525,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 533,
+            "line": 553,
             "description": "Returns the state of the particle effect.\nEither \"stopped\",\"started\" or \"stopping\"",
             "itemtype": "property",
             "name": "state",
@@ -513,7 +539,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 544,
+            "line": 564,
             "description": "The type of object that this is.",
             "itemtype": "method",
             "name": "objType",
@@ -528,7 +554,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 554,
+            "line": 574,
             "description": "An array of vectors that conatains generated velocities\nif useDrawingVectors is true. Used by the particle editor.",
             "itemtype": "property",
             "name": "drawingVectors",
@@ -541,7 +567,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 563,
+            "line": 583,
             "description": "If true, velocity vectors will be stored on particle generation.\nUsed by the particle editor.",
             "itemtype": "property",
             "name": "useDrawingVectors",
@@ -554,7 +580,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 572,
+            "line": 592,
             "description": "A function delegated to return a random number.\nUsed by the particle editor.",
             "itemtype": "property",
             "name": "rnd",
@@ -567,7 +593,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 581,
+            "line": 601,
             "description": "If useRandoms is true, This array will contain pregenerate random\nnumbers which will be used every new generation refresh.\nUsed by the particle editor.",
             "itemtype": "property",
             "name": "randoms",
@@ -580,7 +606,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 591,
+            "line": 611,
             "description": "If true, pregenerate random numbers. Used by the particle editor.",
             "itemtype": "property",
             "name": "useRandoms",
@@ -593,7 +619,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 599,
+            "line": 619,
             "description": "The number of random numbers to generate if useRandoms is true.",
             "itemtype": "property",
             "name": "numRandoms",
@@ -606,7 +632,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 607,
+            "line": 627,
             "description": "The index of the next random number in useRandoms.\nUsed by the particle editor.",
             "itemtype": "property",
             "name": "nextRandomIndex",
@@ -619,7 +645,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 616,
+            "line": 636,
             "description": "The maximum loop length of the system. Used for calculating\nthe timeout when stopping emission. This is calculated when\nthe particles are generated. It can be overridden once\nthe emission has started.",
             "itemtype": "property",
             "name": "timeoutLength",
@@ -632,7 +658,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 627,
+            "line": 647,
             "description": "Get the next random number from the randoms list.\nUsed by the particle editor.",
             "itemtype": "method",
             "name": "nextRandom",
@@ -647,7 +673,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 642,
+            "line": 662,
             "description": "Starts the system emitting particles.\nParticles will be regenerated each time.",
             "itemtype": "method",
             "name": "startEmitting",
@@ -676,7 +702,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 683,
+            "line": 703,
             "description": "Stops the system from emitting particles.",
             "itemtype": "method",
             "name": "stopEmitting",
@@ -700,7 +726,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 717,
+            "line": 737,
             "description": "Schedules the particle effect to stop (discontinue rendering),\n\tand optionally marks the gameobject for removal.",
             "itemtype": "method",
             "name": "scheduleStop",
@@ -724,7 +750,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 738,
+            "line": 758,
             "description": "Immediately marks the gameobject for removal.",
             "itemtype": "method",
             "name": "remove",
@@ -736,7 +762,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 748,
+            "line": 768,
             "description": "Sets the configuration object and optionally regenerates particles\n\tand sets runtime properties.",
             "itemtype": "method",
             "name": "setConfig",
@@ -765,7 +791,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 768,
+            "line": 788,
             "description": "Sets a property on the configuration object and optionally\nregenerates particles and sets runtime properties.",
             "itemtype": "method",
             "name": "setConfigProp",
@@ -799,7 +825,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 785,
+            "line": 805,
             "description": "Gets the configuration object.\n\tTo change it, use setConfig or setConfigProp.",
             "itemtype": "method",
             "name": "getConfig",
@@ -815,7 +841,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 797,
+            "line": 817,
             "description": "Generates particles based on configuration object.",
             "itemtype": "method",
             "name": "_generateParticles",
@@ -827,7 +853,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 977,
+            "line": 997,
             "description": "Instructs the renderer to draw the particles.",
             "itemtype": "method",
             "name": "renderGL",
@@ -839,7 +865,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 1035,
+            "line": 1051,
             "description": "Computes a collapsed world rotation for the renderer.",
             "itemtype": "method",
             "name": "deriveWorldAngle",
@@ -863,7 +889,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 1062,
+            "line": 1081,
             "description": "Returns a point on a unit arc based on a total number of points\n\tand an index",
             "itemtype": "method",
             "name": "regularPointCirclePerimeter",
@@ -897,7 +923,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 1077,
+            "line": 1096,
             "description": "Returns a point on a unit arc",
             "itemtype": "method",
             "name": "randomPointCirclePerimeter",
@@ -921,7 +947,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 1089,
+            "line": 1108,
             "description": "Returns a point within the sector of a circle",
             "itemtype": "method",
             "name": "randomPointCircle",
@@ -945,7 +971,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 1103,
+            "line": 1122,
             "description": "Returns a point within the unit square",
             "itemtype": "method",
             "name": "randomPointRect",
@@ -957,7 +983,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 1112,
+            "line": 1131,
             "description": "Returns a point on the perimeter of the unit square",
             "itemtype": "method",
             "name": "randomPointRectPerimeter",
@@ -969,7 +995,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 1133,
+            "line": 1152,
             "description": "Returns a point on a unit line based on\n\ta total number of points and an index.",
             "itemtype": "method",
             "name": "regularPointLine",
@@ -998,7 +1024,7 @@
         },
         {
             "file": "src/gameobject.js",
-            "line": 1149,
+            "line": 1168,
             "description": "Returns a point on a unit line.",
             "itemtype": "method",
             "name": "regularPointLine",
@@ -1070,7 +1096,29 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 54,
+            "line": 46,
+            "description": "Concatenated transformation matrix of the particle object\ncurrently being rendered",
+            "itemtype": "property",
+            "name": "modelMatrix",
+            "type": "Kiwi.Geom.Matrix",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 55,
+            "description": "Camera matrix derived from render manager camera data.\nUsed to compute final matrix for shader.",
+            "itemtype": "property",
+            "name": "_camMatrix",
+            "type": "Kiwi.Geom.Matrix",
+            "class": "StatelessParticleRenderer",
+            "module": "Kiwi",
+            "submodule": "Renderers"
+        },
+        {
+            "file": "src/renderer.js",
+            "line": 68,
             "description": "Identification string",
             "itemtype": "property",
             "name": "RENDERER_ID",
@@ -1083,7 +1131,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 64,
+            "line": 78,
             "description": "Contains information on stage scaling, received from the rendered entity.",
             "itemtype": "property",
             "name": "stageScale",
@@ -1098,7 +1146,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 83,
+            "line": 97,
             "description": "Configures the shader to use the current configuration of the game object.",
             "itemtype": "method",
             "name": "setConfig",
@@ -1117,7 +1165,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 101,
+            "line": 115,
             "description": "Resets the timer, so that the particles begin from the start.",
             "itemtype": "method",
             "name": "resetTime",
@@ -1129,7 +1177,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 110,
+            "line": 124,
             "description": "Resets the pause time. This will probably hold for some 4 decades,\nlonger than the physical lifetime of many devices.",
             "itemtype": "method",
             "name": "resetPauseTime",
@@ -1141,7 +1189,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 121,
+            "line": 135,
             "description": "Enables the renderer in the rendering pipeline.",
             "itemtype": "method",
             "name": "enable",
@@ -1172,7 +1220,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 137,
+            "line": 151,
             "description": "Sets key uniforms.",
             "itemtype": "method",
             "name": "enableUniforms",
@@ -1191,7 +1239,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 148,
+            "line": 162,
             "description": "Configures basic uniforms in the shader.",
             "itemtype": "method",
             "name": "_setStandardUniforms",
@@ -1220,7 +1268,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 171,
+            "line": 185,
             "description": "Configures particle animation uniforms in the shader.",
             "_setconfiguniforms": "",
             "params": [
@@ -1238,7 +1286,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 219,
+            "line": 231,
             "description": "Configures texture uniforms on the shader.",
             "itemtype": "method",
             "name": "setTextureUniforms",
@@ -1262,7 +1310,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 233,
+            "line": 245,
             "description": "Disables the renderer to make way for subsequent batches.",
             "itemtype": "method",
             "name": "disable",
@@ -1281,7 +1329,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 248,
+            "line": 260,
             "description": "Clears the renderer to make way for new data.",
             "itemtype": "method",
             "name": "clear",
@@ -1293,7 +1341,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 257,
+            "line": 269,
             "description": "The current time, used to drive stateless animation",
             "itemtype": "property",
             "name": "time",
@@ -1307,7 +1355,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 266,
+            "line": 278,
             "description": "The pause time",
             "itemtype": "property",
             "name": "pauseTime",
@@ -1321,7 +1369,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 275,
+            "line": 287,
             "description": "Pauses the particle emission.",
             "itemtype": "method",
             "name": "pause",
@@ -1340,7 +1388,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 286,
+            "line": 298,
             "description": "Sets the \"world angle\"\nConfigures the shader to render correctly when the world has been rotated.",
             "itemtype": "method",
             "name": "setWorldAngle",
@@ -1359,7 +1407,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 298,
+            "line": 310,
             "description": "Renders the object using WebGL",
             "itemtype": "method",
             "name": "draw",
@@ -1378,7 +1426,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 333,
+            "line": 354,
             "description": "Updates the stage resolution so that the image renders at the correct size.",
             "itemtype": "method",
             "name": "updateStageResolution",
@@ -1402,7 +1450,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 345,
+            "line": 366,
             "description": "Updates the texture information.",
             "itemtype": "method",
             "name": "updateTextureSize",
@@ -1426,7 +1474,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 357,
+            "line": 378,
             "description": "Uploads the vertex buffer. Because these particles are stateless,\nthis can be done once and left alone, making particles very efficient.",
             "itemtype": "method",
             "name": "initBatch",
@@ -1443,7 +1491,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 369,
+            "line": 390,
             "description": "Returns the current time",
             "itemtype": "method",
             "name": "_now",
@@ -1459,7 +1507,7 @@
         },
         {
             "file": "src/renderer.js",
-            "line": 381,
+            "line": 402,
             "description": "Removes external references, allowing this to be destroyed without\nmemory leaks.",
             "itemtype": "method",
             "name": "destroy",
@@ -1550,7 +1598,7 @@
     "warnings": [
         {
             "message": "unknown tag: _setconfiguniforms",
-            "line": " src/renderer.js:171"
+            "line": " src/renderer.js:185"
         },
         {
             "message": "Missing item type\nRegisters this plugin with the Global Kiwi Plugins Manager if it is avaiable.",
@@ -1558,7 +1606,7 @@
         },
         {
             "message": "Missing item type\nConfigures particle animation uniforms in the shader.",
-            "line": " src/renderer.js:171"
+            "line": " src/renderer.js:185"
         }
     ]
 }
