@@ -1,6 +1,3 @@
-DEVELOPMENT BRANCH WARNING
-REMOVE THIS WARNING FOR FINAL RELEASE
-
 WebGL Particles
 ===============
 
@@ -9,7 +6,7 @@ WebGL Particles
 	Type: GameObject Plugin
 	Author: Kiwi.js Team
 	Website: www.kiwijs.org
-	KiwiJS last version tested: 1.3.1
+	KiwiJS last version tested: 1.4.0
 
 Tutorials for this plugin can be found on the Kiwi.JS website here: [Using the ParticlesGL Plugin](http://www.kiwijs.org/using-the-particle-effects-plugin)
 
@@ -17,8 +14,9 @@ Tutorials for this plugin can be found on the Kiwi.JS website here: [Using the P
 ## Version Release Notes
 
 ### 1.2.1
-* Upgrade to KiwiJS v1.3.1 development version
-* Recycle assets during rendering to improve performance.
+* Upgrade to KiwiJS v1.4.0 as new minimum
+* Remove glMatrix dependencies for 1.4.0 compatibility
+* Recycle assets during rendering to improve performance
 
 ### 1.2.0
 * Upgrade to KiwiJS v1.2.0
@@ -59,7 +57,7 @@ The ParticlesGL plugin lets you create particle effects game objects in your Kiw
 
 ## Dependencies
 
-- Kiwi.js version 1.1.0 or greater (new in plugin version 1.1.0)
+- Kiwi.js version 1.4.0 or greater (new in plugin version 1.2.1)
 
 ## How to Include
 
